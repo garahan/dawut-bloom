@@ -362,6 +362,55 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
 .lightbox img{max-width:90%;max-height:80vh;border-radius:16px;}
 .lightbox .lb-close{position:absolute;top:16px;right:20px;color:#fff;font-size:28px;cursor:pointer;background:none;border:none;}
 .lightbox .lb-caption{position:absolute;bottom:20px;left:0;right:0;text-align:center;color:#ccc;font-size:13px;}
+/* Mood tracker */
+.mood-row{display:flex;gap:8px;margin-top:10px;justify-content:center;}
+.mood-btn{width:48px;height:48px;border-radius:50%;border:2px solid var(--line);background:var(--bg);font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.mood-btn:hover{border-color:var(--muted);transform:scale(1.1);}
+.mood-btn:active{transform:scale(.9);}
+.mood-btn.selected{border-color:var(--gold);background:rgba(232,169,61,.12);transform:scale(1.15);box-shadow:0 0 0 3px rgba(232,169,61,.15);}
+.mood-card{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:14px;box-shadow:var(--shadow);transition:box-shadow .25s;}
+.mood-card:hover{box-shadow:var(--shadow-lg);}
+.mood-card h3{margin:0 0 4px;font-size:14px;font-weight:700;}
+.mood-card .sub{font-size:11px;color:var(--faint);font-family:'JetBrains Mono',monospace;margin-bottom:8px;}
+.mood-week{display:flex;gap:4px;margin-top:10px;justify-content:center;}
+.mood-day{display:flex;flex-direction:column;align-items:center;gap:2px;}
+.mood-day .md-emoji{font-size:16px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--bg);}
+.mood-day .md-lbl{font-size:8px;color:var(--faint);font-family:'JetBrains Mono',monospace;}
+/* Illness log */
+.illness-card{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:12px;box-shadow:var(--shadow);transition:box-shadow .25s;}
+.illness-card:hover{box-shadow:var(--shadow-lg);}
+.illness-card h3{margin:0 0 4px;font-size:15px;font-weight:700;}
+.illness-card .sub{font-size:11px;color:var(--faint);font-family:'JetBrains Mono',monospace;margin-bottom:10px;}
+.illness-entry{border-left:3px solid #E07070;padding:8px 12px;margin-bottom:8px;background:linear-gradient(90deg,rgba(224,112,112,.04),transparent);border-radius:0 12px 12px 0;}
+.illness-entry .ie-date{font-size:10px;color:var(--faint);font-family:'JetBrains Mono',monospace;}
+.illness-entry .ie-symptom{font-size:13.5px;color:var(--text);margin-top:2px;}
+.illness-entry .ie-meds{font-size:12px;color:var(--muted);margin-top:2px;}
+.illness-entry .ie-del{float:right;font-size:11px;color:var(--faint);cursor:pointer;background:none;border:none;padding:2px 6px;}
+.illness-entry .ie-del:hover{color:#E07070;}
+/* Heatmap day detail */
+.day-detail{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:150;display:flex;align-items:center;justify-content:center;padding:20px;animation:fadein .2s;}
+.day-detail .dd-box{background:var(--card);border-radius:20px;padding:20px;max-width:340px;width:100%;box-shadow:var(--shadow-lg);max-height:80vh;overflow-y:auto;}
+.day-detail .dd-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.day-detail .dd-head h3{margin:0;font-size:16px;font-weight:700;}
+.day-detail .dd-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--faint);padding:0 4px;}
+.day-detail .dd-acts{display:flex;flex-direction:column;gap:8px;}
+.day-detail .dd-act{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:12px;background:var(--bg);font-size:13px;}
+.day-detail .dd-act .dda-icon{font-size:18px;}
+.day-detail .dd-act .dda-name{flex:1;}
+.day-detail .dd-act .dda-check{font-size:16px;}
+.day-detail .dd-note{margin-top:12px;padding:12px;background:var(--bg);border-radius:12px;font-size:13px;color:var(--muted);line-height:1.5;}
+/* Word language tags */
+.word-chip .wc-lang{font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;margin-left:2px;}
+.word-chip .wc-lang.tr{background:rgba(255,138,122,.15);color:var(--body);}
+.word-chip .wc-lang.jp{background:rgba(127,168,255,.15);color:var(--brain);}
+.word-chip .wc-lang.ru{background:rgba(183,154,232,.15);color:var(--create);}
+.word-chip .wc-lang.en{background:rgba(122,203,143,.15);color:var(--food);}
+.lang-select{display:flex;gap:6px;margin-bottom:8px;}
+.lang-btn{padding:4px 10px;border-radius:99px;border:1.5px solid var(--line);background:var(--bg);font-size:11px;font-weight:700;cursor:pointer;font-family:'JetBrains Mono',monospace;transition:all .2s;}
+.lang-btn.active{border-color:var(--brain);background:rgba(127,168,255,.1);color:var(--brain);}
+/* Streak recovery */
+.streak-msg{margin-top:10px;padding:10px 14px;border-radius:14px;background:linear-gradient(135deg,rgba(255,138,122,.1),rgba(232,169,61,.08));border:1.5px solid rgba(232,169,61,.3);font-size:13px;color:var(--muted);line-height:1.5;text-align:center;}
+.streak-msg b{color:var(--gold);}
 </style>
 </head>
 <body>
@@ -398,6 +447,7 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
     <div><h4>Today's parenting key</h4><p id="tipText"></p></div>
   </div>
   <div class="weeksum" id="weekSummary"></div>
+  <div class="mood-card" id="moodCard"></div>
   <div class="daterow">
     <h2 id="today"></h2>
     <div class="count"><b id="donecount">0</b>/6</div>
@@ -482,6 +532,14 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
     <p>Japan routine immunizations. Tap to mark as done. Check 母子手帳 for exact dates.</p>
     <div id="vaxList"></div>
   </div>
+  <h2 class="sec">Illness & medication log</h2>
+  <div class="panel">
+    <p>Track fevers, symptoms, and medications — useful for pediatrician visits and spotting patterns.</p>
+    <input id="illSymptom" placeholder="e.g. fever 38.5°C, runny nose" style="margin-bottom:6px">
+    <input id="illMeds" placeholder="medication given (optional)">
+    <button id="illBtn">Log illness</button>
+    <div id="illList" style="margin-top:12px"></div>
+  </div>
   <h2 class="sec">The development roadmap</h2>
   <div id="stagelist"></div>
 </div>
@@ -515,6 +573,10 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
   </div>
   <h2 class="sec">About</h2>
   <div class="panel">
+    <h3>Child profile</h3>
+    <label for="birthDate">Birth date</label>
+    <input type="date" id="birthDate" value="2024-03-13">
+    <p class="hint">All age calculations, stage assignments, and activity selection are based on this date.</p>
     <p>Dawut's Daily Bloom 🌱 — a research-informed development tracker for our son, born 13 March 2024.</p>
     <p>Growth: WHO Child Growth Standards (LMS method). CDC milestones (2022). Japan routine immunization schedule.</p>
     <p style="margin-bottom:0">All data stays on your device. No accounts, no servers, no tracking.</p>
@@ -533,7 +595,7 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
 
 <script>
 /* ============ CONFIG ============ */
-const BIRTH=new Date('2024-03-13T00:00:00');
+let BIRTH=new Date('2024-03-13T00:00:00');
 const DOMAINS=[
  {id:'body',icon:'🏃',name:'Body'},
  {id:'brain',icon:'🧠',name:'Brain & Memory'},
@@ -780,8 +842,8 @@ const TIPS=[
 /* ============ STATE ============ */
 const KEY='dawut-bloom';
 const SCHEMA_VERSION=2;
-let mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},books:[],outdoor:{},lastBackup:null,version:SCHEMA_VERSION};
-function load(){try{const r=localStorage.getItem(KEY);if(r){const p=JSON.parse(r);mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},books:[],outdoor:{},lastBackup:null,version:SCHEMA_VERSION,...p};if(!mem.version||mem.version<SCHEMA_VERSION){mem.version=SCHEMA_VERSION;save();}}}catch(e){}}
+let mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},books:[],outdoor:{},mood:{},illness:[],lastBackup:null,version:SCHEMA_VERSION};
+function load(){try{const r=localStorage.getItem(KEY);if(r){const p=JSON.parse(r);mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},books:[],outdoor:{},mood:{},illness:[],lastBackup:null,version:SCHEMA_VERSION,...p};if(!mem.version||mem.version<SCHEMA_VERSION){mem.version=SCHEMA_VERSION;save();}if(mem.settings&&mem.settings.birthDate){BIRTH=new Date(mem.settings.birthDate+'T00:00:00');}}}catch(e){}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(mem));}catch(e){}}
 function dkey(d){return d.toISOString().slice(0,10);}
 const todayKey=dkey(new Date());
@@ -850,7 +912,9 @@ function renderHeat(){
   while(cur<=end){const k=dkey(cur),d=mem.days[k],n=d?DOMAINS.filter(x=>d[x.id]).length:0;
     const c=document.createElement('div');
     c.className='cell'+(n>=6?' l3':n>=4?' l2':n>0?' l1':'')+(k===todayKey?' today':'');
-    c.title=k+' · '+n+'/6';heat.appendChild(c);cur.setDate(cur.getDate()+1);}
+    c.title=k+' · '+n+'/6';
+    if(d)c.style.cursor='pointer';c.addEventListener('click',()=>{if(d)showDayDetail(k);});
+    heat.appendChild(c);cur.setDate(cur.getDate()+1);}
 }
 /* ============ GROWTH CHARTS (WHO percentile bands) ============ */
 function renderGrowth(){
@@ -980,26 +1044,41 @@ function renderScreen(){
   wrap.appendChild(div);
 }
 /* ============ WORD TRACKING ============ */
+const LANGS=[{c:'tr',l:'TR'},{c:'jp',l:'JP'},{c:'ru',l:'RU'},{c:'en',l:'EN'}];
+let selectedLang='tr';
 function renderWords(){
   const wrap=document.getElementById('wordCard');wrap.innerHTML='';
   const div=document.createElement('div');div.className='track-card';
   const count=mem.words.length;
+  const langCounts={tr:0,jp:0,ru:0,en:0};
+  mem.words.forEach(w=>{if(typeof w==='object'&&w.l)langCounts[w.l]++;});
   const milestones=[{n:50,label:'50-word milestone (~18mo)'},{n:100,label:'100 words'},{n:200,label:'200 words (~24mo)'},{n:500,label:'500 words (~30mo)'}];
   const nextMs=milestones.find(m=>count<m.n);
+  const langHtml=LANGS.map(l=>`<button class="lang-btn${selectedLang===l.c?' active':''}" data-lang="${l.c}">${l.l} <small style="font-weight:400">${langCounts[l.c]}</small></button>`).join('');
   div.innerHTML=`<h3>Word tracker</h3><div class="sub">${count} words logged · ${nextMs?'next: '+nextMs.label:'all milestones passed 🎉'}</div>
     <div class="big-val">${count}<small> words</small></div>
-    <div class="mrow"><input type="text" placeholder="new word he said today" aria-label="Add new word"><button>Add</button></div>
+    <div class="lang-select">${langHtml}</div>
+    <div class="mrow"><input type="text" placeholder="new word (${selectedLang.toUpperCase()})" aria-label="Add new word"><button>Add</button></div>
     <div class="word-list" id="wordList"></div>`;
-  div.querySelector('button').addEventListener('click',()=>{
-    const inp=div.querySelector('input');const w=inp.value.trim();if(!w)return;
-    if(!mem.words.includes(w)){mem.words.push(w);save();renderWords();}
-    inp.value='';
+  div.querySelectorAll('.lang-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{selectedLang=btn.dataset.lang;renderWords();div.querySelector('input').focus();});
   });
+  const inp=div.querySelector('input');
+  const addWord=()=>{const w=inp.value.trim();if(!w)return;
+    const entry={w:w,l:selectedLang};
+    if(!mem.words.some(x=>typeof x==='object'&&x.w===w)){mem.words.push(entry);save();renderWords();confetti(10);}
+    inp.value='';
+  };
+  div.querySelector('button').addEventListener('click',addWord);
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter')addWord();});
   const wl=div.querySelector('#wordList');
-  mem.words.slice().reverse().slice(0,30).forEach(w=>{
+  mem.words.slice().reverse().slice(0,30).forEach((w,i)=>{
+    const realIdx=mem.words.length-1-i;
+    const word=typeof w==='object'?w.w:w;
+    const lang=typeof w==='object'&&w.l?w.l:'';
     const chip=document.createElement('span');chip.className='word-chip';
-    chip.innerHTML=`${w}<button aria-label="Remove word">✕</button>`;
-    chip.querySelector('button').addEventListener('click',()=>{mem.words=mem.words.filter(x=>x!==w);save();renderWords();});
+    chip.innerHTML=`${word}${lang?`<span class="wc-lang ${lang}">${lang.toUpperCase()}</span>`:''}<button aria-label="Remove word">✕</button>`;
+    chip.querySelector('button').addEventListener('click',()=>{mem.words.splice(realIdx,1);save();renderWords();});
     wl.appendChild(chip);
   });
   if(!count)wl.innerHTML='<p style="color:var(--faint);font-size:13px;margin:4px 0">Add words as he learns them — track his vocabulary growth over time.</p>';
@@ -1085,6 +1164,91 @@ function renderStages(){
       <ul>${sample.map(x=>'<li>'+x+'</li>').join('')}</ul>`;
     el.appendChild(div);
   });
+}
+/* ============ MOOD TRACKER ============ */
+const MOODS=[{e:'😊',l:'Great'},{e:'🙂',l:'Good'},{e:'😐',l:'Okay'},{e:'😟',l:'Fussy'},{e:'😢',l:'Hard'}];
+function renderMood(){
+  const el=document.getElementById('moodCard');el.innerHTML='';
+  const todayMood=mem.mood[todayKey];
+  let btnsHtml='<div class="mood-row">';
+  MOODS.forEach((m,i)=>{
+    const sel=todayMood===i?' selected':'';
+    btnsHtml+=`<button class="mood-btn${sel}" data-mood="${i}" aria-label="${m.l}">${m.e}</button>`;
+  });
+  btnsHtml+='</div>';
+  let weekHtml='<div class="mood-week">';
+  for(let i=6;i>=0;i--){
+    const dt=new Date();dt.setDate(dt.getDate()-i);const k=dkey(dt);
+    const m=mem.mood[k],emoji=m!=null?MOODS[m].e:'·';
+    const lbl=['S','M','T','W','T','F','S'][dt.getDay()];
+    const isToday=k===todayKey;
+    weekHtml+=`<div class="mood-day"><div class="md-emoji" style="${isToday?'outline:2px solid var(--gold);':''}">${emoji}</div><div class="md-lbl">${lbl}</div></div>`;
+  }
+  weekHtml+='</div>';
+  el.innerHTML=`<h3>How is he today?</h3><div class="sub">Tap to log mood — spot patterns over time</div>${btnsHtml}${weekHtml}`;
+  el.querySelectorAll('.mood-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const idx=parseInt(btn.dataset.mood);
+      if(mem.mood[todayKey]===idx){delete mem.mood[todayKey];}else{mem.mood[todayKey]=idx;}
+      save();renderMood();
+    });
+  });
+}
+/* ============ ILLNESS LOG ============ */
+function renderIllness(){
+  const el=document.getElementById('illList');el.innerHTML='';
+  if(!mem.illness.length){el.innerHTML='<p style="color:var(--faint);font-size:13px;margin:4px 0">No illness logged — healthy days! 🌿</p>';return;}
+  mem.illness.slice().reverse().forEach((ill,i)=>{
+    const realIdx=mem.illness.length-1-i;
+    const div=document.createElement('div');div.className='illness-entry';
+    div.innerHTML=`<button class="ie-del" aria-label="Delete entry">✕</button><div class="ie-date">${ill.d}</div><div class="ie-symptom">🤒 ${ill.s}</div>${ill.m?`<div class="ie-meds">💊 ${ill.m}</div>`:''}`;
+    div.querySelector('.ie-del').addEventListener('click',()=>{mem.illness.splice(realIdx,1);save();renderIllness();});
+    el.appendChild(div);
+  });
+}
+document.getElementById('illBtn').addEventListener('click',()=>{
+  const s=document.getElementById('illSymptom').value.trim();if(!s)return;
+  const m=document.getElementById('illMeds').value.trim();
+  mem.illness.push({d:todayKey,s:s,m:m});save();renderIllness();
+  document.getElementById('illSymptom').value='';document.getElementById('illMeds').value='';
+});
+/* ============ HEATMAP DAY DETAIL ============ */
+function showDayDetail(k){
+  const d=mem.days[k];if(!d){return;}
+  const dt=new Date(k+'T00:00:00');
+  const dtStr=dt.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const overlay=document.createElement('div');overlay.className='day-detail';
+  let actsHtml='';
+  DOMAINS.forEach(dom=>{
+    const done=d[dom.id];
+    actsHtml+=`<div class="dd-act"><span class="dda-icon">${dom.icon}</span><span class="dda-name">${dom.name}</span><span class="dda-check">${done?'✅':'⬜'}</span></div>`;
+  });
+  const noteHtml=d.note?`<div class="dd-note">📝 ${d.note}</div>`:'';
+  const moodIdx=mem.mood[k];
+  const moodHtml=moodIdx!=null?`<div class="dd-note">Mood: ${MOODS[moodIdx].e} ${MOODS[moodIdx].l}</div>`:'';
+  overlay.innerHTML=`<div class="dd-box"><div class="dd-head"><h3>${dtStr}</h3><button class="dd-close">✕</button></div><div class="dd-acts">${actsHtml}</div>${moodHtml}${noteHtml}</div>`;
+  overlay.querySelector('.dd-close').addEventListener('click',()=>overlay.remove());
+  overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove();});
+  document.body.appendChild(overlay);
+}
+/* ============ BIRTH DATE EDITOR ============ */
+document.getElementById('birthDate').addEventListener('change',function(){
+  const v=this.value;if(!v)return;
+  S().birthDate=v;save();BIRTH=new Date(v+'T00:00:00');
+  renderAll();renderCards();confetti(20);
+});
+/* ============ KEYBOARD ACCESSIBILITY ============ */
+function addKeyboardHandler(el){
+  el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}});
+}
+document.querySelectorAll('.switch[tabindex="0"]').forEach(addKeyboardHandler);
+/* ============ STREAK RECOVERY ============ */
+function streakMessage(){
+  const si=streakInfo();
+  if(si.streak===0&&si.best>=3){
+    return `<div class="streak-msg">🌟 Best streak was <b>${si.best} days</b> — today is a fresh start. One bloom day begins a new streak!</div>`;
+  }
+  return '';
 }
 /* ============ WEEKLY SUMMARY ============ */
 function renderWeekSummary(){
@@ -1241,6 +1405,9 @@ document.getElementById('reportBtn').addEventListener('click',()=>{
   const msHtml=recentMs.map(ms=>`<tr><td>${ms.d}</td><td>${ms.t}</td></tr>`).join('');
   const sleepAvg=Object.values(mem.sleep).length?(Object.values(mem.sleep).reduce((s,v)=>s+(v.h||0),0)/Object.keys(mem.sleep).length).toFixed(1):'—';
   const screenAvg=Object.values(mem.screen).length?(Object.values(mem.screen).reduce((s,v)=>s+(v.m||0),0)/Object.keys(mem.screen).length).toFixed(0):'—';
+  const outdoorAvg=Object.values(mem.outdoor).length?(Object.values(mem.outdoor).reduce((s,v)=>s+(v.m||0),0)/Object.keys(mem.outdoor).length).toFixed(0):'—';
+  const langBreakdown=LANGS.map(l=>`${l.l}: ${mem.words.filter(w=>typeof w==='object'&&w.l===l.c).length}`).join(' · ');
+  const illHtml=mem.illness.length?mem.illness.map(ill=>`<tr><td>${ill.d}</td><td>${ill.s}</td><td>${ill.m||'—'}</td></tr>`).join(''):'<tr><td colspan=3>No illness logged</td></tr>';
   const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Dawut Bloom Report — ${todayKey}</title>
 <style>body{font-family:Georgia,serif;max-width:680px;margin:0 auto;padding:40px 20px;color:#333;line-height:1.6;}
 h1{color:#5BAE6F;border-bottom:3px solid #5BAE6F;padding-bottom:8px;}
@@ -1253,16 +1420,16 @@ th{background:#f5f0e8;font-weight:bold;}
 .footer{margin-top:40px;padding-top:16px;border-top:1px solid #ddd;font-size:11px;color:#999;text-align:center;}
 @media print{body{padding:10px;}}</style></head><body>
 <h1>Dawut's Development Report</h1>
-<p style="color:#888">Born 13 March 2024 · ${ageString()} old · Generated ${todayKey}</p>
+<p style="color:#888">Born ${BIRTH.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})} · ${ageString()} old · Generated ${todayKey}</p>
 <div class="summary">
 <b>Age:</b> ${m.toFixed(1)} months<br>
 <b>Current stage:</b> ${currentStage().label}<br>
 <b>Full bloom days:</b> ${blooms}<br>
 <b>Current streak:</b> ${si.streak} days · <b>Best streak:</b> ${si.best} days<br>
 <b>Total activities completed:</b> ${totalActs}<br>
-<b>Words logged:</b> ${mem.words.length}<br>
+<b>Words logged:</b> ${mem.words.length} (${langBreakdown})<br>
 <b>Books read:</b> ${mem.books.length}<br>
-<b>Sleep avg (all logged):</b> ${sleepAvg}h · <b>Screen avg:</b> ${screenAvg}min/day
+<b>Sleep avg (all logged):</b> ${sleepAvg}h · <b>Screen avg:</b> ${screenAvg}min/day · <b>Outdoor avg:</b> ${outdoorAvg}min/day
 </div>
 <h2>Growth measurements (WHO)</h2>
 <table><tr><th>Metric</th><th>Value</th><th>Percentile</th><th>Date</th></tr>${growthHtml}</table>
@@ -1272,6 +1439,8 @@ th{background:#f5f0e8;font-weight:bold;}
 <table><tr><th>Category</th><th>Milestone</th><th>Status</th></tr>${cdcHtml}</table>
 <h2>Recent milestone journal entries</h2>
 <table><tr><th>Date</th><th>Entry</th></tr>${msHtml||'<tr><td colspan=2>No entries yet</td></tr>'}</table>
+<h2>Illness & medication history</h2>
+<table><tr><th>Date</th><th>Symptom</th><th>Medication</th></tr>${illHtml}</table>
 <div class="footer">Generated by Dawut's Daily Bloom 🌱 — research-informed development tracker<br>WHO Child Growth Standards · CDC milestones (2022) · Japan immunization schedule<br>This report is for reference only — his pediatrician knows him best.</div>
 </body></html>`;
   const w=window.open('','_blank');
@@ -1523,7 +1692,7 @@ document.getElementById('impBtn').addEventListener('click',()=>document.getEleme
 document.getElementById('impFile').addEventListener('change',e=>{
   const f=e.target.files[0];if(!f)return;const r=new FileReader();
   r.onload=()=>{try{const p=JSON.parse(r.result);if(!p.days)throw 0;
-    if(confirm('Replace current data with this backup?')){mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},books:[],outdoor:{},lastBackup:null,version:SCHEMA_VERSION,...p};save();location.reload();}
+    if(confirm('Replace current data with this backup?')){mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},books:[],outdoor:{},mood:{},illness:[],lastBackup:null,version:SCHEMA_VERSION,...p};save();location.reload();}
   }catch(err){alert('Not a valid backup file.');}};r.readAsText(f);
 });
 /* ============ PWA ============ */
@@ -1549,7 +1718,7 @@ function updateBadges(){
 
 /* ============ RENDER ALL ============ */
 function renderAll(){
-  document.getElementById('age').textContent=ageString()+' old · born 13 March 2024';
+  document.getElementById('age').textContent=ageString()+' old · born '+BIRTH.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
   document.getElementById('hsAge').textContent=ageMonths().toFixed(1);
   const st=currentStage();
   document.getElementById('stagechip').innerHTML='🧭 Current window: <b>'+st.label.replace(' - Dawut is here','')+'</b> — today\u2019s activities are tuned exactly to this stage and rotate automatically every day.';
@@ -1569,7 +1738,11 @@ function renderAll(){
   document.getElementById('ringTxt').textContent=done+'/6';
   renderHeat();
   renderWeekSummary();
+  renderMood();
   updateBadges();
+  const sm=streakMessage();
+  const existing=document.querySelector('.streak-msg');if(existing)existing.remove();
+  if(sm){document.querySelector('.hero').insertAdjacentHTML('afterend',sm);}
 }
 function confetti(n){
   const colors=['#FF8A7A','#FFC24D','#7FA8FF','#F78FB8','#7ACB8F','#B79AE8'];
@@ -1589,7 +1762,7 @@ document.querySelectorAll('nav button').forEach(b=>{
     document.getElementById(b.dataset.tab).classList.add('active');
     if(b.dataset.tab==='tab-plan')renderPlan();
     if(b.dataset.tab==='tab-growth'){renderGrowth();renderSleep();renderScreen();renderOutdoor();renderWords();renderBooks();renderTrend();}
-    if(b.dataset.tab==='tab-stages'){renderMilestones();renderGallery();renderCDC();renderVax();renderStages();}
+    if(b.dataset.tab==='tab-stages'){renderMilestones();renderGallery();renderCDC();renderVax();renderIllness();renderStages();}
     if(b.dataset.tab==='tab-settings')renderSettings();
     window.scrollTo({top:0});});
 });
@@ -1600,7 +1773,7 @@ const noteEl=document.getElementById('note');
 noteEl.addEventListener('input',()=>{day(todayKey).note=noteEl.value;save();});
 load();seedGrowth();applyTheme();
 noteEl.value=day(todayKey).note||'';
-renderCards();renderAll();renderGrowth();renderSleep();renderScreen();renderOutdoor();renderWords();renderBooks();renderTrend();renderPlan();renderWeekSummary();
+renderCards();renderAll();renderGrowth();renderSleep();renderScreen();renderOutdoor();renderWords();renderBooks();renderTrend();renderPlan();renderWeekSummary();renderMood();renderIllness();
 checkAutoBackup();
 </script>
 </body>
