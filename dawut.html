@@ -78,6 +78,11 @@ h2.sec::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(
 .daterow h2{font-size:15px;margin:0;font-weight:600;color:var(--muted);}
 .daterow .count{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--faint);}
 .daterow .count b{color:var(--text);}
+.daterow-right{display:flex;align-items:center;gap:10px;}
+.quick-done{background:none;border:1.5px solid var(--line);border-radius:99px;padding:6px 14px;font-size:11px;font-weight:700;color:var(--faint);cursor:pointer;font-family:'Quicksand',sans-serif;transition:all .2s;min-height:32px;}
+.quick-done:hover{border-color:var(--green);color:var(--green);}
+.quick-done:active{transform:scale(.95);}
+.quick-done.hide{display:none;}
 .cards{display:flex;flex-direction:column;gap:10px;}
 .act{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:0;cursor:pointer;user-select:none;-webkit-user-select:none;transition:transform .15s cubic-bezier(.2,1,.4,1),border-color .25s,box-shadow .25s;box-shadow:var(--shadow);overflow:hidden;}
 .act:hover{box-shadow:var(--shadow-lg);}
@@ -116,6 +121,14 @@ h2.sec::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(
 .daydone span{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-top:4px;}
 @keyframes pop{0%{transform:scale(.85);opacity:0}100%{transform:scale(1);opacity:1}}
 .note{margin-top:14px;}
+.quick-word{margin-top:14px;background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow);}
+.quick-word label{font-size:11px;color:var(--faint);letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:8px;font-weight:700;}
+.qw-row{display:flex;gap:8px;align-items:center;}
+.qw-row select{border:1.5px solid var(--line);border-radius:12px;padding:10px 8px;font-size:14px;background:var(--surface);color:var(--text);outline:none;min-height:44px;}
+.qw-row input{flex:1;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;font-size:16px;background:var(--surface);color:var(--text);outline:none;transition:border-color .2s;min-height:44px;}
+.qw-row input:focus{border-color:var(--lang);}
+.qw-row button{background:linear-gradient(135deg,var(--lang),#FFD66B);color:#5A4200;border:none;border-radius:12px;padding:10px 18px;font-size:14px;font-weight:700;font-family:'Quicksand',sans-serif;cursor:pointer;transition:transform .15s;min-height:44px;}
+.qw-row button:active{transform:scale(.95);}
 .note textarea{width:100%;min-height:64px;border-radius:16px;border:1.5px solid var(--line);background:var(--surface);color:var(--text);padding:12px 14px;font-size:14px;font-family:'Quicksand',sans-serif;resize:vertical;outline:none;box-shadow:var(--shadow);transition:border-color .2s,box-shadow .2s;}
 .note textarea:focus{border-color:var(--lang);box-shadow:0 0 0 3px rgba(255,194,77,.12);}
 .note label{font-size:11px;color:var(--faint);letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:8px;font-weight:700;}
@@ -665,7 +678,10 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
   <div class="mom-motivation" id="momMotivation"></div>
   <div class="daterow">
     <h2 id="today"></h2>
-    <div class="count"><b id="donecount">0</b>/6 seeds</div>
+    <div class="daterow-right">
+      <span class="count"><b id="donecount">0</b>/6 seeds</span>
+      <button class="quick-done" id="quickDone" aria-label="Mark all done">✅ All done</button>
+    </div>
   </div>
   <div class="cards" id="cards" role="list"></div>
   <div class="daydone" id="daydone">🌸 A full bloom day! Six little seeds planted.<span>Consistency, not intensity, builds his brain.</span></div>
@@ -675,6 +691,14 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
   </div>
   <div class="weeksum" id="weekSummary"></div>
   <div class="mood-card" id="moodCard"></div>
+  <div class="quick-word">
+    <label for="quickWordInput">＋ New word he said</label>
+    <div class="qw-row">
+      <select id="qwLang"><option value="tr">🇹🇷 TR</option><option value="jp">🇯🇵 JP</option><option value="ru">🇷🇺 RU</option><option value="en">🇬🇧 EN</option></select>
+      <input type="text" id="quickWordInput" placeholder="e.g. 'mama', 'water', 'more'">
+      <button id="qwBtn">Add</button>
+    </div>
+  </div>
   <div class="note">
     <label for="note">A little moment today</label>
     <textarea id="note" placeholder="e.g. said 'more water' by himself, balanced on one foot for 2 seconds!"></textarea>
@@ -1218,6 +1242,12 @@ function renderCards(){
     cardsEl.appendChild(el);
   });
 }
+/* Quick complete all */
+document.getElementById('quickDone').addEventListener('click',function(){
+  const d=day(todayKey);
+  DOMAINS.forEach(dom=>d[dom.id]=1);
+  save();renderCards();renderAll();confetti(70);
+});
 /* ============ STREAK / HEAT ============ */
 function complete(k){const d=mem.days[k];return d&&DOMAINS.filter(x=>d[x.id]).length>=4;}
 function fullBloom(k){const d=mem.days[k];return d&&DOMAINS.every(x=>d[x.id]);}
@@ -2348,6 +2378,10 @@ function renderAll(){
   const d=day(todayKey),done=DOMAINS.filter(x=>d[x.id]).length;
   document.getElementById('donecount').textContent=done;
   document.getElementById('daydone').classList.toggle('show',done===6);
+  document.getElementById('quickDone').classList.toggle('hide',done===6);
+  const todayBadge=document.getElementById('badge-today');
+  if(done>0&&done<6){todayBadge.textContent=done;todayBadge.classList.remove('hide');}
+  else todayBadge.classList.add('hide');
   document.getElementById('stTotal').textContent=blooms;
   document.getElementById('stBest').textContent=si.best;
   document.getElementById('stActs').textContent=Object.values(mem.days).reduce((s,dd)=>s+DOMAINS.filter(x=>dd[x.id]).length,0);
@@ -2394,6 +2428,17 @@ document.getElementById('today').textContent=new Date().toLocaleDateString('en-G
 document.getElementById('tipText').textContent=TIPS[dayOfYear()%TIPS.length];
 const noteEl=document.getElementById('note');
 noteEl.addEventListener('input',()=>{day(todayKey).note=noteEl.value;save();});
+/* Quick word add from Today tab */
+document.getElementById('qwBtn').addEventListener('click',function(){
+  const w=document.getElementById('quickWordInput').value.trim();
+  if(!w)return;
+  const l=document.getElementById('qwLang').value;
+  if(!mem.words.some(x=>typeof x==='object'&&x.w===w&&x.l===l)){mem.words.push({w:w,l:l});save();confetti(10);}
+  document.getElementById('quickWordInput').value='';
+  this.textContent='✓ Added!';
+  setTimeout(()=>{this.textContent='Add';},1200);
+});
+document.getElementById('quickWordInput').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('qwBtn').click();});
 load();seedGrowth();applyTheme();loadBirthDetails();
 noteEl.value=day(todayKey).note||'';
 renderCards();renderAll();renderGrowth();renderGrowthInput();renderCountdowns();renderSleep();renderScreen();renderOutdoor();renderWords();renderBooks();renderMeals();renderPotty();renderDental();renderTrend();renderPlan();renderWeekSummary();renderMood();renderIllness();renderAllergies();renderBadges();
