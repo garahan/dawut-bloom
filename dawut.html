@@ -1112,7 +1112,9 @@ function seedGrowth(){
 function ageMonths(){return (new Date()-BIRTH)/(1000*60*60*24*30.4375);}
 function ageString(){
   const now=new Date();let y=now.getFullYear()-BIRTH.getFullYear(),m=now.getMonth()-BIRTH.getMonth(),d=now.getDate()-BIRTH.getDate();
-  if(d<0)m--;if(m<0){y--;m+=12;}return y+' year'+(y!==1?'s':'')+', '+m+' month'+(m!==1?'s':'');
+  if(d<0){m--;const pm=new Date(now.getFullYear(),now.getMonth(),0).getDate();d+=pm;}
+  if(m<0){y--;m+=12;}
+  return y+' year'+(y!==1?'s':'')+', '+m+' month'+(m!==1?'s':'')+', '+d+' day'+(d!==1?'s':'');
 }
 function currentStage(){const m=ageMonths();return STAGES.find(s=>m>=s.from&&m<s.to)||STAGES[STAGES.length-1];}
 /* ============ TODAY'S ACTIVITIES ============ */
