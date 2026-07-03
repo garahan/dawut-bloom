@@ -78,28 +78,32 @@ h2.sec::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(
 .daterow h2{font-size:15px;margin:0;font-weight:600;color:var(--muted);}
 .daterow .count{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--faint);}
 .daterow .count b{color:var(--text);}
-.cards{display:flex;flex-direction:column;gap:12px;}
-.act{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:15px 16px;cursor:pointer;user-select:none;transition:transform .15s cubic-bezier(.2,1,.4,1),border-color .25s,box-shadow .25s;box-shadow:var(--shadow);}
-.act:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px);}
-.act:active{transform:scale(.97);}
-.act .top{display:flex;gap:12px;align-items:flex-start;}
-.act .dot{width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;transition:all .25s;}
-.act h3{margin:0;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;}
-.act p.what{margin:4px 0 0;font-size:14.5px;color:var(--text);line-height:1.45;font-weight:500;}
-.act p.why{margin:6px 0 0;font-size:12px;color:var(--muted);line-height:1.45;}
-.act .check{margin-left:auto;width:30px;height:30px;border-radius:50%;border:2px solid var(--line);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px;color:transparent;transition:all .25s cubic-bezier(.2,1.4,.4,1);}
+.cards{display:flex;flex-direction:column;gap:10px;}
+.act{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:0;cursor:pointer;user-select:none;-webkit-user-select:none;transition:transform .15s cubic-bezier(.2,1,.4,1),border-color .25s,box-shadow .25s;box-shadow:var(--shadow);overflow:hidden;}
+.act:hover{box-shadow:var(--shadow-lg);}
+.act:active{transform:scale(.98);}
+.act .act-bar{height:4px;width:100%;}
+.act .act-body{padding:14px 16px;}
+.act .top{display:flex;gap:12px;align-items:center;}
+.act .dot{width:48px;height:48px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;transition:all .25s;}
+.act .act-content{flex:1;min-width:0;}
+.act h3{margin:0;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;}
+.act p.what{margin:3px 0 0;font-size:15px;color:var(--text);line-height:1.4;font-weight:600;}
+.act p.why{margin:5px 0 0;font-size:11.5px;color:var(--muted);line-height:1.4;}
+.act .check{margin-left:auto;width:44px;height:44px;border-radius:50%;border:2.5px solid var(--line);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px;color:transparent;transition:all .25s cubic-bezier(.2,1.4,.4,1);}
 .act.done .check{transform:scale(1.1);}
-.act .shuffle{margin-top:10px;display:inline-block;font-size:11.5px;font-family:'JetBrains Mono',monospace;color:var(--faint);padding:5px 12px;border:1.5px dashed var(--line);border-radius:99px;cursor:pointer;transition:all .2s;}
+.act .shuffle{margin-top:10px;display:inline-flex;align-items:center;gap:4px;font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--faint);padding:6px 14px;border:1.5px dashed var(--line);border-radius:99px;cursor:pointer;transition:all .2s;min-height:32px;}
 .act .shuffle:hover{color:var(--muted);border-color:var(--muted);background:var(--bg);}
 .act .shuffle:active{transform:scale(.95);}
 .act.done .check{color:#fff;border-color:transparent;}
-.act.done p.what{text-decoration:line-through;opacity:.6;}
-.d-body .dot{background:rgba(255,138,122,.16);} .d-body h3{color:var(--body);}
-.d-brain .dot{background:rgba(127,168,255,.16);} .d-brain h3{color:var(--brain);}
-.d-lang .dot{background:rgba(255,194,77,.18);} .d-lang h3{color:#C98F1E;}
-.d-heart .dot{background:rgba(247,143,184,.16);} .d-heart h3{color:var(--heart);}
-.d-food .dot{background:rgba(122,203,143,.16);} .d-food h3{color:var(--food);}
-.d-create .dot{background:rgba(183,154,232,.16);} .d-create h3{color:var(--create);}
+.act.done .act-body{opacity:.55;}
+.act.done p.what{text-decoration:line-through;}
+.d-body .dot{background:rgba(255,138,122,.16);} .d-body h3{color:var(--body);} .d-body .act-bar{background:var(--body);}
+.d-brain .dot{background:rgba(127,168,255,.16);} .d-brain h3{color:var(--brain);} .d-brain .act-bar{background:var(--brain);}
+.d-lang .dot{background:rgba(255,194,77,.18);} .d-lang h3{color:#C98F1E;} .d-lang .act-bar{background:var(--lang);}
+.d-heart .dot{background:rgba(247,143,184,.16);} .d-heart h3{color:var(--heart);} .d-heart .act-bar{background:var(--heart);}
+.d-food .dot{background:rgba(122,203,143,.16);} .d-food h3{color:var(--food);} .d-food .act-bar{background:var(--food);}
+.d-create .dot{background:rgba(183,154,232,.16);} .d-create h3{color:var(--create);} .d-create .act-bar{background:var(--create);}
 .act.done.d-body{border-color:var(--body);} .act.done.d-body .check{background:var(--body);}
 .act.done.d-brain{border-color:var(--brain);} .act.done.d-brain .check{background:var(--brain);}
 .act.done.d-lang{border-color:var(--lang);} .act.done.d-lang .check{background:var(--lang);}
@@ -427,15 +431,19 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
 .mom-motivation .mm-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--heart);margin-bottom:6px;}
 .mom-motivation .mm-text{font-size:14px;color:var(--text);line-height:1.5;font-weight:500;}
 /* Expanded activity card */
-.act .detail{margin-top:10px;padding-top:10px;border-top:1px solid var(--line);display:none;}
+.act .detail{padding:14px 16px;background:var(--bg);display:none;}
 .act.expanded .detail{display:block;animation:fadein .25s ease;}
-.act .detail-row{display:flex;gap:8px;margin-bottom:6px;font-size:12px;line-height:1.45;}
-.act .detail-row .dr-label{font-weight:700;color:var(--faint);font-size:10px;text-transform:uppercase;letter-spacing:.08em;flex-shrink:0;width:70px;}
-.act .detail-row .dr-value{color:var(--muted);}
-.act .contributes{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;color:var(--faint);background:var(--bg);padding:4px 10px;border-radius:99px;margin-top:8px;}
-.act .contributes .c-icon{font-size:12px;}
-.act .expand-hint{font-size:10px;color:var(--faint);margin-top:6px;text-align:center;}
+.act .detail-section{margin-bottom:12px;}
+.act .detail-section:last-child{margin-bottom:0;}
+.act .ds-header{display:flex;align-items:center;gap:6px;margin-bottom:4px;}
+.act .ds-icon{font-size:14px;}
+.act .ds-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--faint);}
+.act .ds-text{font-size:13px;color:var(--text);line-height:1.5;padding-left:20px;}
+.act .contributes{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--faint);background:var(--card);border:1px solid var(--line);padding:6px 12px;border-radius:99px;margin-top:10px;}
+.act .contributes .c-icon{font-size:14px;}
+.act .expand-hint{font-size:10px;color:var(--faint);text-align:center;padding:6px 0 0;border-top:1px solid var(--line);margin-top:10px;}
 .act.expanded .expand-hint{display:none;}
+.act .act-footer{padding:8px 16px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
 /* Potty training tracker */
 .potty-card{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:12px;box-shadow:var(--shadow);transition:box-shadow .25s;}
 .potty-card:hover{box-shadow:var(--shadow-lg);}
@@ -1126,28 +1134,55 @@ function todaysActivity(domId){
 const cardsEl=document.getElementById('cards');
 function renderCards(){
   cardsEl.innerHTML='';const d=day(todayKey);
-  DOMAINS.forEach(dom=>{
+  DOMAINS.forEach((dom,idx)=>{
     const act=todaysActivity(dom.id);
     const el=document.createElement('div');
     el.className='act d-'+dom.id+(d[dom.id]?' done':'');
     el.setAttribute('role','listitem');
-    el.innerHTML=`<div class="top"><div class="dot">${dom.icon}</div>
-      <div><h3>${dom.name}</h3><p class="what">${act.a}</p><p class="why">why: ${act.w}</p></div>
-      <div class="check" aria-hidden="true">✓</div></div>
-      <div class="expand-hint">tap card for details ↓</div>
-      <div class="detail">
-        <div class="detail-row"><span class="dr-label">Why</span><span class="dr-value">${act.w}</span></div>
-        <div class="detail-row"><span class="dr-label">Contributes to</span><span class="dr-value">${dom.desc}</span></div>
-        <div class="detail-row"><span class="dr-label">How to</span><span class="dr-value">${act.a}. Keep it light and playful — follow his lead, stop before he gets frustrated, and celebrate the attempt not just the result.</span></div>
-        <div class="contributes"><span class="c-icon">${dom.icon}</span> ${dom.name} development domain</div>
+    el.innerHTML=`<div class="act-bar"></div>
+      <div class="act-body">
+        <div class="top">
+          <div class="dot">${dom.icon}</div>
+          <div class="act-content">
+            <h3>${dom.name}</h3>
+            <p class="what">${act.a}</p>
+            <p class="why">${act.w}</p>
+          </div>
+          <div class="check" aria-label="Mark ${dom.name} done" role="checkbox" aria-checked="${d[dom.id]?'true':'false'}" tabindex="0">✓</div>
+        </div>
+        <div class="expand-hint">tap for how-to guide ↓</div>
       </div>
-      <span class="shuffle" role="button" tabindex="0">↻ different one</span>`;
-    el.querySelector('.top').addEventListener('click',()=>{
+      <div class="detail">
+        <div class="detail-section">
+          <div class="ds-header"><span class="ds-icon">🎯</span><span class="ds-title">What to do</span></div>
+          <div class="ds-text">${act.a}</div>
+        </div>
+        <div class="detail-section">
+          <div class="ds-header"><span class="ds-icon">🔬</span><span class="ds-title">Why it matters</span></div>
+          <div class="ds-text">${act.w}</div>
+        </div>
+        <div class="detail-section">
+          <div class="ds-header"><span class="ds-icon">🧩</span><span class="ds-title">Develops</span></div>
+          <div class="ds-text">${dom.desc}</div>
+        </div>
+        <div class="detail-section">
+          <div class="ds-header"><span class="ds-icon">📋</span><span class="ds-title">How to do it</span></div>
+          <div class="ds-text">Keep it light and playful. Follow his lead — if he loses interest, switch to something else. Stop before frustration starts. Celebrate the attempt, not just the result. 5-10 minutes is enough.</div>
+        </div>
+        <div class="contributes"><span class="c-icon">${dom.icon}</span> ${dom.name} domain · seed ${idx+1} of 6</div>
+      </div>
+      <div class="act-footer">
+        <span class="shuffle" role="button" tabindex="0">↻ give me a different one</span>
+      </div>`;
+    const checkEl=el.querySelector('.check');
+    checkEl.addEventListener('click',e=>{
+      e.stopPropagation();
       d[dom.id]=d[dom.id]?0:1;save();renderCards();renderAll();
       if(DOMAINS.every(x=>day(todayKey)[x.id]))confetti(70);
     });
-    el.addEventListener('click',e=>{
-      if(e.target.closest('.shuffle')||e.target.closest('.check'))return;
+    checkEl.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();checkEl.click();}});
+    el.querySelector('.act-body').addEventListener('click',e=>{
+      if(e.target.closest('.check'))return;
       el.classList.toggle('expanded');
     });
     const shf=el.querySelector('.shuffle');
