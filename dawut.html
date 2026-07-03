@@ -756,7 +756,23 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
     <h3>Child profile</h3>
     <label for="birthDate">Birth date</label>
     <input type="date" id="birthDate" value="2024-03-13">
-    <p class="hint">All age calculations, stage assignments, and activity selection are based on this date.</p>
+    <label for="birthTime" style="margin-top:10px">Birth time</label>
+    <input type="time" id="birthTime" value="15:48">
+    <div class="mrow" style="margin-top:10px"><input type="text" id="birthHospital" placeholder="Hospital" value="東京都立大塚病院" aria-label="Birth hospital"></div>
+    <div class="mrow" style="margin-top:6px"><input type="text" id="birthDoctor" placeholder="Doctor" value="中澤早希" aria-label="Doctor"></div>
+    <div class="mrow" style="margin-top:6px"><input type="text" id="birthMidwife" placeholder="Midwife" value="矢澤るり" aria-label="Midwife"></div>
+    <div class="mrow" style="margin-top:6px"><input type="text" id="birthGestational" placeholder="Gestational age (e.g. 39 weeks 4 days)" value="39 weeks 4 days" aria-label="Gestational age"></div>
+    <div class="mrow" style="margin-top:6px"><input type="text" id="birthDelivery" placeholder="Delivery type" value="Cephalic position, 4h 22m labor" aria-label="Delivery type"></div>
+    <h3 style="margin-top:14px">Birth measurements</h3>
+    <div class="herostats" style="gap:8px">
+      <div class="hstat"><b id="birthW">4200g</b><span>Weight</span></div>
+      <div class="hstat"><b id="birthH">53.9cm</b><span>Height</span></div>
+      <div class="hstat"><b id="birthHead">35.0cm</b><span>Head</span></div>
+      <div class="hstat"><b id="birthChest">35.0cm</b><span>Chest</span></div>
+    </div>
+    <div class="mrow" style="margin-top:8px"><input type="text" id="birthFeeding" placeholder="Feeding" value="Breastfeeding / Mixed Formula" aria-label="Feeding"></div>
+    <div class="mrow" style="margin-top:6px"><input type="text" id="birthApgar" placeholder="APGAR score" value="Stable, no abnormalities" aria-label="APGAR score"></div>
+    <p class="hint">All age calculations, stage assignments, and activity selection are based on birth date.</p>
     <p>Dawut's Daily Bloom 🌱 — a research-informed development tracker for our son, born 13 March 2024.</p>
     <p>Growth: WHO Child Growth Standards (LMS method). CDC milestones (2022). Japan routine immunization schedule.</p>
     <p style="margin-bottom:0">All data stays on your device. No accounts, no servers, no tracking.</p>
@@ -1030,9 +1046,9 @@ const todayKey=dkey(new Date());
 function day(k){if(!mem.days[k])mem.days[k]={body:0,brain:0,lang:0,heart:0,food:0,create:0,note:''};return mem.days[k];}
 function seedGrowth(){
   if(!mem.growth.height||!mem.growth.height.length){
-    mem.growth.height=[{d:'2025-05-26',v:82},{d:'2026-06-01',v:95}];
-    mem.growth.weight=[{d:'2025-05-26',v:12.9},{d:'2026-06-01',v:14.5}];
-    mem.growth.head=[{d:'2025-05-26',v:47.5}];save();
+    mem.growth.height=[{d:'2024-03-13',v:53.9},{d:'2025-05-26',v:82},{d:'2026-06-01',v:95}];
+    mem.growth.weight=[{d:'2024-03-13',v:4.2},{d:'2025-05-26',v:12.9},{d:'2026-06-01',v:14.5}];
+    mem.growth.head=[{d:'2024-03-13',v:35.0},{d:'2025-05-26',v:47.5}];save();
   }
 }
 /* ============ AGE & STAGE ============ */
@@ -1568,11 +1584,37 @@ function showDayDetail(k){
   overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove();});
   document.body.appendChild(overlay);
 }
-/* ============ BIRTH DATE EDITOR ============ */
+/* ============ BIRTH DETAILS EDITOR ============ */
+const BIRTH_FIELDS=['birthTime','birthHospital','birthDoctor','birthMidwife','birthGestational','birthDelivery','birthFeeding','birthApgar'];
+function loadBirthDetails(){
+  const b=S().birthDetails||{};
+  document.getElementById('birthDate').value=S().birthDate||'2024-03-13';
+  document.getElementById('birthTime').value=b.birthTime||'15:48';
+  BIRTH_FIELDS.forEach(f=>{const el=document.getElementById(f);if(el&&b[f])el.value=b[f];});
+  if(b.birthWeight)document.getElementById('birthW').textContent=b.birthWeight;
+  if(b.birthHeight)document.getElementById('birthH').textContent=b.birthHeight;
+  if(b.birthHead)document.getElementById('birthHead').textContent=b.birthHead;
+  if(b.birthChest)document.getElementById('birthChest').textContent=b.birthChest;
+}
+function saveBirthDetails(){
+  const b=S().birthDetails||(S().birthDetails={});
+  BIRTH_FIELDS.forEach(f=>{const el=document.getElementById(f);if(el)b[f]=el.value;});
+  b.birthWeight=document.getElementById('birthW').textContent;
+  b.birthHeight=document.getElementById('birthH').textContent;
+  b.birthHead=document.getElementById('birthHead').textContent;
+  b.birthChest=document.getElementById('birthChest').textContent;
+  save();
+}
 document.getElementById('birthDate').addEventListener('change',function(){
   const v=this.value;if(!v)return;
   S().birthDate=v;save();BIRTH=new Date(v+'T00:00:00');
-  renderAll();renderCards();confetti(20);
+  saveBirthDetails();renderAll();renderCards();confetti(20);
+});
+BIRTH_FIELDS.forEach(f=>{const el=document.getElementById(f);if(el)el.addEventListener('change',saveBirthDetails);});
+['birthW','birthH','birthHead','birthChest'].forEach(id=>{
+  const el=document.getElementById(id);if(el)el.addEventListener('click',()=>{
+    const v=prompt('Enter new value for '+el.nextElementSibling.textContent+':',el.textContent);if(v){el.textContent=v;saveBirthDetails();}
+  });
 });
 /* ============ KEYBOARD ACCESSIBILITY ============ */
 function addKeyboardHandler(el){
@@ -1717,6 +1759,7 @@ function renderTrend(){
 document.getElementById('reportBtn').addEventListener('click',()=>{
   const m=ageMonths();
   const si=streakInfo();
+  const bd=S().birthDetails||{};
   const blooms=Object.keys(mem.days).filter(fullBloom).length;
   const totalActs=Object.values(mem.days).reduce((s,dd)=>s+DOMAINS.filter(x=>dd[x.id]).length,0);
   let growthHtml='';
@@ -1757,9 +1800,21 @@ th{background:#f5f0e8;font-weight:bold;}
 .footer{margin-top:40px;padding-top:16px;border-top:1px solid #ddd;font-size:11px;color:#999;text-align:center;}
 @media print{body{padding:10px;}}</style></head><body>
 <h1>Dawut's Development Report</h1>
-<p style="color:#888">Born ${BIRTH.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})} · ${ageString()} old · Generated ${todayKey}</p>
+<p style="color:#888">Born ${BIRTH.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})}${bd.birthTime?' at '+bd.birthTime:''} · ${ageString()} old · Generated ${todayKey}</p>
 <div class="summary">
 <b>Age:</b> ${m.toFixed(1)} months<br>
+<b>Sex:</b> Male<br>
+${bd.birthHospital?'<b>Birth hospital:</b> '+bd.birthHospital+'<br>':''}
+${bd.birthDoctor?'<b>Doctor:</b> '+bd.birthDoctor+'<br>':''}
+${bd.birthMidwife?'<b>Midwife:</b> '+bd.birthMidwife+'<br>':''}
+${bd.birthGestational?'<b>Gestational age:</b> '+bd.birthGestational+'<br>':''}
+${bd.birthDelivery?'<b>Delivery:</b> '+bd.birthDelivery+'<br>':''}
+${bd.birthWeight?'<b>Birth weight:</b> '+bd.birthWeight+'<br>':''}
+${bd.birthHeight?'<b>Birth height:</b> '+bd.birthHeight+'<br>':''}
+${bd.birthHead?'<b>Birth head circ.:</b> '+bd.birthHead+'<br>':''}
+${bd.birthChest?'<b>Birth chest:</b> '+bd.birthChest+'<br>':''}
+${bd.birthFeeding?'<b>Feeding:</b> '+bd.birthFeeding+'<br>':''}
+${bd.birthApgar?'<b>APGAR:</b> '+bd.birthApgar+'<br>':''}
 <b>Current stage:</b> ${currentStage().label}<br>
 <b>Full bloom days:</b> ${blooms}<br>
 <b>Current streak:</b> ${si.streak} days · <b>Best streak:</b> ${si.best} days<br>
@@ -2102,7 +2157,7 @@ document.querySelectorAll('nav button').forEach(b=>{
     if(b.dataset.tab==='tab-plan')renderPlan();
     if(b.dataset.tab==='tab-growth'){renderGrowth();renderSleep();renderScreen();renderOutdoor();renderWords();renderBooks();renderMeals();renderPotty();renderDental();renderTrend();}
     if(b.dataset.tab==='tab-stages'){renderMilestones();renderGallery();renderCDC();renderVax();renderIllness();renderAllergies();renderStages();}
-    if(b.dataset.tab==='tab-settings')renderSettings();
+    if(b.dataset.tab==='tab-settings'){renderSettings();loadBirthDetails();}
     window.scrollTo({top:0});});
 });
 /* init */
@@ -2110,7 +2165,7 @@ document.getElementById('today').textContent=new Date().toLocaleDateString('en-G
 document.getElementById('tipText').textContent=TIPS[dayOfYear()%TIPS.length];
 const noteEl=document.getElementById('note');
 noteEl.addEventListener('input',()=>{day(todayKey).note=noteEl.value;save();});
-load();seedGrowth();applyTheme();
+load();seedGrowth();applyTheme();loadBirthDetails();
 noteEl.value=day(todayKey).note||'';
 renderCards();renderAll();renderGrowth();renderSleep();renderScreen();renderOutdoor();renderWords();renderBooks();renderMeals();renderPotty();renderDental();renderTrend();renderPlan();renderWeekSummary();renderMood();renderIllness();renderAllergies();renderBadges();
 checkAutoBackup();
