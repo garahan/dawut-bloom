@@ -62,9 +62,12 @@ h2.sec::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(
 .hstat b.grn{color:var(--green);} .hstat b.gld{color:var(--gold);}
 .ringwrap{display:flex;justify-content:center;margin-top:16px;}
 .ringwrap svg{width:120px;height:120px;}
+.hero .who .ringwrap svg{width:72px;height:72px;}
 .ringwrap .ringbg{stroke:var(--line);stroke-width:8;fill:none;}
 .ringwrap .ringfg{stroke:url(#ringGrad);stroke-width:8;fill:none;stroke-linecap:round;transition:stroke-dashoffset .6s cubic-bezier(.2,1,.4,1);filter:drop-shadow(0 0 6px rgba(91,174,111,.3));}
 .ringwrap .ringtxt{font-size:28px;font-weight:700;font-family:'JetBrains Mono',monospace;fill:var(--text);text-anchor:middle;dominant-baseline:central;}
+.hero .who .ringwrap .ringtxt{font-size:18px;}
+.hero .who .ringwrap .ringlbl{font-size:6px;}
 .ringwrap .ringlbl{font-size:9px;fill:var(--faint);text-anchor:middle;letter-spacing:.1em;text-transform:uppercase;}
 .tip{margin-top:14px;background:linear-gradient(135deg,var(--card),rgba(232,169,61,.04));border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow);display:flex;gap:12px;align-items:flex-start;position:relative;overflow:hidden;}
 .tip::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--gold),var(--body));}
@@ -418,6 +421,21 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
 /* Streak recovery */
 .streak-msg{margin-top:10px;padding:10px 14px;border-radius:14px;background:linear-gradient(135deg,rgba(255,138,122,.1),rgba(232,169,61,.08));border:1.5px solid rgba(232,169,61,.3);font-size:13px;color:var(--muted);line-height:1.5;text-align:center;}
 .streak-msg b{color:var(--gold);}
+/* Mom motivation banner */
+.mom-motivation{background:linear-gradient(135deg,rgba(247,143,184,.1),rgba(255,194,77,.08),rgba(122,203,143,.06));border:1.5px solid rgba(247,143,184,.25);border-radius:var(--r);padding:14px 16px;margin-bottom:14px;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+.mom-motivation::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--heart),var(--gold),var(--food));}
+.mom-motivation .mm-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--heart);margin-bottom:6px;}
+.mom-motivation .mm-text{font-size:14px;color:var(--text);line-height:1.5;font-weight:500;}
+/* Expanded activity card */
+.act .detail{margin-top:10px;padding-top:10px;border-top:1px solid var(--line);display:none;}
+.act.expanded .detail{display:block;animation:fadein .25s ease;}
+.act .detail-row{display:flex;gap:8px;margin-bottom:6px;font-size:12px;line-height:1.45;}
+.act .detail-row .dr-label{font-weight:700;color:var(--faint);font-size:10px;text-transform:uppercase;letter-spacing:.08em;flex-shrink:0;width:70px;}
+.act .detail-row .dr-value{color:var(--muted);}
+.act .contributes{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;color:var(--faint);background:var(--bg);padding:4px 10px;border-radius:99px;margin-top:8px;}
+.act .contributes .c-icon{font-size:12px;}
+.act .expand-hint{font-size:10px;color:var(--faint);margin-top:6px;text-align:center;}
+.act.expanded .expand-hint{display:none;}
 /* Potty training tracker */
 .potty-card{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:12px;box-shadow:var(--shadow);transition:box-shadow .25s;}
 .potty-card:hover{box-shadow:var(--shadow-lg);}
@@ -592,6 +610,15 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
     <div class="who">
       <div class="face" aria-hidden="true">🌱</div>
       <div><h1>Dawut</h1><div class="age" id="age"></div></div>
+      <div class="ringwrap" style="margin-top:0;margin-left:auto" aria-hidden="true">
+        <svg viewBox="0 0 120 120">
+          <defs><linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7ACB8F"/><stop offset="100%" stop-color="#5BAE6F"/></linearGradient></defs>
+          <circle class="ringbg" cx="60" cy="60" r="50"/>
+          <circle class="ringfg" id="ringFg" cx="60" cy="60" r="50" stroke-dasharray="314.16" stroke-dashoffset="314.16" transform="rotate(-90 60 60)"/>
+          <text class="ringtxt" id="ringTxt" x="60" y="56">0/6</text>
+          <text class="ringlbl" x="60" y="74">today</text>
+        </svg>
+      </div>
     </div>
     <div class="stagechip" id="stagechip"></div>
     <div class="herostats">
@@ -599,29 +626,20 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
       <div class="hstat"><b class="grn" id="hsDone">0</b><span>bloom days</span></div>
       <div class="hstat"><b id="hsAge">—</b><span>months old</span></div>
     </div>
-    <div class="ringwrap" aria-hidden="true">
-      <svg viewBox="0 0 120 120">
-        <defs><linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7ACB8F"/><stop offset="100%" stop-color="#5BAE6F"/></linearGradient></defs>
-        <circle class="ringbg" cx="60" cy="60" r="50"/>
-        <circle class="ringfg" id="ringFg" cx="60" cy="60" r="50" stroke-dasharray="314.16" stroke-dashoffset="314.16" transform="rotate(-90 60 60)"/>
-        <text class="ringtxt" id="ringTxt" x="60" y="56">0/6</text>
-        <text class="ringlbl" x="60" y="74">today</text>
-      </svg>
-    </div>
   </div>
+  <div class="mom-motivation" id="momMotivation"></div>
+  <div class="daterow">
+    <h2 id="today"></h2>
+    <div class="count"><b id="donecount">0</b>/6 seeds</div>
+  </div>
+  <div class="cards" id="cards" role="list"></div>
+  <div class="daydone" id="daydone">🌸 A full bloom day! Six little seeds planted.<span>Consistency, not intensity, builds his brain.</span></div>
   <div class="tip" role="note">
     <span class="ti" aria-hidden="true">💡</span>
     <div><h4>Today's parenting key</h4><p id="tipText"></p></div>
   </div>
   <div class="weeksum" id="weekSummary"></div>
   <div class="mood-card" id="moodCard"></div>
-  <div class="badges-section" id="badgesSection"></div>
-  <div class="daterow">
-    <h2 id="today"></h2>
-    <div class="count"><b id="donecount">0</b>/6</div>
-  </div>
-  <div class="cards" id="cards" role="list"></div>
-  <div class="daydone" id="daydone">🌸 A full bloom day! Six little seeds planted.<span>Consistency, not intensity, builds his brain.</span></div>
   <div class="note">
     <label for="note">Today's little moment — a word he said, something new he did</label>
     <textarea id="note" placeholder="e.g. said 'more water' by himself, balanced on one foot for 2 seconds!"></textarea>
@@ -677,6 +695,8 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
     <div class="stat"><b id="stBest">0</b><span>best streak</span></div>
     <div class="stat"><b id="stActs">0</b><span>activities done</span></div>
   </div>
+  <h2 class="sec">Achievement badges</h2>
+  <div class="badges-section" id="badgesSection"></div>
 </div>
 
 <div class="tab" id="tab-stages" role="tabpanel" aria-label="Milestones and development">
@@ -793,12 +813,12 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
 /* ============ CONFIG ============ */
 let BIRTH=new Date('2024-03-13T00:00:00');
 const DOMAINS=[
- {id:'body',icon:'🏃',name:'Body'},
- {id:'brain',icon:'🧠',name:'Brain & Memory'},
- {id:'lang',icon:'🗣️',name:'Language'},
- {id:'heart',icon:'💛',name:'Heart (EQ)'},
- {id:'food',icon:'🥦',name:'Food'},
- {id:'create',icon:'🎨',name:'Create & Play'}
+ {id:'body',icon:'🏃',name:'Body',desc:'Gross motor · balance · strength · vestibular system'},
+ {id:'brain',icon:'🧠',name:'Brain & Memory',desc:'Executive function · problem-solving · working memory · IQ scaffolding'},
+ {id:'lang',icon:'🗣️',name:'Language',desc:'Vocabulary · bilingual wiring · phonemic awareness · future literacy'},
+ {id:'heart',icon:'💛',name:'Heart (EQ)',desc:'Emotional regulation · empathy · self-worth · social intelligence'},
+ {id:'food',icon:'🥦',name:'Food',desc:'Neuronutrition · gut-brain axis · iron for IQ · DHA for synapses'},
+ {id:'create',icon:'🎨',name:'Create & Play',desc:'Divergent thinking · fine motor · imagination · creative confidence'}
 ];
 /* ============ WHO LMS DATA (boys, 0-60 months) ============ */
 const WHO={
@@ -1035,6 +1055,43 @@ const TIPS=[
  'Executive function grows through wait time: let him struggle 30 seconds before stepping in.',
  'Narration builds vocabulary: describe what you are doing as you cook, clean, walk. Word gap is real.',
  'Secure attachment is not constant attention - it is reliable response. Quality over quantity.'];
+const MOM_MOTIVATIONS=[
+ 'You are his safe place. Every time you respond warmly, you build his brain architecture. 🌸',
+ 'The fact that you track this means you already are an exceptional mother. Data is love. 💛',
+ 'Some days 2/6 is enough. Consistency, not perfection, builds his brain. You showed up. That is everything. 🌱',
+ 'He will not remember today specifically, but his brain will. Every word, every hug, every play — it all wires in. 🧠',
+ 'You are raising a trilingual child. That alone gives him cognitive advantages most adults never develop. 🌍',
+ 'When you narrate your day to him, you are closing the word gap one sentence at a time. Keep talking! 🗣️',
+ 'Your patience during his tantrums teaches him emotional regulation better than any book ever could. 💛',
+ 'He learns more from watching YOU than from any toy or class. You are his favorite teacher. 👶',
+ 'The days are long but the years are short. You are doing the most important work in the world. ⭐',
+ 'Research shows serve-and-return interaction builds IQ. Every time you respond to his babble, you are literally building synapses. 🔬',
+ 'You do not need to be perfect. You need to be present. And you are. 🌿',
+ 'His brain doubles in size by age 2. Every nutrition choice you make today is brain architecture. 🥦',
+ 'A mother who tracks development catches delays early, celebrates wins often, and never misses a moment. That is you. 📝',
+ 'Bilingual children develop stronger executive function. Your family language strategy is a gift. 🎁',
+ 'You are not just raising a child — you are raising a future adult who will think, feel, and lead. 🌟',
+ 'The best investment you can make is 15 minutes of fully present play. No phone, just him. 📵',
+ 'Your calm voice is his regulation. When you breathe slowly, his nervous system syncs to yours. 🌬️',
+ 'Every book you read together builds vocabulary, empathy, and imagination. You are building a reader. 📚',
+ 'He will climb, fall, and try again — because you created a safe space for failure. That is elite parenting. 🧗',
+ 'The meal you prepared with protein and greens today? That is literally building his neurons. 🍳',
+ 'You are his first and most important teacher. No app, no class, no school will ever replace you. ❤️',
+ 'Some days are hard. Some days are magical. Both kinds are building him into who he will become. 🌈',
+ 'When you choose outdoor time over screen time, you are protecting his vision, his attention, and his joy. 🌳',
+ 'Your consistency is his security. When he knows what comes next, his brain can focus on learning. 📅',
+ 'You are documenting his life in a way most parents only wish they had. These records are gold. ✨',
+ 'Every peekaboo, every tickle, every silly face — that is attachment theory in action. You are doing it right. 😊',
+ 'You are raising a child who will know he was loved, tracked, celebrated, and supported. That is legacy. 🏆',
+ 'The tired you feel? That is your brain building his brain. It is real, meaningful work. 😴',
+ 'He ate something green today because you offered it 15 times. That is science + love. 🥬',
+ 'When you read in 3 languages, you are giving him a brain that can think in 3 worlds. 🌐',
+ 'Your gentle tone during hard moments teaches him more about emotional intelligence than any course ever could. 🎓',
+ 'You do not need to do everything right. You need to do the important things consistently. And you do. 🎯',
+ 'Today might feel ordinary, but you are building an extraordinary little human. One seed at a time. 🌱',
+ 'He is watching how you handle stress, joy, and frustration. You are his blueprint for being human. 🪞',
+ 'The world is better because you are his mother. Never doubt that. 💛🌸'
+];
 /* ============ STATE ============ */
 const KEY='dawut-bloom';
 const SCHEMA_VERSION=2;
@@ -1075,10 +1132,21 @@ function renderCards(){
     el.innerHTML=`<div class="top"><div class="dot">${dom.icon}</div>
       <div><h3>${dom.name}</h3><p class="what">${act.a}</p><p class="why">why: ${act.w}</p></div>
       <div class="check" aria-hidden="true">✓</div></div>
+      <div class="expand-hint">tap card for details ↓</div>
+      <div class="detail">
+        <div class="detail-row"><span class="dr-label">Why</span><span class="dr-value">${act.w}</span></div>
+        <div class="detail-row"><span class="dr-label">Contributes to</span><span class="dr-value">${dom.desc}</span></div>
+        <div class="detail-row"><span class="dr-label">How to</span><span class="dr-value">${act.a}. Keep it light and playful — follow his lead, stop before he gets frustrated, and celebrate the attempt not just the result.</span></div>
+        <div class="contributes"><span class="c-icon">${dom.icon}</span> ${dom.name} development domain</div>
+      </div>
       <span class="shuffle" role="button" tabindex="0">↻ different one</span>`;
     el.querySelector('.top').addEventListener('click',()=>{
       d[dom.id]=d[dom.id]?0:1;save();renderCards();renderAll();
       if(DOMAINS.every(x=>day(todayKey)[x.id]))confetti(70);
+    });
+    el.addEventListener('click',e=>{
+      if(e.target.closest('.shuffle')||e.target.closest('.check'))return;
+      el.classList.toggle('expanded');
     });
     const shf=el.querySelector('.shuffle');
     shf.addEventListener('click',e=>{e.stopPropagation();
@@ -2125,6 +2193,9 @@ function renderAll(){
   document.getElementById('stTotal').textContent=blooms;
   document.getElementById('stBest').textContent=si.best;
   document.getElementById('stActs').textContent=Object.values(mem.days).reduce((s,dd)=>s+DOMAINS.filter(x=>dd[x.id]).length,0);
+  /* Mom motivation */
+  const mm=MOM_MOTIVATIONS[dayOfYear()%MOM_MOTIVATIONS.length];
+  document.getElementById('momMotivation').innerHTML='<div class="mm-label">💛 For Mama</div><div class="mm-text">'+mm+'</div>';
   /* Progress ring */
   const circ=314.16,offset=circ-(done/6)*circ;
   document.getElementById('ringFg').setAttribute('stroke-dashoffset',offset);
@@ -2155,7 +2226,7 @@ document.querySelectorAll('nav button').forEach(b=>{
     b.classList.add('active');b.setAttribute('aria-selected','true');
     document.getElementById(b.dataset.tab).classList.add('active');
     if(b.dataset.tab==='tab-plan')renderPlan();
-    if(b.dataset.tab==='tab-growth'){renderGrowth();renderSleep();renderScreen();renderOutdoor();renderWords();renderBooks();renderMeals();renderPotty();renderDental();renderTrend();}
+    if(b.dataset.tab==='tab-growth'){renderGrowth();renderSleep();renderScreen();renderOutdoor();renderWords();renderBooks();renderMeals();renderPotty();renderDental();renderTrend();renderBadges();}
     if(b.dataset.tab==='tab-stages'){renderMilestones();renderGallery();renderCDC();renderVax();renderIllness();renderAllergies();renderStages();}
     if(b.dataset.tab==='tab-settings'){renderSettings();loadBirthDetails();}
     window.scrollTo({top:0});});
