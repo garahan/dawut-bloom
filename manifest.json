@@ -2,7 +2,7 @@
   "name": "Dawut — Daily Bloom",
   "short_name": "Dawut Bloom",
   "description": "Track Dawut's daily development activities, growth, and milestones — backed by research.",
-  "start_url": "dawut.html",
+  "start_url": "/",
   "display": "standalone",
   "display_override": ["standalone"],
   "orientation": "portrait",
