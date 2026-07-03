@@ -308,6 +308,60 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
 .peer-row .pr-status.ahead{background:rgba(91,174,111,.15);color:var(--green);}
 .peer-row .pr-status.ontrack{background:rgba(232,169,61,.15);color:var(--gold);}
 .peer-row .pr-status.behind{background:rgba(224,112,112,.15);color:#E07070;}
+/* Weekly summary */
+.weeksum{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:14px;box-shadow:var(--shadow);transition:box-shadow .25s;}
+.weeksum:hover{box-shadow:var(--shadow-lg);}
+.weeksum h3{margin:0 0 10px;font-size:14px;font-weight:700;display:flex;justify-content:space-between;align-items:center;}
+.weeksum h3 .ws-total{font-size:11px;color:var(--faint);font-family:'JetBrains Mono',monospace;font-weight:400;}
+.ws-bars{display:flex;gap:6px;align-items:flex-end;height:60px;}
+.ws-bar{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.ws-bar .ws-fill{width:100%;border-radius:6px 6px 2px 2px;min-height:4px;transition:height .4s cubic-bezier(.2,1,.4,1);position:relative;}
+.ws-bar .ws-day{font-size:9px;color:var(--faint);font-family:'JetBrains Mono',monospace;}
+.ws-bar .ws-num{font-size:9px;color:var(--faint);font-family:'JetBrains Mono',monospace;position:absolute;top:-14px;left:50%;transform:translateX(-50%);}
+.ws-bar.today .ws-day{color:var(--gold);font-weight:700;}
+/* Book tracker */
+.book-card{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:12px;box-shadow:var(--shadow);transition:box-shadow .25s;}
+.book-card:hover{box-shadow:var(--shadow-lg);}
+.book-card h3{margin:0 0 4px;font-size:15px;font-weight:700;}
+.book-card .sub{font-size:11px;color:var(--faint);font-family:'JetBrains Mono',monospace;margin-bottom:10px;}
+.book-card .big-val{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600;}
+.book-card .big-val small{font-size:12px;color:var(--muted);}
+.book-card .mrow{display:flex;gap:8px;margin-top:12px;align-items:center;}
+.book-card input{flex:1;border-radius:12px;border:1.5px solid var(--line);background:var(--input-bg);color:var(--text);padding:9px 12px;font-size:14px;font-family:'Quicksand',sans-serif;outline:none;min-width:0;transition:border-color .2s,box-shadow .2s;}
+.book-card input:focus{border-color:var(--heart);box-shadow:0 0 0 3px rgba(247,143,184,.12);}
+.book-card button{border-radius:12px;border:none;background:var(--heart);color:#fff;font-weight:700;padding:9px 16px;font-size:13px;font-family:'Quicksand',sans-serif;cursor:pointer;transition:opacity .2s,transform .15s;}
+.book-card button:hover{opacity:.88;}
+.book-card button:active{transform:scale(.93);}
+.book-list{margin-top:10px;}
+.book-item{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--line);font-size:13px;}
+.book-item:last-child{border-bottom:none;}
+.book-item .bi-icon{font-size:14px;}
+.book-item .bi-title{flex:1;color:var(--text);}
+.book-item .bi-date{font-size:10px;color:var(--faint);font-family:'JetBrains Mono',monospace;}
+.book-item .bi-del{background:none;border:none;color:var(--faint);cursor:pointer;font-size:14px;padding:0 4px;}
+.book-item .bi-del:hover{color:#E07070;}
+/* Photo gallery */
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;}
+.gallery-item{position:relative;aspect-ratio:1;border-radius:12px;overflow:hidden;cursor:pointer;transition:transform .15s;}
+.gallery-item:active{transform:scale(.95);}
+.gallery-item img{width:100%;height:100%;object-fit:cover;}
+.gallery-item .gi-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.7));padding:6px 8px;font-size:9px;color:#fff;font-family:'JetBrains Mono',monospace;}
+.gallery-empty{grid-column:1/-1;text-align:center;padding:20px;color:var(--faint);font-size:13px;}
+/* Trend chart */
+.trend-card{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:12px;box-shadow:var(--shadow);transition:box-shadow .25s;}
+.trend-card:hover{box-shadow:var(--shadow-lg);}
+.trend-card h3{margin:0 0 4px;font-size:14px;font-weight:700;}
+.trend-card .sub{font-size:11px;color:var(--faint);font-family:'JetBrains Mono',monospace;margin-bottom:8px;}
+.trend-card svg{width:100%;height:80px;display:block;}
+/* Report button */
+.report-btn{border-radius:12px;border:none;background:linear-gradient(135deg,var(--brain),#6B8FE0);color:#fff;font-weight:700;padding:10px 18px;font-size:13px;cursor:pointer;font-family:'Quicksand',sans-serif;margin-right:8px;transition:opacity .2s,transform .15s;box-shadow:0 2px 8px rgba(127,168,255,.2);}
+.report-btn:hover{opacity:.9;}
+.report-btn:active{transform:scale(.95);}
+/* Lightbox */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;animation:fadein .2s;}
+.lightbox img{max-width:90%;max-height:80vh;border-radius:16px;}
+.lightbox .lb-close{position:absolute;top:16px;right:20px;color:#fff;font-size:28px;cursor:pointer;background:none;border:none;}
+.lightbox .lb-caption{position:absolute;bottom:20px;left:0;right:0;text-align:center;color:#ccc;font-size:13px;}
 </style>
 </head>
 <body>
@@ -343,6 +397,7 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
     <span class="ti" aria-hidden="true">💡</span>
     <div><h4>Today's parenting key</h4><p id="tipText"></p></div>
   </div>
+  <div class="weeksum" id="weekSummary"></div>
   <div class="daterow">
     <h2 id="today"></h2>
     <div class="count"><b id="donecount">0</b>/6</div>
@@ -383,8 +438,14 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
   <div id="sleepCard"></div>
   <h2 class="sec">Screen time</h2>
   <div id="screenCard"></div>
+  <h2 class="sec">Outdoor time</h2>
+  <div id="outdoorCard"></div>
   <h2 class="sec">Language development</h2>
   <div id="wordCard"></div>
+  <h2 class="sec">Books read</h2>
+  <div id="bookCard"></div>
+  <h2 class="sec">30-day activity trend</h2>
+  <div id="trendCard"></div>
   <h2 class="sec">Consistency garden</h2>
   <div class="heat" id="heat" role="img" aria-label="Activity consistency heatmap"></div>
   <div class="stats">
@@ -405,6 +466,11 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
     <input id="msText" placeholder="e.g. First 3-word sentence: 'mama more banana'">
     <button id="msBtn">Save milestone</button>
     <div id="mstones" style="margin-top:12px"></div>
+  </div>
+  <h2 class="sec">Photo gallery</h2>
+  <div class="panel">
+    <p>Every milestone photo, in one place. Tap to enlarge.</p>
+    <div class="gallery" id="gallery"></div>
   </div>
   <h2 class="sec">CDC developmental milestones</h2>
   <div class="panel">
@@ -439,6 +505,9 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
   <div class="panel">
     <h3>Data backup</h3>
     <button id="expBtn">Export backup</button><button class="ghost" id="impBtn">Import</button>
+    <h3 style="margin-top:16px">Pediatrician visit report</h3>
+    <p>Generates a printable summary of Dawut's growth, milestones, and vaccination status — perfect for checkup visits.</p>
+    <button class="report-btn" id="reportBtn">📄 Generate report</button>
     <input type="file" id="impFile" accept=".json" style="display:none">
     <p class="hint">Data lives in this browser. Export weekly — these are memories, not just data.</p>
     <div class="togglerow" style="margin-top:10px"><span>Auto-backup reminder</span><div class="switch" id="swAutoBackup" role="switch" tabindex="0" aria-label="Toggle auto-backup reminder"></div></div>
@@ -711,8 +780,8 @@ const TIPS=[
 /* ============ STATE ============ */
 const KEY='dawut-bloom';
 const SCHEMA_VERSION=2;
-let mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},lastBackup:null,version:SCHEMA_VERSION};
-function load(){try{const r=localStorage.getItem(KEY);if(r){const p=JSON.parse(r);mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},lastBackup:null,version:SCHEMA_VERSION,...p};if(!mem.version||mem.version<SCHEMA_VERSION){mem.version=SCHEMA_VERSION;save();}}}catch(e){}}
+let mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},books:[],outdoor:{},lastBackup:null,version:SCHEMA_VERSION};
+function load(){try{const r=localStorage.getItem(KEY);if(r){const p=JSON.parse(r);mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},books:[],outdoor:{},lastBackup:null,version:SCHEMA_VERSION,...p};if(!mem.version||mem.version<SCHEMA_VERSION){mem.version=SCHEMA_VERSION;save();}}}catch(e){}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(mem));}catch(e){}}
 function dkey(d){return d.toISOString().slice(0,10);}
 const todayKey=dkey(new Date());
@@ -1017,6 +1086,197 @@ function renderStages(){
     el.appendChild(div);
   });
 }
+/* ============ WEEKLY SUMMARY ============ */
+function renderWeekSummary(){
+  const el=document.getElementById('weekSummary');if(!el)return;
+  let barsHtml='';
+  let totalDone=0;
+  for(let i=6;i>=0;i--){
+    const dt=new Date();dt.setDate(dt.getDate()-i);const k=dkey(dt);
+    const d=mem.days[k],n=d?DOMAINS.filter(x=>d[x.id]).length:0;
+    totalDone+=n;
+    const h=(n/6)*100;
+    const isToday=k===todayKey;
+    const fillC=n>=6?'var(--green)':n>=4?'var(--gold)':n>0?'var(--body)':'var(--line)';
+    const lbl=['S','M','T','W','T','F','S'][dt.getDay()];
+    barsHtml+=`<div class="ws-bar${isToday?' today':''}">
+      <div class="ws-fill" style="height:${h}%;background:${n>0?fillC:'var(--line)'}">${n>0?`<span class="ws-num">${n}</span>`:''}</div>
+      <div class="ws-day">${lbl}</div></div>`;
+  }
+  el.innerHTML=`<h3>This week's bloom 🌸<span class="ws-total">${totalDone}/42 activities</span></h3>
+    <div class="ws-bars">${barsHtml}</div>`;
+}
+/* ============ OUTDOOR TIME TRACKER ============ */
+function renderOutdoor(){
+  const wrap=document.getElementById('outdoorCard');wrap.innerHTML='';
+  const TARGET=120;
+  const today=mem.outdoor[todayKey];
+  const div=document.createElement('div');div.className='track-card';
+  let min=today?today.m:null;
+  let pctText='Log outdoor minutes',barW=0,barClass='good';
+  if(min!=null){
+    barW=Math.min(min/TARGET*100,100);
+    barClass=min>=TARGET?'good':min>=60?'warn':'over';
+    pctText=min>=TARGET?`✓ ${min}min — great! (target ${TARGET}min+)`:`${min}min — aim for ${TARGET}min/day`;
+  }
+  let weekHtml='<div class="week-mini">';
+  for(let i=6;i>=0;i--){
+    const dt=new Date();dt.setDate(dt.getDate()-i);const k=dkey(dt);
+    const s=mem.outdoor[k],m=s?s.m:null;
+    const fillH=m?Math.min(m/TARGET*100,100):0;
+    const fillC=m>=TARGET?'var(--green)':m>=60?'var(--gold)':'#E07070';
+    const lbl=['S','M','T','W','T','F','S'][dt.getDay()];
+    weekHtml+=`<div class="dbar"><div class="fill" style="height:${fillH}%;background:${m?fillC:'var(--line)'}"></div><div class="lbl">${lbl}</div></div>`;
+  }
+  weekHtml+='</div>';
+  div.innerHTML=`<h3>Outdoor time</h3><div class="sub">Research target: ${TARGET}min/day for healthy development</div>
+    <div class="big-val">${min!=null?min+'<small> min</small>':'—'}</div>
+    <div class="bar"><div class="bar-fill ${barClass}" style="width:${barW}%"></div></div>
+    <div class="pctl" style="margin-top:8px;font-size:12px;color:var(--muted)">${pctText}</div>
+    ${weekHtml}
+    <div class="mrow"><input type="number" step="5" inputmode="numeric" placeholder="minutes outdoors" aria-label="Log outdoor time"><button>Log</button></div>`;
+  div.querySelector('button').addEventListener('click',()=>{
+    const v=parseFloat(div.querySelector('input').value);if(isNaN(v))return;
+    if(!mem.outdoor[todayKey])mem.outdoor[todayKey]={};mem.outdoor[todayKey].m=v;save();renderOutdoor();});
+  wrap.appendChild(div);
+}
+/* ============ BOOK TRACKER ============ */
+function renderBooks(){
+  const wrap=document.getElementById('bookCard');wrap.innerHTML='';
+  const div=document.createElement('div');div.className='book-card';
+  const count=mem.books.length;
+  const weekAgo=new Date();weekAgo.setDate(weekAgo.getDate()-7);
+  const recent=mem.books.filter(b=>new Date(b.d)>=weekAgo).length;
+  div.innerHTML=`<h3>📖 Books read</h3><div class="sub">${count} total · ${recent} this week</div>
+    <div class="big-val">${count}<small> books</small></div>
+    <div class="mrow"><input type="text" placeholder="book title" aria-label="Add book"><button>Add</button></div>
+    <div class="book-list" id="bookList"></div>`;
+  div.querySelector('button').addEventListener('click',()=>{
+    const inp=div.querySelector('input');const t=inp.value.trim();if(!t)return;
+    mem.books.push({d:todayKey,t:t});save();renderBooks();confetti(15);
+    inp.value='';
+  });
+  const bl=div.querySelector('#bookList');
+  mem.books.slice().reverse().slice(0,15).forEach((b,i)=>{
+    const realIdx=mem.books.length-1-i;
+    const item=document.createElement('div');item.className='book-item';
+    item.innerHTML=`<span class="bi-icon">📖</span><span class="bi-title">${b.t}</span><span class="bi-date">${b.d}</span><button class="bi-del" aria-label="Remove book">✕</button>`;
+    item.querySelector('.bi-del').addEventListener('click',()=>{mem.books.splice(realIdx,1);save();renderBooks();});
+    bl.appendChild(item);
+  });
+  if(!count)bl.innerHTML='<p style="color:var(--faint);font-size:13px;margin:4px 0">Log books as you read them — reading aloud is the #1 language booster.</p>';
+  wrap.appendChild(div);
+}
+/* ============ PHOTO GALLERY ============ */
+function renderGallery(){
+  const el=document.getElementById('gallery');el.innerHTML='';
+  const photos=mem.milestones.filter(m=>m.photo);
+  if(!photos.length){el.innerHTML='<div class="gallery-empty">No photos yet — add a milestone with a photo to see it here 📸</div>';return;}
+  photos.slice().reverse().forEach(m=>{
+    const item=document.createElement('div');item.className='gallery-item';
+    item.innerHTML=`<img src="${m.photo}" alt="${m.t}"><div class="gi-overlay">${m.d}</div>`;
+    item.addEventListener('click',()=>{
+      const lb=document.createElement('div');lb.className='lightbox';
+      lb.innerHTML=`<button class="lb-close">✕</button><img src="${m.photo}" alt="${m.t}"><div class="lb-caption">${m.d} — ${m.t}</div>`;
+      lb.querySelector('.lb-close').addEventListener('click',()=>lb.remove());
+      lb.addEventListener('click',e=>{if(e.target===lb)lb.remove();});
+      document.body.appendChild(lb);
+    });
+    el.appendChild(item);
+  });
+}
+/* ============ 30-DAY TREND CHART ============ */
+function renderTrend(){
+  const wrap=document.getElementById('trendCard');wrap.innerHTML='';
+  const div=document.createElement('div');div.className='trend-card';
+  let data=[];
+  for(let i=29;i>=0;i--){
+    const dt=new Date();dt.setDate(dt.getDate()-i);const k=dkey(dt);
+    const d=mem.days[k],n=d?DOMAINS.filter(x=>d[x.id]).length:0;
+    data.push(n);
+  }
+  const avg=(data.reduce((a,b)=>a+b,0)/30).toFixed(1);
+  const W=300,H=80,padT=8,padB=16,plotH=H-padT-padB;
+  const barW=W/30-2;
+  let bars='';
+  data.forEach((n,i)=>{
+    const x=i*(W/30)+1;
+    const h=(n/6)*plotH;
+    const y=padT+plotH-h;
+    const c=n>=6?'var(--green)':n>=4?'var(--gold)':n>0?'var(--body)':'var(--line)';
+    bars+=`<rect x="${x}" y="${y}" width="${barW}" height="${h}" rx="2" fill="${c}"/>`;
+  });
+  const avgY=padT+plotH-(avg/6)*plotH;
+  bars+=`<line x1="0" y1="${avgY}" x2="${W}" y2="${avgY}" stroke="var(--brain)" stroke-width="1" stroke-dasharray="3,3" opacity=".5"/>`;
+  div.innerHTML=`<h3>30-day activity trend</h3><div class="sub">Daily completion (0-6) · 30-day avg: ${avg}/6</div>
+    <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">${bars}</svg>`;
+  wrap.appendChild(div);
+}
+/* ============ PEDIATRICIAN REPORT ============ */
+document.getElementById('reportBtn').addEventListener('click',()=>{
+  const m=ageMonths();
+  const si=streakInfo();
+  const blooms=Object.keys(mem.days).filter(fullBloom).length;
+  const totalActs=Object.values(mem.days).reduce((s,dd)=>s+DOMAINS.filter(x=>dd[x.id]).length,0);
+  let growthHtml='';
+  ['height','weight','head'].forEach(id=>{
+    const data=mem.growth[id]||[];
+    const last=data.length?data[data.length-1]:null;
+    if(last){const p=lmsPercentile(id,m,last.v);
+      growthHtml+=`<tr><td>${WHO[id].name}</td><td>${last.v} ${WHO[id].unit}</td><td>${p}th percentile</td><td>${last.d}</td></tr>`;}
+  });
+  let vaxHtml='';
+  VAX.forEach((v,i)=>{
+    const done=!!mem.vax['vax-'+i];
+    vaxHtml+=`<tr><td>${v.name}</td><td>${v.when}</td><td>${done?'✓ Done':'Pending'}</td></tr>`;
+  });
+  let cdcHtml='';
+  CDC.forEach(g=>{
+    if(m>=g.age-3){g.items.forEach((item,i)=>{
+      const done=!!mem.cdc[g.age+'-'+i];
+      cdcHtml+=`<tr><td>${item.c}</td><td>${item.t}</td><td>${done?'✓':'Not yet'}</td></tr>`;
+    });}
+  });
+  const recentMs=mem.milestones.slice().reverse().slice(0,10);
+  const msHtml=recentMs.map(ms=>`<tr><td>${ms.d}</td><td>${ms.t}</td></tr>`).join('');
+  const sleepAvg=Object.values(mem.sleep).length?(Object.values(mem.sleep).reduce((s,v)=>s+(v.h||0),0)/Object.keys(mem.sleep).length).toFixed(1):'—';
+  const screenAvg=Object.values(mem.screen).length?(Object.values(mem.screen).reduce((s,v)=>s+(v.m||0),0)/Object.keys(mem.screen).length).toFixed(0):'—';
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Dawut Bloom Report — ${todayKey}</title>
+<style>body{font-family:Georgia,serif;max-width:680px;margin:0 auto;padding:40px 20px;color:#333;line-height:1.6;}
+h1{color:#5BAE6F;border-bottom:3px solid #5BAE6F;padding-bottom:8px;}
+h2{color:#E8A93D;margin-top:30px;font-size:18px;}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px;}
+td,th{padding:6px 10px;border-bottom:1px solid #ddd;text-align:left;}
+th{background:#f5f0e8;font-weight:bold;}
+.summary{background:#f9f5ee;border-radius:12px;padding:16px;margin:16px 0;}
+.summary b{color:#5BAE6F;}
+.footer{margin-top:40px;padding-top:16px;border-top:1px solid #ddd;font-size:11px;color:#999;text-align:center;}
+@media print{body{padding:10px;}}</style></head><body>
+<h1>Dawut's Development Report</h1>
+<p style="color:#888">Born 13 March 2024 · ${ageString()} old · Generated ${todayKey}</p>
+<div class="summary">
+<b>Age:</b> ${m.toFixed(1)} months<br>
+<b>Current stage:</b> ${currentStage().label}<br>
+<b>Full bloom days:</b> ${blooms}<br>
+<b>Current streak:</b> ${si.streak} days · <b>Best streak:</b> ${si.best} days<br>
+<b>Total activities completed:</b> ${totalActs}<br>
+<b>Words logged:</b> ${mem.words.length}<br>
+<b>Books read:</b> ${mem.books.length}<br>
+<b>Sleep avg (all logged):</b> ${sleepAvg}h · <b>Screen avg:</b> ${screenAvg}min/day
+</div>
+<h2>Growth measurements (WHO)</h2>
+<table><tr><th>Metric</th><th>Value</th><th>Percentile</th><th>Date</th></tr>${growthHtml}</table>
+<h2>Vaccination status (Japan schedule)</h2>
+<table><tr><th>Vaccine</th><th>Scheduled</th><th>Status</th></tr>${vaxHtml}</table>
+<h2>CDC developmental milestones</h2>
+<table><tr><th>Category</th><th>Milestone</th><th>Status</th></tr>${cdcHtml}</table>
+<h2>Recent milestone journal entries</h2>
+<table><tr><th>Date</th><th>Entry</th></tr>${msHtml||'<tr><td colspan=2>No entries yet</td></tr>'}</table>
+<div class="footer">Generated by Dawut's Daily Bloom 🌱 — research-informed development tracker<br>WHO Child Growth Standards · CDC milestones (2022) · Japan immunization schedule<br>This report is for reference only — his pediatrician knows him best.</div>
+</body></html>`;
+  const w=window.open('','_blank');
+  if(w){w.document.write(html);w.document.close();}else{alert('Please allow popups to generate the report.');}
+});
 /* ============ DAILY PLAN ============ */
 const ROUTINE=[
  {block:'am',icon:'☀️',title:'Morning Block',time:'07:00 – 10:00',items:[
@@ -1263,7 +1523,7 @@ document.getElementById('impBtn').addEventListener('click',()=>document.getEleme
 document.getElementById('impFile').addEventListener('change',e=>{
   const f=e.target.files[0];if(!f)return;const r=new FileReader();
   r.onload=()=>{try{const p=JSON.parse(r.result);if(!p.days)throw 0;
-    if(confirm('Replace current data with this backup?')){mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},lastBackup:null,version:SCHEMA_VERSION,...p};save();location.reload();}
+    if(confirm('Replace current data with this backup?')){mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},books:[],outdoor:{},lastBackup:null,version:SCHEMA_VERSION,...p};save();location.reload();}
   }catch(err){alert('Not a valid backup file.');}};r.readAsText(f);
 });
 /* ============ PWA ============ */
@@ -1308,6 +1568,7 @@ function renderAll(){
   document.getElementById('ringFg').setAttribute('stroke-dashoffset',offset);
   document.getElementById('ringTxt').textContent=done+'/6';
   renderHeat();
+  renderWeekSummary();
   updateBadges();
 }
 function confetti(n){
@@ -1327,8 +1588,8 @@ document.querySelectorAll('nav button').forEach(b=>{
     b.classList.add('active');b.setAttribute('aria-selected','true');
     document.getElementById(b.dataset.tab).classList.add('active');
     if(b.dataset.tab==='tab-plan')renderPlan();
-    if(b.dataset.tab==='tab-growth'){renderGrowth();renderSleep();renderScreen();renderWords();}
-    if(b.dataset.tab==='tab-stages'){renderMilestones();renderCDC();renderVax();renderStages();}
+    if(b.dataset.tab==='tab-growth'){renderGrowth();renderSleep();renderScreen();renderOutdoor();renderWords();renderBooks();renderTrend();}
+    if(b.dataset.tab==='tab-stages'){renderMilestones();renderGallery();renderCDC();renderVax();renderStages();}
     if(b.dataset.tab==='tab-settings')renderSettings();
     window.scrollTo({top:0});});
 });
@@ -1339,7 +1600,7 @@ const noteEl=document.getElementById('note');
 noteEl.addEventListener('input',()=>{day(todayKey).note=noteEl.value;save();});
 load();seedGrowth();applyTheme();
 noteEl.value=day(todayKey).note||'';
-renderCards();renderAll();renderGrowth();renderSleep();renderScreen();renderWords();renderPlan();
+renderCards();renderAll();renderGrowth();renderSleep();renderScreen();renderOutdoor();renderWords();renderBooks();renderTrend();renderPlan();renderWeekSummary();
 checkAutoBackup();
 </script>
 </body>
