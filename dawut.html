@@ -676,7 +676,7 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
   <div class="weeksum" id="weekSummary"></div>
   <div class="mood-card" id="moodCard"></div>
   <div class="note">
-    <label for="note">Today's little moment — a word he said, something new he did</label>
+    <label for="note">A little moment today</label>
     <textarea id="note" placeholder="e.g. said 'more water' by himself, balanced on one foot for 2 seconds!"></textarea>
   </div>
 </div>
@@ -685,19 +685,18 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
   <div class="plan-hero">
     <h2>📋 Mama's Daily Plan</h2>
     <div class="sub" id="planSub"></div>
-    <span class="week-tag" id="planWeekTag"></span>
   </div>
 
-  <h2 class="sec" style="margin-top:8px">Today's routine</h2>
+  <h2 class="sec" style="margin-top:8px">Daily routine</h2>
   <div id="routineBlocks"></div>
 
-  <h2 class="sec">This week's focus goals</h2>
+  <h2 class="sec">Weekly focus</h2>
   <div id="weeklyGoals"></div>
 
-  <h2 class="sec">Skill ladder — where he is and what's next</h2>
+  <h2 class="sec">Skill ladder</h2>
   <div id="skillLadder"></div>
 
-  <h2 class="sec">Peer benchmarks (typical development)</h2>
+  <h2 class="sec">Development timeline</h2>
   <div id="peerBench"></div>
   <h2 class="sec">Sleep</h2>
   <div id="sleepCard"></div>
@@ -722,7 +721,7 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
 <div class="tab" id="tab-growth" role="tabpanel" aria-label="Growth tracking">
   <h2 class="sec" style="margin-top:8px">Body growth (WHO)</h2>
   <div id="metrics"></div>
-  <p class="refnote">Percentiles calculated from WHO Child Growth Standards (LMS method, boys). For orientation only — his pediatrician and 母子手帳 checkups are the real source of truth.</p>
+  <p class="refnote">WHO percentiles for boys. For reference — his pediatrician and 母子手帳 are the real source of truth.</p>
   <h2 class="sec">Log new measurement</h2>
   <div class="panel" id="growthInput"></div>
   <h2 class="sec">Life countdown ⏳</h2>
@@ -741,7 +740,6 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
 <div class="tab" id="tab-stages" role="tabpanel" aria-label="Milestones and development">
   <h2 class="sec" style="margin-top:8px">Milestone journal</h2>
   <div class="panel">
-    <p>First words, first jumps, sweet moments — they disappear from memory faster than you think. Two seconds to save them forever.</p>
     <div class="photo-row">
       <input type="file" id="msPhoto" accept="image/*" aria-label="Attach photo">
       <img id="msPhotoPreview" class="photo-preview" style="display:none" alt="Preview">
@@ -752,31 +750,28 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
   </div>
   <h2 class="sec">Photo gallery</h2>
   <div class="panel">
-    <p>Every milestone photo, in one place. Tap to enlarge.</p>
     <div class="gallery" id="gallery"></div>
   </div>
   <h2 class="sec">CDC developmental milestones</h2>
   <div class="panel">
-    <p>Official CDC milestones (2022 update). Check off each as Dawut achieves it — talk to your pediatrician if any are missed by the age window.</p>
+    <p>Check off each milestone as Dawut achieves it.</p>
     <div id="cdcList"></div>
   </div>
   <h2 class="sec">Vaccination schedule (Japan)</h2>
   <div class="panel">
-    <p>Japan routine immunizations. Tap to mark as done. Check 母子手帳 for exact dates.</p>
+    <p>Japan routine immunizations. Tap to mark done.</p>
     <div id="vaxList"></div>
   </div>
   <h2 class="sec">Illness & medication log</h2>
   <div class="panel">
-    <p>Track fevers, symptoms, and medications — useful for pediatrician visits and spotting patterns.</p>
-    <input id="illSymptom" placeholder="e.g. fever 38.5°C, runny nose" style="margin-bottom:6px">
-    <input id="illMeds" placeholder="medication given (optional)">
-    <button id="illBtn">Log illness</button>
+    <input id="illSymptom" placeholder="e.g. fever 38.5°C" style="margin-bottom:6px">
+    <input id="illMeds" placeholder="medication (optional)">
+    <button id="illBtn">Log</button>
     <div id="illList" style="margin-top:12px"></div>
   </div>
   <h2 class="sec">Allergy tracker</h2>
   <div class="panel">
-    <p>Known or suspected allergies. Important for daycare, restaurants, and pediatrician visits.</p>
-    <div class="mrow"><input type="text" id="allergyInput" placeholder="e.g. peanuts, eggs, lactose" aria-label="Add allergy"><button id="allergyBtn">Add</button></div>
+    <div class="mrow"><input type="text" id="allergyInput" placeholder="e.g. peanuts, eggs" aria-label="Add allergy"><button id="allergyBtn">Add</button></div>
     <div class="allergy-chips" id="allergyChips"></div>
   </div>
   <h2 class="sec">The development roadmap</h2>
@@ -787,7 +782,7 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
   <h2 class="sec" style="margin-top:8px">Appearance</h2>
   <div class="panel">
     <div class="togglerow"><span>Dark mode</span><div class="switch" id="swDark" role="switch" tabindex="0" aria-label="Toggle dark mode"></div></div>
-    <p class="hint">Auto-detects system preference. Toggle to override manually.</p>
+    <p class="hint">Auto-detects system preference.</p>
   </div>
   <h2 class="sec">Reminders</h2>
   <div class="panel">
@@ -796,19 +791,19 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
     <label for="remAM">Morning activities reminder</label><input type="time" id="remAM" value="09:30">
     <label for="remPM">Evening note reminder</label><input type="time" id="remPM" value="20:30">
     <button id="saveRem">Save</button>
-    <p class="hint">For reminders that arrive even when the app is closed, use the Telegram engine in the family repo.</p>
+    <p class="hint">For reminders when app is closed, use the Telegram engine.</p>
   </div>
   <h2 class="sec">Backup</h2>
   <div class="panel">
     <h3>Data backup</h3>
     <button id="expBtn">Export backup</button><button class="ghost" id="impBtn">Import</button>
     <h3 style="margin-top:16px">Pediatrician visit report</h3>
-    <p>Generates a printable summary of Dawut's growth, milestones, and vaccination status — perfect for checkup visits.</p>
+    <p>Printable summary for checkup visits.</p>
     <button class="report-btn" id="reportBtn">📄 Generate report</button>
     <input type="file" id="impFile" accept=".json" style="display:none">
-    <p class="hint">Data lives in this browser. Export weekly — these are memories, not just data.</p>
+    <p class="hint">Data lives in this browser. Export weekly.</p>
     <div class="togglerow" style="margin-top:10px"><span>Auto-backup reminder</span><div class="switch" id="swAutoBackup" role="switch" tabindex="0" aria-label="Toggle auto-backup reminder"></div></div>
-    <p class="hint">Reminds you to export if it's been 7+ days since last backup.</p>
+    <p class="hint">Reminds you if it's been 7+ days.</p>
   </div>
   <h2 class="sec">About</h2>
   <div class="panel">
@@ -831,10 +826,9 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
     </div>
     <div class="mrow" style="margin-top:8px"><input type="text" id="birthFeeding" placeholder="Feeding" value="Breastfeeding / Mixed Formula" aria-label="Feeding"></div>
     <div class="mrow" style="margin-top:6px"><input type="text" id="birthApgar" placeholder="APGAR score" value="Stable, no abnormalities" aria-label="APGAR score"></div>
-    <p class="hint">All age calculations, stage assignments, and activity selection are based on birth date.</p>
-    <p>Dawut's Daily Bloom 🌱 — a research-informed development tracker for our son, born 13 March 2024.</p>
-    <p>Growth: WHO Child Growth Standards (LMS method). CDC milestones (2022). Japan routine immunization schedule.</p>
-    <p style="margin-bottom:0">All data stays on your device. No accounts, no servers, no tracking.</p>
+    <p class="hint">All age calculations are based on birth date.</p>
+    <p>Dawut's Daily Bloom 🌱 — born 13 March 2024.</p>
+    <p style="margin-bottom:0">All data stays on your device. No accounts, no servers.</p>
   </div>
 </div>
 
@@ -846,7 +840,7 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
   <button data-tab="tab-settings" role="tab" aria-selected="false"><span class="ni" aria-hidden="true">⚙️</span>Settings</button>
 </nav>
 
-<footer>little seeds daily 🌱 grown with love, backed by research<br>guidance only — his pediatrician knows him best</footer>
+<footer>little seeds daily 🌱<br>guidance only — his pediatrician knows him best</footer>
 
 <script>
 /* ============ CONFIG ============ */
@@ -2165,8 +2159,7 @@ function renderPlan(){
   const m=ageMonths();
   const st=currentStage();
   const wNum=planWeekNum();
-  document.getElementById('planSub').innerHTML=`Dawut is ${ageString()} old. This plan gives Mama a clear daily routine, weekly focus goals, and a skill ladder so she always knows what to do next. Every activity is tuned to his current stage: <b>${st.label.replace(' - Dawut is here','')}</b>.`;
-  document.getElementById('planWeekTag').textContent=`Week ${wNum+1} of this stage`;
+  document.getElementById('planSub').innerHTML=`${ageString()} old · Stage: <b>${st.label.replace(' - Dawut is here','')}</b> · Week ${wNum+1}`;
   renderRoutine();
   renderWeeklyGoals(wNum);
   renderSkillLadder(m);
@@ -2215,8 +2208,7 @@ function renderWeeklyGoals(wNum){
       <div class="goal-text ${cls}">${g.title}: ${g.goal}</div>
       <div class="goal-week">W${realIdx+1}</div></div>`;
   });
-  div.innerHTML=`<h3>12-week progressive goal cycle</h3>${html}
-    <p class="hint" style="margin-top:8px">Each week focuses on one skill area. Goals repeat every 12 weeks at a higher level as he grows. Current week is highlighted.</p>`;
+  div.innerHTML=`<h3>This week's focus</h3>${html}`;
   wrap.appendChild(div);
 }
 function renderSkillLadder(m){
@@ -2237,7 +2229,7 @@ function renderSkillLadder(m){
         <div class="lr-age">~${s.age} months · ${s.cat}</div>
       </div></div>`;
   });
-  div.innerHTML=`<h3>Developmental skill ladder (27 skills)</h3>${html}`;
+  div.innerHTML=`<h3>What he's learning next</h3>${html}`;
   wrap.appendChild(div);
 }
 function renderPeerBench(m){
@@ -2254,8 +2246,7 @@ function renderPeerBench(m){
       <div class="pr-skill">${b.skill}<br><span style="font-size:10px;color:var(--faint)">${b.desc}</span></div>
       <div class="pr-status ${status}">${label}</div></div>`;
   });
-  div.innerHTML=`<h3>How Dawut compares to typical development</h3>
-    <div class="peer-sub">Based on CDC/WHO typical ages. "Ahead" means he achieved it early. Every child has their own pace — this is for reference, not pressure.</div>${html}`;
+  div.innerHTML=`<h3>Typical development timeline</h3>${html}`;
   wrap.appendChild(div);
 }
 /* ============ SETTINGS ============ */
@@ -2349,7 +2340,7 @@ function renderAll(){
   document.getElementById('age').textContent=ageString()+' old · born '+BIRTH.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
   document.getElementById('hsAge').textContent=ageMonths().toFixed(1);
   const st=currentStage();
-  document.getElementById('stagechip').innerHTML='🧭 Current window: <b>'+st.label.replace(' - Dawut is here','')+'</b> — today\u2019s activities are tuned exactly to this stage and rotate automatically every day.';
+  document.getElementById('stagechip').innerHTML='🧭 Stage: <b>'+st.label.replace(' - Dawut is here','')+'</b>';
   const si=streakInfo();
   document.getElementById('hsStreak').textContent=si.streak;
   const blooms=Object.keys(mem.days).filter(fullBloom).length;
