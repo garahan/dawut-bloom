@@ -446,6 +446,33 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
 .act .act-footer{padding:8px 16px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
 /* Potty training tracker */
 .potty-card{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:12px;box-shadow:var(--shadow);transition:box-shadow .25s;}
+/* Life countdown */
+.countdown-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.cd-card{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:14px;box-shadow:var(--shadow);position:relative;overflow:hidden;transition:box-shadow .25s,border-color .25s;}
+.cd-card:hover{box-shadow:var(--shadow-lg);}
+.cd-card.cd-soon{border-color:var(--gold);}
+.cd-card.cd-soon::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--gold);}
+.cd-icon{font-size:28px;margin-bottom:6px;}
+.cd-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.cd-date{font-size:10px;color:var(--faint);font-family:'JetBrains Mono',monospace;margin-bottom:8px;}
+.cd-count{font-size:24px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--green);}
+.cd-card.cd-soon .cd-count{color:var(--gold);}
+.cd-unit{font-size:11px;color:var(--faint);margin-left:2px;}
+.cd-age{font-size:10px;color:var(--muted);margin-top:4px;}
+/* Growth input */
+.growth-input-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+.growth-field{flex:1;min-width:80px;}
+.growth-field label{font-size:10px;color:var(--faint);text-transform:uppercase;letter-spacing:.08em;font-weight:700;display:block;margin-bottom:4px;}
+.growth-field input{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;font-size:16px;background:var(--surface);color:var(--text);outline:none;transition:border-color .2s;}
+.growth-field input:focus{border-color:var(--green);}
+.growth-log-btn{background:linear-gradient(135deg,var(--green),#6BC97E);color:#fff;border:none;border-radius:12px;padding:12px 20px;font-size:14px;font-weight:700;font-family:'Quicksand',sans-serif;cursor:pointer;transition:transform .15s,opacity .2s;width:100%;}
+.growth-log-btn:active{transform:scale(.97);}
+.growth-history{margin-top:12px;}
+.growth-history h4{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--faint);margin:0 0 8px;}
+.growth-hist-item{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-radius:10px;background:var(--bg);margin-bottom:6px;font-size:12px;}
+.growth-hist-item .gh-date{color:var(--faint);font-family:'JetBrains Mono',monospace;font-size:10px;}
+.growth-hist-item .gh-val{font-weight:700;color:var(--text);}
+.growth-hist-item .gh-del{background:none;border:none;color:var(--faint);cursor:pointer;font-size:14px;padding:4px;min-width:28px;min-height:28px;}
 .potty-card:hover{box-shadow:var(--shadow-lg);}
 .potty-card h3{margin:0 0 4px;font-size:15px;font-weight:700;}
 .potty-card .sub{font-size:11px;color:var(--faint);font-family:'JetBrains Mono',monospace;margin-bottom:10px;}
@@ -672,12 +699,6 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
 
   <h2 class="sec">Peer benchmarks (typical development)</h2>
   <div id="peerBench"></div>
-</div>
-
-<div class="tab" id="tab-growth" role="tabpanel" aria-label="Growth tracking">
-  <h2 class="sec" style="margin-top:8px">Growth tracking (WHO)</h2>
-  <div id="metrics"></div>
-  <p class="refnote">Percentiles calculated from WHO Child Growth Standards (LMS method, boys). For orientation only — his pediatrician and 母子手帳 checkups are the real source of truth.</p>
   <h2 class="sec">Sleep</h2>
   <div id="sleepCard"></div>
   <h2 class="sec">Screen time</h2>
@@ -696,6 +717,16 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
   <div id="dentalCard"></div>
   <h2 class="sec">30-day activity trend</h2>
   <div id="trendCard"></div>
+</div>
+
+<div class="tab" id="tab-growth" role="tabpanel" aria-label="Growth tracking">
+  <h2 class="sec" style="margin-top:8px">Body growth (WHO)</h2>
+  <div id="metrics"></div>
+  <p class="refnote">Percentiles calculated from WHO Child Growth Standards (LMS method, boys). For orientation only — his pediatrician and 母子手帳 checkups are the real source of truth.</p>
+  <h2 class="sec">Log new measurement</h2>
+  <div class="panel" id="growthInput"></div>
+  <h2 class="sec">Life countdown ⏳</h2>
+  <div id="countdowns"></div>
   <h2 class="sec">Consistency garden</h2>
   <div class="heat" id="heat" role="img" aria-label="Activity consistency heatmap"></div>
   <div class="stats">
@@ -1273,6 +1304,105 @@ function growthChart(id,data){
   }
   svg+=`<line x1="${xS(m)}" y1="${padT}" x2="${xS(m)}" y2="${padT+plotH}" stroke="var(--gold)" stroke-width="1" stroke-dasharray="2,2" opacity=".5"/>`;
   return svg;
+}
+/* ============ GROWTH INPUT ============ */
+function renderGrowthInput(){
+  const el=document.getElementById('growthInput');if(!el)return;
+  const lastH=(mem.growth.height||[]).slice().reverse()[0];
+  const lastW=(mem.growth.weight||[]).slice().reverse()[0];
+  const lastHd=(mem.growth.head||[]).slice().reverse()[0];
+  el.innerHTML=`
+    <div class="growth-input-row">
+      <div class="growth-field"><label>Height (cm)</label><input type="number" id="giH" placeholder="${lastH?lastH.v:'—'}" step="0.1" inputmode="decimal"></div>
+      <div class="growth-field"><label>Weight (kg)</label><input type="number" id="giW" placeholder="${lastW?lastW.v:'—'}" step="0.1" inputmode="decimal"></div>
+      <div class="growth-field"><label>Head (cm)</label><input type="number" id="giHd" placeholder="${lastHd?lastHd.v:'—'}" step="0.1" inputmode="decimal"></div>
+    </div>
+    <button class="growth-log-btn" id="giBtn">📊 Save measurement</button>
+    <div class="growth-history" id="ghList"></div>`;
+  function refreshHistory(){
+    const hl=el.querySelector('#ghList');
+    const all=[];
+    ['height','weight','head'].forEach(id=>{
+      (mem.growth[id]||[]).forEach(e=>all.push({...e,id}));
+    });
+    all.sort((a,b)=>b.d.localeCompare(a.d));
+    const seen={};
+    const unique=all.filter(e=>{if(seen[e.d])return false;seen[e.d]=true;return true;}).slice(0,8);
+    if(!unique.length){hl.innerHTML='';return;}
+    hl.innerHTML='<h4>Recent measurements</h4>'+unique.map(e=>{
+      const h=(mem.growth.height||[]).find(x=>x.d===e.d);
+      const w=(mem.growth.weight||[]).find(x=>x.d===e.d);
+      const hd=(mem.growth.head||[]).find(x=>x.d===e.d);
+      const parts=[];
+      if(h)parts.push(h.v+'cm');
+      if(w)parts.push(w.v+'kg');
+      if(hd)parts.push(hd.v+'cm head');
+      return `<div class="growth-hist-item"><span class="gh-date">${e.d}</span><span class="gh-val">${parts.join(' · ')}</span><button class="gh-del" data-date="${e.d}" aria-label="Delete">✕</button></div>`;
+    }).join('');
+    hl.querySelectorAll('.gh-del').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const dt=btn.dataset.date;
+        ['height','weight','head'].forEach(id=>{
+          mem.growth[id]=(mem.growth[id]||[]).filter(e=>e.d!==dt);
+        });
+        save();renderGrowth();renderGrowthInput();
+      });
+    });
+  }
+  refreshHistory();
+  el.querySelector('#giBtn').addEventListener('click',()=>{
+    const h=parseFloat(el.querySelector('#giH').value);
+    const w=parseFloat(el.querySelector('#giW').value);
+    const hd=parseFloat(el.querySelector('#giHd').value);
+    if(!h&&!w&&!hd){alert('Enter at least one measurement.');return;}
+    if(h){if(!mem.growth.height)mem.growth.height=[];const ex=mem.growth.height.find(e=>e.d===todayKey);if(ex)ex.v=h;else mem.growth.height.push({d:todayKey,v:h});}
+    if(w){if(!mem.growth.weight)mem.growth.weight=[];const ex=mem.growth.weight.find(e=>e.d===todayKey);if(ex)ex.v=w;else mem.growth.weight.push({d:todayKey,v:w});}
+    if(hd){if(!mem.growth.head)mem.growth.head=[];const ex=mem.growth.head.find(e=>e.d===todayKey);if(ex)ex.v=hd;else mem.growth.head.push({d:todayKey,v:hd});}
+    save();renderGrowth();renderGrowthInput();confetti(20);
+  });
+}
+/* ============ LIFE COUNTDOWN ============ */
+const LIFE_EVENTS=[
+  {icon:'🏥',title:'18-month checkup',ageMonths:18,desc:'Routine pediatric visit + head/height/weight'},
+  {icon:'💉',title:'Japanese Encephalitis',ageMonths:18,desc:'First dose — Japan schedule'},
+  {icon:'🎂',title:'2nd birthday',ageMonths:24,desc:'Terrible twos begin — language explosion'},
+  {icon:'🧩',title:'3rd birthday',ageMonths:36,desc:'Preschool age — social play begins'},
+  {icon:'🏫',title:'Elementary school',ageMonths:72,desc:'日本: 小学校入学 — April after turning 6'},
+  {icon:'📚',title:'Middle school',ageMonths:144,desc:'日本: 中学校 — age 12'},
+  {icon:'🔬',title:'High school',ageMonths:180,desc:'日本: 高校 — age 15'},
+  {icon:'🎓',title:'University',ageMonths:216,desc:'日本: 大学 — age 18'},
+  {icon:'🗳️',title:'Voting age',ageMonths:216,desc:'Japan lowered to 18 in 2016'},
+  {icon:'🚗',title:'Driving age',ageMonths:216,desc:'Car license at 18 in Japan'},
+  {icon:'🍶',title:'Legal adulthood',ageMonths:228,desc:'Japan: 成人 — age 19 (2022 reform)'},
+  {icon:'💼',title:'Job hunting',ageMonths:264,desc:'就職活動 — typically age 22'},
+];
+function renderCountdowns(){
+  const el=document.getElementById('countdowns');if(!el)return;
+  const m=ageMonths();
+  const events=LIFE_EVENTS.filter(e=>e.ageMonths>m).sort((a,b)=>a.ageMonths-b.ageMonths);
+  const grid=document.createElement('div');grid.className='countdown-grid';
+  events.forEach(e=>{
+    const daysLeft=Math.round((e.ageMonths-m)*30.4375);
+    const targetDate=new Date(BIRTH.getTime()+e.ageMonths*30.4375*86400000);
+    const dateStr=targetDate.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+    const yearsLeft=Math.floor(daysLeft/365);
+    const monthsLeft=Math.floor((daysLeft%365)/30.4375);
+    const isSoon=daysLeft<180;
+    const card=document.createElement('div');
+    card.className='cd-card'+(isSoon?' cd-soon':'');
+    let countStr,unitStr;
+    if(yearsLeft>0){countStr=yearsLeft;unitStr='yr '+(monthsLeft>0?monthsLeft+'mo':'');}
+    else if(monthsLeft>0){countStr=monthsLeft;unitStr='months';}
+    else{countStr=daysLeft;unitStr='days';}
+    card.innerHTML=`<div class="cd-icon">${e.icon}</div>
+      <div class="cd-title">${e.title}</div>
+      <div class="cd-date">${dateStr}</div>
+      <div><span class="cd-count">${countStr}</span><span class="cd-unit">${unitStr}</span></div>
+      <div class="cd-age">${e.desc}</div>`;
+    grid.appendChild(card);
+  });
+  el.innerHTML='';
+  el.appendChild(grid);
 }
 /* ============ SLEEP TRACKING (AAP: 11-14h for toddlers 1-3yr) ============ */
 function renderSleep(){
@@ -2262,8 +2392,8 @@ document.querySelectorAll('nav button').forEach(b=>{
     document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
     b.classList.add('active');b.setAttribute('aria-selected','true');
     document.getElementById(b.dataset.tab).classList.add('active');
-    if(b.dataset.tab==='tab-plan')renderPlan();
-    if(b.dataset.tab==='tab-growth'){renderGrowth();renderSleep();renderScreen();renderOutdoor();renderWords();renderBooks();renderMeals();renderPotty();renderDental();renderTrend();renderBadges();}
+    if(b.dataset.tab==='tab-plan'){renderPlan();renderSleep();renderScreen();renderOutdoor();renderWords();renderBooks();renderMeals();renderPotty();renderDental();renderTrend();}
+    if(b.dataset.tab==='tab-growth'){renderGrowth();renderGrowthInput();renderCountdowns();renderHeat();renderBadges();}
     if(b.dataset.tab==='tab-stages'){renderMilestones();renderGallery();renderCDC();renderVax();renderIllness();renderAllergies();renderStages();}
     if(b.dataset.tab==='tab-settings'){renderSettings();loadBirthDetails();}
     window.scrollTo({top:0});});
@@ -2275,7 +2405,7 @@ const noteEl=document.getElementById('note');
 noteEl.addEventListener('input',()=>{day(todayKey).note=noteEl.value;save();});
 load();seedGrowth();applyTheme();loadBirthDetails();
 noteEl.value=day(todayKey).note||'';
-renderCards();renderAll();renderGrowth();renderSleep();renderScreen();renderOutdoor();renderWords();renderBooks();renderMeals();renderPotty();renderDental();renderTrend();renderPlan();renderWeekSummary();renderMood();renderIllness();renderAllergies();renderBadges();
+renderCards();renderAll();renderGrowth();renderGrowthInput();renderCountdowns();renderSleep();renderScreen();renderOutdoor();renderWords();renderBooks();renderMeals();renderPotty();renderDental();renderTrend();renderPlan();renderWeekSummary();renderMood();renderIllness();renderAllergies();renderBadges();
 checkAutoBackup();
 </script>
 </body>
