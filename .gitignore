@@ -1,0 +1,5 @@
+version-2-repo.zip
+*.zip
+node_modules/
+.DS_Store
+.vercel

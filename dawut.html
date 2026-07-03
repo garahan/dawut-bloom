@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#FDF8F0" id="metaTheme">
+<meta name="description" content="Track Dawut's daily development activities, growth, and milestones — backed by research.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Dawut Bloom">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='80' font-size='80'%3E%F0%9F%8C%B1%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%23FDF8F0'/%3E%3Ctext x='90' y='125' font-size='90' text-anchor='middle'%3E%F0%9F%8C%B1%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<title>Dawut — Daily Bloom</title>
+<style>
+:root{
+  --bg:#FDF8F0; --surface:#FFFFFF; --card:#FFFFFF; --line:#EFE5D6;
+  --text:#3D3229; --muted:#8A7B6C; --faint:#B5A897;
+  --body:#FF8A7A; --brain:#7FA8FF; --lang:#FFC24D; --heart:#F78FB8; --food:#7ACB8F; --create:#B79AE8;
+  --gold:#E8A93D; --green:#5BAE6F; --r:20px;
+  --shadow:0 2px 8px rgba(120,90,60,.06),0 4px 20px rgba(120,90,60,.08);
+  --shadow-lg:0 4px 12px rgba(120,90,60,.08),0 8px 32px rgba(120,90,60,.12);
+  --nav-bg:rgba(255,255,255,.92); --heat-empty:#F3EBDD; --input-bg:#FDF8F0; --toggle-bg:#FDF8F0;
+}
+[data-theme="dark"]{
+  --bg:#161310; --surface:#221E16; --card:#2A251D; --line:#3D362C;
+  --text:#EDE4D5; --muted:#B0A390; --faint:#857A6B;
+  --shadow:0 2px 8px rgba(0,0,0,.2),0 4px 20px rgba(0,0,0,.15);
+  --shadow-lg:0 4px 12px rgba(0,0,0,.25),0 8px 32px rgba(0,0,0,.2);
+  --nav-bg:rgba(34,30,22,.92); --heat-empty:#332E26; --input-bg:#1F1B15; --toggle-bg:#1F1B15;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:'Quicksand',system-ui,sans-serif;transition:background .3s,color .3s;}
+body{max-width:520px;margin:0 auto;padding:18px 16px 110px;
+  background:radial-gradient(700px 300px at 90% -5%,rgba(255,194,77,.15),transparent 60%),radial-gradient(600px 300px at 0% 10%,rgba(127,168,255,.1),transparent 60%),radial-gradient(500px 400px at 50% 100%,rgba(183,154,232,.06),transparent 60%),var(--bg);}
+.mono{font-family:'JetBrains Mono',monospace;}
+h2.sec{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:700;margin:28px 0 12px;display:flex;align-items:center;gap:8px;}
+h2.sec::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent);}
+:focus-visible{outline:2.5px solid var(--brain);outline-offset:2px;border-radius:8px;}
+.hero{background:linear-gradient(135deg,var(--card),rgba(255,194,77,.03));border-radius:24px;padding:20px;box-shadow:var(--shadow-lg);border:1px solid var(--line);}
+.hero .who{display:flex;align-items:center;gap:14px;}
+.hero .face{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#FFE3B3,#FFD1C4);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;box-shadow:0 0 0 4px rgba(255,194,77,.12),0 4px 14px rgba(255,194,77,.15);}
+.hero h1{margin:0;font-size:20px;font-weight:700;}
+.hero .age{font-size:13px;color:var(--muted);margin-top:2px;}
+.stagechip{margin-top:14px;background:linear-gradient(135deg,rgba(255,194,77,.18),rgba(255,138,122,.12));border:1px solid rgba(232,169,61,.4);border-radius:14px;padding:10px 14px;font-size:13px;color:#8A6420;line-height:1.45;}
+[data-theme="dark"] .stagechip{color:var(--lang);background:linear-gradient(135deg,rgba(255,194,77,.12),rgba(255,138,122,.08));}
+.herostats{display:flex;gap:10px;margin-top:14px;}
+.hstat{flex:1;background:var(--bg);border-radius:14px;padding:10px;text-align:center;transition:transform .15s;}
+.hstat:active{transform:scale(.95);}
+.hstat b{font-size:18px;display:block;font-family:'JetBrains Mono',monospace;}
+.hstat span{font-size:10.5px;color:var(--muted);}
+.hstat b.grn{color:var(--green);} .hstat b.gld{color:var(--gold);}
+.ringwrap{display:flex;justify-content:center;margin-top:16px;}
+.ringwrap svg{width:120px;height:120px;}
+.ringwrap .ringbg{stroke:var(--line);stroke-width:8;fill:none;}
+.ringwrap .ringfg{stroke:url(#ringGrad);stroke-width:8;fill:none;stroke-linecap:round;transition:stroke-dashoffset .6s cubic-bezier(.2,1,.4,1);filter:drop-shadow(0 0 6px rgba(91,174,111,.3));}
+.ringwrap .ringtxt{font-size:28px;font-weight:700;font-family:'JetBrains Mono',monospace;fill:var(--text);text-anchor:middle;dominant-baseline:central;}
+.ringwrap .ringlbl{font-size:9px;fill:var(--faint);text-anchor:middle;letter-spacing:.1em;text-transform:uppercase;}
+.tip{margin-top:14px;background:linear-gradient(135deg,var(--card),rgba(232,169,61,.04));border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow);display:flex;gap:12px;align-items:flex-start;position:relative;overflow:hidden;}
+.tip::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--gold),var(--body));}
+.tip .ti{font-size:20px;}
+.tip h4{margin:0 0 3px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:700;}
+.tip p{margin:0;font-size:13.5px;color:var(--muted);line-height:1.5;}
+.daterow{display:flex;justify-content:space-between;align-items:center;margin:22px 0 12px;}
+.daterow h2{font-size:15px;margin:0;font-weight:600;color:var(--muted);}
+.daterow .count{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--faint);}
+.daterow .count b{color:var(--text);}
+.cards{display:flex;flex-direction:column;gap:12px;}
+.act{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:15px 16px;cursor:pointer;user-select:none;transition:transform .15s cubic-bezier(.2,1,.4,1),border-color .25s,box-shadow .25s;box-shadow:var(--shadow);}
+.act:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px);}
+.act:active{transform:scale(.97);}
+.act .top{display:flex;gap:12px;align-items:flex-start;}
+.act .dot{width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;transition:all .25s;}
+.act h3{margin:0;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;}
+.act p.what{margin:4px 0 0;font-size:14.5px;color:var(--text);line-height:1.45;font-weight:500;}
+.act p.why{margin:6px 0 0;font-size:12px;color:var(--muted);line-height:1.45;}
+.act .check{margin-left:auto;width:30px;height:30px;border-radius:50%;border:2px solid var(--line);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px;color:transparent;transition:all .25s cubic-bezier(.2,1.4,.4,1);}
+.act.done .check{transform:scale(1.1);}
+.act .shuffle{margin-top:10px;display:inline-block;font-size:11.5px;font-family:'JetBrains Mono',monospace;color:var(--faint);padding:5px 12px;border:1.5px dashed var(--line);border-radius:99px;cursor:pointer;transition:all .2s;}
+.act .shuffle:hover{color:var(--muted);border-color:var(--muted);background:var(--bg);}
+.act .shuffle:active{transform:scale(.95);}
+.act.done .check{color:#fff;border-color:transparent;}
+.act.done p.what{text-decoration:line-through;opacity:.6;}
+.d-body .dot{background:rgba(255,138,122,.16);} .d-body h3{color:var(--body);}
+.d-brain .dot{background:rgba(127,168,255,.16);} .d-brain h3{color:var(--brain);}
+.d-lang .dot{background:rgba(255,194,77,.18);} .d-lang h3{color:#C98F1E;}
+.d-heart .dot{background:rgba(247,143,184,.16);} .d-heart h3{color:var(--heart);}
+.d-food .dot{background:rgba(122,203,143,.16);} .d-food h3{color:var(--food);}
+.d-create .dot{background:rgba(183,154,232,.16);} .d-create h3{color:var(--create);}
+.act.done.d-body{border-color:var(--body);} .act.done.d-body .check{background:var(--body);}
+.act.done.d-brain{border-color:var(--brain);} .act.done.d-brain .check{background:var(--brain);}
+.act.done.d-lang{border-color:var(--lang);} .act.done.d-lang .check{background:var(--lang);}
+.act.done.d-heart{border-color:var(--heart);} .act.done.d-heart .check{background:var(--heart);}
+.act.done.d-food{border-color:var(--food);} .act.done.d-food .check{background:var(--food);}
+.act.done.d-create{border-color:var(--create);} .act.done.d-create .check{background:var(--create);}
+.daydone{display:none;margin-top:14px;text-align:center;padding:18px;border-radius:var(--r);background:linear-gradient(135deg,rgba(255,194,77,.22),rgba(247,143,184,.18),rgba(183,154,232,.1));border:1.5px solid rgba(232,169,61,.5);font-weight:700;font-size:17px;color:#8A6420;box-shadow:var(--shadow-lg);}
+[data-theme="dark"] .daydone{color:var(--lang);background:linear-gradient(135deg,rgba(255,194,77,.12),rgba(247,143,184,.1),rgba(183,154,232,.06));}
+.daydone.show{display:block;animation:pop .45s cubic-bezier(.2,1.4,.4,1);}
+.daydone span{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-top:4px;}
+@keyframes pop{0%{transform:scale(.85);opacity:0}100%{transform:scale(1);opacity:1}}
+.note{margin-top:14px;}
+.note textarea{width:100%;min-height:64px;border-radius:16px;border:1.5px solid var(--line);background:var(--surface);color:var(--text);padding:12px 14px;font-size:14px;font-family:'Quicksand',sans-serif;resize:vertical;outline:none;box-shadow:var(--shadow);transition:border-color .2s,box-shadow .2s;}
+.note textarea:focus{border-color:var(--lang);box-shadow:0 0 0 3px rgba(255,194,77,.12);}
+.note label{font-size:11px;color:var(--faint);letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:8px;font-weight:700;}
+.chart-card{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:12px;box-shadow:var(--shadow);transition:box-shadow .25s;}
+.chart-card:hover{box-shadow:var(--shadow-lg);}
+.chart-card .mtop{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:4px;}
+.chart-card h3{margin:0;font-size:15px;font-weight:700;}
+.chart-card .target{font-size:11px;color:var(--faint);font-family:'JetBrains Mono',monospace;}
+.chart-card .chart-wrap{position:relative;margin-top:10px;overflow-x:auto;}
+.chart-card svg.chart{width:100%;min-width:300px;height:180px;display:block;}
+.chart-card .val-row{display:flex;align-items:center;gap:14px;margin-top:10px;}
+.chart-card .val{font-family:'JetBrains Mono',monospace;font-size:25px;font-weight:600;min-width:96px;}
+.chart-card .val small{font-size:12px;color:var(--muted);}
+.chart-card .pctl{font-size:12px;margin-top:8px;line-height:1.5;color:var(--muted);}
+.chart-card .pctl b{color:var(--green);}
+.chart-card .mrow{display:flex;gap:8px;margin-top:12px;}
+.chart-card input{flex:1;border-radius:12px;border:1.5px solid var(--line);background:var(--input-bg);color:var(--text);padding:9px 12px;font-size:15px;font-family:'JetBrains Mono',monospace;outline:none;min-width:0;}
+.chart-card input:focus{border-color:var(--brain);box-shadow:0 0 0 3px rgba(127,168,255,.12);}
+.chart-card button{border-radius:12px;border:none;background:var(--brain);color:#fff;font-weight:700;padding:9px 16px;font-size:13px;font-family:'Quicksand',sans-serif;cursor:pointer;transition:opacity .2s,transform .15s;}
+.chart-card button:hover{opacity:.88;}
+.chart-card button:active{transform:scale(.93);}
+.chart-legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;font-size:10px;color:var(--faint);}
+.chart-legend span{display:flex;align-items:center;gap:4px;}
+.chart-legend i{width:12px;height:3px;border-radius:2px;display:inline-block;}
+.refnote{font-size:11.5px;color:var(--faint);line-height:1.55;margin-top:4px;}
+.track-card{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:12px;box-shadow:var(--shadow);transition:box-shadow .25s;}
+.track-card:hover{box-shadow:var(--shadow-lg);}
+.track-card h3{margin:0 0 4px;font-size:15px;font-weight:700;}
+.track-card .sub{font-size:11px;color:var(--faint);font-family:'JetBrains Mono',monospace;margin-bottom:10px;}
+.track-card .big-val{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600;}
+.track-card .big-val small{font-size:12px;color:var(--muted);}
+.track-card .bar{height:8px;border-radius:99px;background:var(--line);margin-top:10px;overflow:hidden;}
+.track-card .bar-fill{height:100%;border-radius:99px;transition:width .5s cubic-bezier(.2,1,.4,1);}
+.track-card .bar-fill.good{background:linear-gradient(90deg,var(--green),#7ACB8F);}
+.track-card .bar-fill.warn{background:linear-gradient(90deg,var(--gold),#FFC24D);}
+.track-card .bar-fill.over{background:linear-gradient(90deg,#E07070,#FF8A7A);}
+.track-card .mrow{display:flex;gap:8px;margin-top:12px;align-items:center;}
+.track-card input{flex:1;border-radius:12px;border:1.5px solid var(--line);background:var(--input-bg);color:var(--text);padding:9px 12px;font-size:15px;font-family:'JetBrains Mono',monospace;outline:none;min-width:0;}
+.track-card input:focus{border-color:var(--brain);box-shadow:0 0 0 3px rgba(127,168,255,.12);}
+.track-card button{border-radius:12px;border:none;background:var(--brain);color:#fff;font-weight:700;padding:9px 16px;font-size:13px;font-family:'Quicksand',sans-serif;cursor:pointer;transition:opacity .2s,transform .15s;}
+.track-card button:hover{opacity:.88;}
+.track-card button:active{transform:scale(.93);}
+.track-card .week-mini{display:flex;gap:4px;margin-top:10px;padding-bottom:18px;}
+.track-card .week-mini .dbar{flex:1;height:40px;border-radius:6px;background:var(--line);position:relative;overflow:hidden;display:flex;align-items:flex-end;}
+.track-card .week-mini .dbar .fill{width:100%;border-radius:6px;transition:height .4s;}
+.track-card .week-mini .dbar .lbl{position:absolute;bottom:-16px;width:100%;text-align:center;font-size:8px;color:var(--faint);font-family:'JetBrains Mono',monospace;}
+.word-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+.word-chip{background:var(--bg);border:1.5px solid var(--line);border-radius:99px;padding:5px 12px;font-size:13px;display:flex;align-items:center;gap:6px;transition:all .2s;}
+.word-chip:hover{border-color:var(--lang);background:rgba(255,194,77,.06);}
+.word-chip button{background:none;border:none;color:var(--faint);font-size:14px;cursor:pointer;padding:0;line-height:1;}
+.word-chip button:hover{color:#E07070;}
+.panel{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:14px;box-shadow:var(--shadow);transition:box-shadow .25s;}
+.panel:hover{box-shadow:var(--shadow-lg);}
+.panel h3{margin:0 0 8px;font-size:15px;font-weight:700;}
+.panel p{font-size:13px;color:var(--muted);margin:0 0 10px;line-height:1.5;}
+.panel input,.panel textarea{width:100%;border-radius:12px;border:1.5px solid var(--line);background:var(--input-bg);color:var(--text);padding:10px 12px;font-size:14px;font-family:'Quicksand',sans-serif;outline:none;margin-bottom:8px;transition:border-color .2s,box-shadow .2s;}
+.panel input:focus,.panel textarea:focus{border-color:var(--lang);box-shadow:0 0 0 3px rgba(255,194,77,.12);}
+.panel button{border-radius:12px;border:none;background:linear-gradient(135deg,var(--gold),#D49530);color:#fff;font-weight:700;padding:10px 18px;font-size:13px;cursor:pointer;font-family:'Quicksand',sans-serif;margin-right:8px;transition:opacity .2s,transform .15s;box-shadow:0 2px 8px rgba(232,169,61,.2);}
+.panel button:hover{opacity:.9;}
+.panel button:active{transform:scale(.95);}
+.panel button.ghost{background:none;border:1.5px solid var(--line);color:var(--muted);box-shadow:none;}
+.panel button.ghost:hover{opacity:.7;border-color:var(--muted);}
+.panel label{font-size:10.5px;color:var(--faint);letter-spacing:.1em;text-transform:uppercase;display:block;margin:10px 0 5px;font-weight:700;}
+.mstone{border-left:3px solid var(--gold);padding:8px 14px;margin-bottom:8px;font-size:13.5px;color:var(--text);background:linear-gradient(90deg,rgba(232,169,61,.04),transparent);border-radius:0 12px 12px 0;transition:all .2s;}
+.mstone:hover{background:linear-gradient(90deg,rgba(232,169,61,.08),transparent);}
+.mstone b{color:var(--faint);font-family:'JetBrains Mono',monospace;font-size:10.5px;display:block;margin-bottom:2px;}
+.mstone img{max-width:100%;border-radius:12px;margin-top:6px;max-height:200px;object-fit:cover;}
+.mstone .del{float:right;font-size:11px;color:var(--faint);cursor:pointer;background:none;border:none;padding:2px 6px;}
+.mstone .del:hover{color:#E07070;}
+.photo-row{display:flex;gap:8px;margin-bottom:8px;align-items:center;}
+.photo-row input[type=file]{flex:1;margin-bottom:0;}
+.photo-preview{width:60px;height:60px;border-radius:12px;object-fit:cover;border:1.5px solid var(--line);}
+.cdc-group{margin-bottom:14px;}
+.cdc-group h4{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--brain);font-weight:700;margin:0 0 8px;}
+.cdc-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px;line-height:1.45;color:var(--text);}
+.cdc-item:last-child{border-bottom:none;}
+.cdc-item .chk{width:24px;height:24px;border-radius:7px;border:2px solid var(--line);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;color:transparent;transition:all .25s cubic-bezier(.2,1.4,.4,1);margin-top:1px;}
+.cdc-item.done .chk{background:var(--green);border-color:var(--green);color:#fff;transform:scale(1.08);}
+.cdc-item.done span{text-decoration:line-through;opacity:.55;}
+.cdc-item .age-tag{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--faint);background:var(--bg);padding:2px 8px;border-radius:99px;flex-shrink:0;}
+.vax-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);}
+.vax-item:last-child{border-bottom:none;}
+.vax-item .vax-dot{width:14px;height:14px;border-radius:50%;border:2.5px solid var(--line);flex-shrink:0;transition:all .25s cubic-bezier(.2,1.4,.4,1);cursor:pointer;}
+.vax-item.done .vax-dot{background:var(--green);border-color:var(--green);box-shadow:0 0 0 3px rgba(91,174,111,.15);}
+.vax-item .vax-info{flex:1;}
+.vax-item .vax-name{font-size:14px;font-weight:600;}
+.vax-item .vax-when{font-size:11px;color:var(--faint);font-family:'JetBrains Mono',monospace;}
+.vax-item .vax-status{font-size:11px;font-weight:700;padding:4px 10px;border-radius:99px;}
+.vax-item .vax-status.due{background:rgba(232,169,61,.18);color:var(--gold);}
+.vax-item .vax-status.done{background:rgba(91,174,111,.15);color:var(--green);}
+.vax-item .vax-status.upcoming{background:var(--bg);color:var(--faint);}
+.heat{display:grid;grid-template-rows:repeat(7,1fr);grid-auto-flow:column;gap:4px;justify-content:start;}
+.cell{width:15px;height:15px;border-radius:5px;background:var(--heat-empty);transition:transform .15s;}
+.cell:hover{transform:scale(1.3);}
+.cell.l1{background:#CBE8D2;} .cell.l2{background:#8FD1A1;} .cell.l3{background:var(--green);box-shadow:0 0 8px rgba(91,174,111,.4);}
+.cell.l3{animation:bloomPulse 2s ease-in-out infinite;}
+@keyframes bloomPulse{0%,100%{box-shadow:0 0 8px rgba(91,174,111,.4)}50%{box-shadow:0 0 14px rgba(91,174,111,.6)}}
+.cell.today{outline:2px solid var(--gold);outline-offset:1px;}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px;}
+.stat{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:12px;box-shadow:var(--shadow);transition:transform .15s,box-shadow .25s;}
+.stat:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);}
+.stat b{font-family:'JetBrains Mono',monospace;font-size:20px;display:block;}
+.stat span{font-size:11px;color:var(--muted);}
+.stagecard{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:12px;box-shadow:var(--shadow);transition:all .25s;}
+.stagecard:hover{box-shadow:var(--shadow-lg);transform:translateY(-1px);}
+.stagecard h3{margin:0 0 4px;font-size:14px;} .stagecard .rng{font-size:11px;color:var(--faint);font-family:'JetBrains Mono',monospace;}
+.stagecard.cur{border-color:var(--gold);background:linear-gradient(135deg,var(--card),rgba(255,194,77,.08));box-shadow:0 4px 20px rgba(232,169,61,.1);}
+.stagecard ul{margin:10px 0 0;padding-left:18px;}
+.stagecard li{font-size:13px;color:var(--muted);margin-bottom:5px;line-height:1.45;}
+.tab{display:none;} .tab.active{display:block;animation:fadein .3s cubic-bezier(.2,1,.4,1);}
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.act{animation:cardIn .35s cubic-bezier(.2,1,.4,1) both;}
+.act:nth-child(1){animation-delay:.02s;}.act:nth-child(2){animation-delay:.06s;}.act:nth-child(3){animation-delay:.1s;}.act:nth-child(4){animation-delay:.14s;}.act:nth-child(5){animation-delay:.18s;}.act:nth-child(6){animation-delay:.22s;}
+@keyframes cardIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+nav{position:fixed;bottom:0;left:0;right:0;max-width:520px;margin:0 auto;display:flex;background:var(--nav-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--line);padding:8px 8px calc(8px + env(safe-area-inset-bottom));z-index:50;box-shadow:0 -2px 20px rgba(120,90,60,.06);}
+nav button{flex:1;background:none;border:none;color:var(--faint);font-family:'Quicksand',sans-serif;font-size:10.5px;font-weight:700;padding:7px 0;cursor:pointer;border-radius:14px;position:relative;transition:color .2s,background .2s,transform .15s;}
+nav button:active{transform:scale(.92);}
+nav button .ni{display:block;font-size:19px;margin-bottom:2px;transition:transform .2s;}
+nav button.active .ni{transform:scale(1.15);}
+nav button.active{color:var(--text);background:linear-gradient(135deg,var(--bg),rgba(255,194,77,.06));}
+nav button .badge{position:absolute;top:2px;left:50%;margin-left:8px;background:var(--gold);color:#fff;font-size:9px;font-weight:700;border-radius:99px;min-width:16px;height:16px;display:flex;align-items:center;justify-content:center;padding:0 4px;}
+nav button .badge.hide{display:none;}
+.cf{position:fixed;width:9px;height:14px;top:-20px;z-index:99;pointer-events:none;animation:fall linear forwards;}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:.2}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-height:1.8;}
+.togglerow{display:flex;align-items:center;justify-content:space-between;padding:6px 0;}
+.togglerow span{font-size:14px;font-weight:600;}
+.switch{width:48px;height:28px;border-radius:99px;background:var(--toggle-bg);border:1.5px solid var(--line);position:relative;cursor:pointer;transition:all .25s;}
+.switch::after{content:'';position:absolute;top:2px;left:2px;width:21px;height:21px;border-radius:50%;background:var(--faint);transition:all .25s cubic-bezier(.2,1.4,.4,1);}
+.switch.on{background:rgba(122,203,143,.25);border-color:var(--food);}
+.switch.on::after{left:22px;background:var(--food);box-shadow:0 2px 6px rgba(122,203,143,.3);}
+.hint{font-size:11.5px;color:var(--faint);line-height:1.55;margin-top:6px;}
+.install-banner{display:none;background:linear-gradient(135deg,rgba(91,174,111,.12),rgba(127,168,255,.1));border:1.5px solid rgba(91,174,111,.4);border-radius:var(--r);padding:14px;margin-bottom:14px;align-items:center;gap:12px;box-shadow:var(--shadow);}
+.install-banner.show{display:flex;}
+.install-banner .it{font-size:24px;}
+.install-banner .itx{flex:1;font-size:13px;color:var(--muted);line-height:1.4;}
+.install-banner button{border:none;background:linear-gradient(135deg,var(--green),#7ACB8F);color:#fff;font-weight:700;padding:8px 16px;border-radius:12px;font-size:13px;cursor:pointer;font-family:'Quicksand',sans-serif;box-shadow:0 2px 8px rgba(91,174,111,.2);transition:transform .15s;}
+.install-banner button:active{transform:scale(.95);}
+.plan-hero{background:linear-gradient(135deg,var(--card),rgba(127,168,255,.08),rgba(183,154,232,.04));border:1.5px solid var(--line);border-radius:24px;padding:18px;box-shadow:var(--shadow-lg);margin-bottom:14px;}
+.plan-hero h2{margin:0 0 4px;font-size:18px;font-weight:700;}
+.plan-hero .sub{font-size:13px;color:var(--muted);line-height:1.5;}
+.plan-hero .week-tag{display:inline-block;margin-top:10px;background:rgba(127,168,255,.15);color:var(--brain);font-size:11px;font-weight:700;padding:4px 12px;border-radius:99px;font-family:'JetBrains Mono',monospace;}
+.routine-block{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:12px;box-shadow:var(--shadow);transition:box-shadow .25s;}
+.routine-block:hover{box-shadow:var(--shadow-lg);}
+.routine-block .rb-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.routine-block .rb-icon{width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.routine-block .rb-icon.am{background:rgba(255,194,77,.18);}
+.routine-block .rb-icon.mid{background:rgba(127,168,255,.15);}
+.routine-block .rb-icon.pm{background:rgba(183,154,232,.15);}
+.routine-block h3{margin:0;font-size:14px;font-weight:700;}
+.routine-block .rb-time{font-size:11px;color:var(--faint);font-family:'JetBrains Mono',monospace;}
+.routine-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px;line-height:1.45;color:var(--text);}
+.routine-item:last-child{border-bottom:none;}
+.routine-item .ri-check{width:22px;height:22px;border-radius:7px;border:2px solid var(--line);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:transparent;transition:all .25s cubic-bezier(.2,1.4,.4,1);margin-top:1px;}
+.routine-item.done .ri-check{background:var(--green);border-color:var(--green);color:#fff;transform:scale(1.08);}
+.routine-item.done .ri-text{text-decoration:line-through;opacity:.5;}
+.routine-item .ri-text{flex:1;}
+.routine-item .ri-text .ri-why{display:block;font-size:11px;color:var(--faint);margin-top:2px;}
+.routine-item .ri-tag{font-size:9px;font-weight:700;padding:2px 8px;border-radius:99px;flex-shrink:0;margin-top:2px;}
+.routine-item .ri-tag.body{background:rgba(255,138,122,.15);color:var(--body);}
+.routine-item .ri-tag.brain{background:rgba(127,168,255,.15);color:var(--brain);}
+.routine-item .ri-tag.lang{background:rgba(255,194,77,.15);color:#C98F1E;}
+.routine-item .ri-tag.heart{background:rgba(247,143,184,.15);color:var(--heart);}
+.routine-item .ri-tag.food{background:rgba(122,203,143,.15);color:var(--food);}
+.routine-item .ri-tag.create{background:rgba(183,154,232,.15);color:var(--create);}
+.goal-card{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:12px;box-shadow:var(--shadow);transition:box-shadow .25s;}
+.goal-card:hover{box-shadow:var(--shadow-lg);}
+.goal-card h3{margin:0 0 8px;font-size:14px;font-weight:700;}
+.goal-card .goal-row{display:flex;align-items:center;gap:10px;padding:6px 0;font-size:13px;}
+.goal-card .goal-dot{width:10px;height:10px;border-radius:50%;border:2px solid var(--line);flex-shrink:0;transition:all .2s;}
+.goal-card .goal-dot.done{background:var(--green);border-color:var(--green);}
+.goal-card .goal-dot.current{border-color:var(--gold);background:rgba(232,169,61,.3);}
+.goal-card .goal-dot.future{border-color:var(--faint);}
+.goal-card .goal-text{flex:1;color:var(--text);}
+.goal-card .goal-text.done{color:var(--faint);text-decoration:line-through;}
+.goal-card .goal-text.current{font-weight:600;}
+.goal-card .goal-week{font-size:10px;color:var(--faint);font-family:'JetBrains Mono',monospace;}
+.ladder-card{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:12px;box-shadow:var(--shadow);transition:box-shadow .25s;}
+.ladder-card:hover{box-shadow:var(--shadow-lg);}
+.ladder-card h3{margin:0 0 10px;font-size:14px;font-weight:700;}
+.ladder-row{display:flex;align-items:flex-start;gap:12px;padding:8px 0;position:relative;}
+.ladder-row .lr-line{position:absolute;left:11px;top:24px;bottom:-8px;width:2px;background:var(--line);}
+.ladder-row:last-child .lr-line{display:none;}
+.ladder-row .lr-dot{width:24px;height:24px;border-radius:50%;flex-shrink:0;z-index:1;display:flex;align-items:center;justify-content:center;font-size:11px;}
+.ladder-row .lr-dot.done{background:var(--green);color:#fff;}
+.ladder-row .lr-dot.current{background:var(--gold);color:#fff;box-shadow:0 0 0 4px rgba(232,169,61,.2);}
+.ladder-row .lr-dot.future{background:var(--bg);border:2px solid var(--line);color:var(--faint);}
+.ladder-row .lr-content{flex:1;}
+.ladder-row .lr-title{font-size:13.5px;font-weight:600;}
+.ladder-row .lr-title.done{color:var(--faint);text-decoration:line-through;}
+.ladder-row .lr-title.current{color:var(--text);}
+.ladder-row .lr-title.future{color:var(--muted);}
+.ladder-row .lr-desc{font-size:11.5px;color:var(--faint);margin-top:2px;line-height:1.4;}
+.ladder-row .lr-age{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--faint);margin-top:3px;}
+.peer-card{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:12px;box-shadow:var(--shadow);transition:box-shadow .25s;}
+.peer-card:hover{box-shadow:var(--shadow-lg);}
+.peer-card h3{margin:0 0 6px;font-size:14px;font-weight:700;}
+.peer-card .peer-sub{font-size:11px;color:var(--faint);margin-bottom:10px;}
+.peer-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px;}
+.peer-row:last-child{border-bottom:none;}
+.peer-row .pr-skill{color:var(--text);}
+.peer-row .pr-status{font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;}
+.peer-row .pr-status.ahead{background:rgba(91,174,111,.15);color:var(--green);}
+.peer-row .pr-status.ontrack{background:rgba(232,169,61,.15);color:var(--gold);}
+.peer-row .pr-status.behind{background:rgba(224,112,112,.15);color:#E07070;}
+</style>
+</head>
+<body>
+<div class="install-banner" id="installBanner">
+  <span class="it">📲</span>
+  <div class="itx">Install Dawut Bloom to your home screen for offline use.</div>
+  <button id="installBtn">Install</button>
+</div>
+
+<div class="tab active" id="tab-today" role="tabpanel" aria-label="Today's activities">
+  <div class="hero">
+    <div class="who">
+      <div class="face" aria-hidden="true">🌱</div>
+      <div><h1>Dawut</h1><div class="age" id="age"></div></div>
+    </div>
+    <div class="stagechip" id="stagechip"></div>
+    <div class="herostats">
+      <div class="hstat"><b class="gld" id="hsStreak">0</b><span>day streak 🔥</span></div>
+      <div class="hstat"><b class="grn" id="hsDone">0</b><span>bloom days</span></div>
+      <div class="hstat"><b id="hsAge">—</b><span>months old</span></div>
+    </div>
+    <div class="ringwrap" aria-hidden="true">
+      <svg viewBox="0 0 120 120">
+        <defs><linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7ACB8F"/><stop offset="100%" stop-color="#5BAE6F"/></linearGradient></defs>
+        <circle class="ringbg" cx="60" cy="60" r="50"/>
+        <circle class="ringfg" id="ringFg" cx="60" cy="60" r="50" stroke-dasharray="314.16" stroke-dashoffset="314.16" transform="rotate(-90 60 60)"/>
+        <text class="ringtxt" id="ringTxt" x="60" y="56">0/6</text>
+        <text class="ringlbl" x="60" y="74">today</text>
+      </svg>
+    </div>
+  </div>
+  <div class="tip" role="note">
+    <span class="ti" aria-hidden="true">💡</span>
+    <div><h4>Today's parenting key</h4><p id="tipText"></p></div>
+  </div>
+  <div class="daterow">
+    <h2 id="today"></h2>
+    <div class="count"><b id="donecount">0</b>/6</div>
+  </div>
+  <div class="cards" id="cards" role="list"></div>
+  <div class="daydone" id="daydone">🌸 A full bloom day! Six little seeds planted.<span>Consistency, not intensity, builds his brain.</span></div>
+  <div class="note">
+    <label for="note">Today's little moment — a word he said, something new he did</label>
+    <textarea id="note" placeholder="e.g. said 'more water' by himself, balanced on one foot for 2 seconds!"></textarea>
+  </div>
+</div>
+
+<div class="tab" id="tab-plan" role="tabpanel" aria-label="Daily plan and goals">
+  <div class="plan-hero">
+    <h2>📋 Mama's Daily Plan</h2>
+    <div class="sub" id="planSub"></div>
+    <span class="week-tag" id="planWeekTag"></span>
+  </div>
+
+  <h2 class="sec" style="margin-top:8px">Today's routine</h2>
+  <div id="routineBlocks"></div>
+
+  <h2 class="sec">This week's focus goals</h2>
+  <div id="weeklyGoals"></div>
+
+  <h2 class="sec">Skill ladder — where he is and what's next</h2>
+  <div id="skillLadder"></div>
+
+  <h2 class="sec">Peer benchmarks (typical development)</h2>
+  <div id="peerBench"></div>
+</div>
+
+<div class="tab" id="tab-growth" role="tabpanel" aria-label="Growth tracking">
+  <h2 class="sec" style="margin-top:8px">Growth tracking (WHO)</h2>
+  <div id="metrics"></div>
+  <p class="refnote">Percentiles calculated from WHO Child Growth Standards (LMS method, boys). For orientation only — his pediatrician and 母子手帳 checkups are the real source of truth.</p>
+  <h2 class="sec">Sleep</h2>
+  <div id="sleepCard"></div>
+  <h2 class="sec">Screen time</h2>
+  <div id="screenCard"></div>
+  <h2 class="sec">Language development</h2>
+  <div id="wordCard"></div>
+  <h2 class="sec">Consistency garden</h2>
+  <div class="heat" id="heat" role="img" aria-label="Activity consistency heatmap"></div>
+  <div class="stats">
+    <div class="stat"><b id="stTotal">0</b><span>full bloom days</span></div>
+    <div class="stat"><b id="stBest">0</b><span>best streak</span></div>
+    <div class="stat"><b id="stActs">0</b><span>activities done</span></div>
+  </div>
+</div>
+
+<div class="tab" id="tab-stages" role="tabpanel" aria-label="Milestones and development">
+  <h2 class="sec" style="margin-top:8px">Milestone journal</h2>
+  <div class="panel">
+    <p>First words, first jumps, sweet moments — they disappear from memory faster than you think. Two seconds to save them forever.</p>
+    <div class="photo-row">
+      <input type="file" id="msPhoto" accept="image/*" aria-label="Attach photo">
+      <img id="msPhotoPreview" class="photo-preview" style="display:none" alt="Preview">
+    </div>
+    <input id="msText" placeholder="e.g. First 3-word sentence: 'mama more banana'">
+    <button id="msBtn">Save milestone</button>
+    <div id="mstones" style="margin-top:12px"></div>
+  </div>
+  <h2 class="sec">CDC developmental milestones</h2>
+  <div class="panel">
+    <p>Official CDC milestones (2022 update). Check off each as Dawut achieves it — talk to your pediatrician if any are missed by the age window.</p>
+    <div id="cdcList"></div>
+  </div>
+  <h2 class="sec">Vaccination schedule (Japan)</h2>
+  <div class="panel">
+    <p>Japan routine immunizations. Tap to mark as done. Check 母子手帳 for exact dates.</p>
+    <div id="vaxList"></div>
+  </div>
+  <h2 class="sec">The development roadmap</h2>
+  <div id="stagelist"></div>
+</div>
+
+<div class="tab" id="tab-settings" role="tabpanel" aria-label="Settings">
+  <h2 class="sec" style="margin-top:8px">Appearance</h2>
+  <div class="panel">
+    <div class="togglerow"><span>Dark mode</span><div class="switch" id="swDark" role="switch" tabindex="0" aria-label="Toggle dark mode"></div></div>
+    <p class="hint">Auto-detects system preference. Toggle to override manually.</p>
+  </div>
+  <h2 class="sec">Reminders</h2>
+  <div class="panel">
+    <h3>Reminders (while app is open)</h3>
+    <div class="togglerow"><span>Browser notifications</span><div class="switch" id="swNotif" role="switch" tabindex="0" aria-label="Toggle notifications"></div></div>
+    <label for="remAM">Morning activities reminder</label><input type="time" id="remAM" value="09:30">
+    <label for="remPM">Evening note reminder</label><input type="time" id="remPM" value="20:30">
+    <button id="saveRem">Save</button>
+    <p class="hint">For reminders that arrive even when the app is closed, use the Telegram engine in the family repo.</p>
+  </div>
+  <h2 class="sec">Backup</h2>
+  <div class="panel">
+    <h3>Data backup</h3>
+    <button id="expBtn">Export backup</button><button class="ghost" id="impBtn">Import</button>
+    <input type="file" id="impFile" accept=".json" style="display:none">
+    <p class="hint">Data lives in this browser. Export weekly — these are memories, not just data.</p>
+    <div class="togglerow" style="margin-top:10px"><span>Auto-backup reminder</span><div class="switch" id="swAutoBackup" role="switch" tabindex="0" aria-label="Toggle auto-backup reminder"></div></div>
+    <p class="hint">Reminds you to export if it's been 7+ days since last backup.</p>
+  </div>
+  <h2 class="sec">About</h2>
+  <div class="panel">
+    <p>Dawut's Daily Bloom 🌱 — a research-informed development tracker for our son, born 13 March 2024.</p>
+    <p>Growth: WHO Child Growth Standards (LMS method). CDC milestones (2022). Japan routine immunization schedule.</p>
+    <p style="margin-bottom:0">All data stays on your device. No accounts, no servers, no tracking.</p>
+  </div>
+</div>
+
+<nav role="tablist" aria-label="Navigation">
+  <button class="active" data-tab="tab-today" role="tab" aria-selected="true"><span class="ni" aria-hidden="true">🌱</span>Today<span class="badge hide" id="badge-today"></span></button>
+  <button data-tab="tab-plan" role="tab" aria-selected="false"><span class="ni" aria-hidden="true">📋</span>Plan<span class="badge hide" id="badge-plan"></span></button>
+  <button data-tab="tab-growth" role="tab" aria-selected="false"><span class="ni" aria-hidden="true">📏</span>Growth<span class="badge hide" id="badge-growth"></span></button>
+  <button data-tab="tab-stages" role="tab" aria-selected="false"><span class="ni" aria-hidden="true">⭐</span>Milestones<span class="badge hide" id="badge-stages"></span></button>
+  <button data-tab="tab-settings" role="tab" aria-selected="false"><span class="ni" aria-hidden="true">⚙️</span>Settings</button>
+</nav>
+
+<footer>little seeds daily 🌱 grown with love, backed by research<br>guidance only — his pediatrician knows him best</footer>
+
+<script>
+/* ============ CONFIG ============ */
+const BIRTH=new Date('2024-03-13T00:00:00');
+const DOMAINS=[
+ {id:'body',icon:'🏃',name:'Body'},
+ {id:'brain',icon:'🧠',name:'Brain & Memory'},
+ {id:'lang',icon:'🗣️',name:'Language'},
+ {id:'heart',icon:'💛',name:'Heart (EQ)'},
+ {id:'food',icon:'🥦',name:'Food'},
+ {id:'create',icon:'🎨',name:'Create & Play'}
+];
+/* ============ WHO LMS DATA (boys, 0-60 months) ============ */
+const WHO={
+ height:{m:[0,3,6,9,12,15,18,21,24,27,30,33,36,42,48,54,60],
+  L:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+  M:[49.15,61.79,67.58,72.01,75.75,79.08,82.09,84.77,87.16,89.29,91.19,93.01,94.75,98.11,101.36,104.52,107.61],
+  S:[.03795,.04068,.04196,.04329,.04437,.04534,.04621,.04698,.04768,.04830,.04886,.04937,.04984,.05069,.05145,.05213,.05276],
+  unit:'cm',name:'Height'},
+ weight:{m:[0,3,6,9,12,15,18,21,24,27,30,33,36,42,48,54,60],
+  L:[-.3342,-.3184,-.2848,-.2525,-.2227,-.1955,-.1707,-.1481,-.1275,-.1087,-.0915,-.0756,-.0610,-.0349,-.0121,.0079,.0264],
+  M:[3.35,6.01,7.79,9.19,10.28,11.20,11.99,12.70,13.34,13.93,14.47,14.97,15.44,16.31,17.12,17.88,18.61],
+  S:[.05557,.07736,.08742,.09354,.09772,.10068,.10299,.10487,.10634,.10749,.10841,.10916,.10978,.11072,.11140,.11195,.11242],
+  unit:'kg',name:'Weight'},
+ head:{m:[0,3,6,9,12,15,18,21,24,27,30,33,36,42,48,54,60],
+  L:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+  M:[34.46,41.04,43.61,45.22,46.35,47.07,47.68,48.18,48.62,49.01,49.36,49.67,49.96,50.45,50.88,51.25,51.59],
+  S:[.03687,.03369,.03266,.03223,.03219,.03241,.03275,.03314,.03354,.03394,.03433,.03470,.03505,.03570,.03629,.03683,.03733],
+  unit:'cm',name:'Head circumference'}
+};
+const ZP={p3:-1.8808,p15:-1.0364,p50:0,p85:1.0364,p97:1.8808};
+function interpWHO(id,ageM){
+  const w=WHO[id],ms=w.m;
+  if(ageM<=ms[0])return{L:w.L[0],M:w.M[0],S:w.S[0]};
+  if(ageM>=ms[ms.length-1])return{L:w.L[ms.length-1],M:w.M[ms.length-1],S:w.S[ms.length-1]};
+  for(let i=0;i<ms.length-1;i++){if(ageM>=ms[i]&&ageM<ms[i+1]){const t=(ageM-ms[i])/(ms[i+1]-ms[i]);return{L:w.L[i]+t*(w.L[i+1]-w.L[i]),M:w.M[i]+t*(w.M[i+1]-w.M[i]),S:w.S[i]+t*(w.S[i+1]-w.S[i])};}}
+  return{L:w.L[0],M:w.M[0],S:w.S[0]};
+}
+function lmsPercentile(id,ageM,value){
+  const{L,M,S}=interpWHO(id,ageM);let z;
+  if(Math.abs(L)<.01)z=Math.log(value/M)/S;else z=(Math.pow(value/M,L)-1)/(L*S);
+  return Math.round(normCDF(z)*100);
+}
+function lmsValue(id,ageM,pct){
+  const{L,M,S}=interpWHO(id,ageM);
+  const z=pct===3?ZP.p3:pct===15?ZP.p15:pct===50?0:pct===85?ZP.p85:pct===97?ZP.p97:0;
+  if(Math.abs(L)<.01)return M*Math.exp(S*z);return M*Math.pow(1+L*S*z,1/L);
+}
+function normCDF(z){return 0.5*(1+Math.tanh(Math.sqrt(Math.PI/8)*z));}
+/* ============ CDC MILESTONES (2022) ============ */
+const CDC=[
+ {age:15,label:'15 months',items:[
+  {c:'Social/Emotional',t:'Copies other children while playing'},
+  {c:'Social/Emotional',t:'Shows you an object they like'},
+  {c:'Social/Emotional',t:'Claps when excited'},
+  {c:'Social/Emotional',t:'Hugs stuffed doll or other toy'},
+  {c:'Language/Communication',t:'Tries to say one or two words besides mama or dada'},
+  {c:'Language/Communication',t:'Looks at a familiar object when named'},
+  {c:'Language/Communication',t:'Follows directions given with gestures'},
+  {c:'Cognitive',t:'Tries to use things the right way (phone, cup, book)'},
+  {c:'Cognitive',t:'Gets to know each other through play'},
+  {c:'Physical/Movement',t:'Takes a few steps on their own'},
+  {c:'Physical/Movement',t:'Uses fingers to feed self some food'}]},
+ {age:18,label:'18 months',items:[
+  {c:'Social/Emotional',t:'Moves away from you, but looks back to make sure you are close'},
+  {c:'Social/Emotional',t:'Points to show you something interesting'},
+  {c:'Social/Emotional',t:'Puts hands out for you to wash them'},
+  {c:'Social/Emotional',t:'Looks at a few pages in a book with you'},
+  {c:'Social/Emotional',t:'Helps you dress them by pushing arm through sleeve or lifting up foot'},
+  {c:'Language/Communication',t:'Tries to say three or more words besides mama or dada'},
+  {c:'Language/Communication',t:'Follows one-step directions without any gestures'},
+  {c:'Cognitive',t:'Copies you doing chores, like sweeping with a broom'},
+  {c:'Cognitive',t:'Plays with toys in a simple way, like pushing a toy car'},
+  {c:'Physical/Movement',t:'Walks without holding on to anyone or anything'},
+  {c:'Physical/Movement',t:'Scribbles'},
+  {c:'Physical/Movement',t:'Drinks from a cup without a lid and may spill sometimes'},
+  {c:'Physical/Movement',t:'Feeds themselves with their fingers'},
+  {c:'Physical/Movement',t:'Tries to use a spoon'},
+  {c:'Physical/Movement',t:'Climbs on and off a couch or chair'}]},
+ {age:24,label:'2 years',items:[
+  {c:'Social/Emotional',t:'Notices when others are upset or hurt'},
+  {c:'Social/Emotional',t:'Looks at your face to see how to react in a new situation'},
+  {c:'Language/Communication',t:'Points to things in a book when asked'},
+  {c:'Language/Communication',t:'Says at least two words together'},
+  {c:'Language/Communication',t:'Points to at least two body parts when asked'},
+  {c:'Language/Communication',t:'Uses more gestures than just waving and pointing'},
+  {c:'Cognitive',t:'Holds something in one hand while using the other hand'},
+  {c:'Cognitive',t:'Tries to use switches, knobs, or buttons on a toy'},
+  {c:'Cognitive',t:'Plays beside other children'},
+  {c:'Physical/Movement',t:'Kicks a ball'},
+  {c:'Physical/Movement',t:'Runs'},
+  {c:'Physical/Movement',t:'Walks (not climbs) up a few stairs with or without help'},
+  {c:'Physical/Movement',t:'Eats with a spoon'}]},
+ {age:30,label:'30 months',items:[
+  {c:'Social/Emotional',t:'Plays next to other children and sometimes plays with them'},
+  {c:'Social/Emotional',t:'Shows you what they can do by saying Look at me!'},
+  {c:'Social/Emotional',t:'Follows simple routines when told'},
+  {c:'Language/Communication',t:'Says about 50 words'},
+  {c:'Language/Communication',t:'Says two or more words, with one action word'},
+  {c:'Language/Communication',t:'Names things in a book when you point and ask'},
+  {c:'Cognitive',t:'Does some pretend play'},
+  {c:'Cognitive',t:'Shows simple problem-solving skills'},
+  {c:'Cognitive',t:'Knows at least one color'},
+  {c:'Physical/Movement',t:'Uses hands to twist things'},
+  {c:'Physical/Movement',t:'Takes off some clothes by themselves'},
+  {c:'Physical/Movement',t:'Jumps with both feet'}]},
+ {age:36,label:'3 years',items:[
+  {c:'Social/Emotional',t:'Calms down within 10 minutes after you leave them'},
+  {c:'Social/Emotional',t:'Notices other children and joins them to play'},
+  {c:'Language/Communication',t:'Talks with you in conversation using at least two back-and-forth exchanges'},
+  {c:'Language/Communication',t:'Asks who, what, where, or why questions'},
+  {c:'Language/Communication',t:'Says what action is happening in a picture or book'},
+  {c:'Language/Communication',t:'Says their first name when asked'},
+  {c:'Language/Communication',t:'Talks well enough for others to understand most of the time'},
+  {c:'Cognitive',t:'Draws a circle when you show them how'},
+  {c:'Cognitive',t:'Avoids touching hot objects when you warn them'},
+  {c:'Physical/Movement',t:'Strings items together, like large beads or macaroni'},
+  {c:'Physical/Movement',t:'Puts on some clothes by themselves, like loose pants or a jacket'},
+  {c:'Physical/Movement',t:'Washes and dries their own hands'}]}
+];
+/* ============ JAPAN VACCINATION SCHEDULE ============ */
+const VAX=[
+ {name:'BCG',ageM:1,when:'1 month',cat:'TB'},
+ {name:'HepB (1st)',ageM:0,when:'Birth',cat:'Hepatitis B'},
+ {name:'HepB (2nd)',ageM:1,when:'1 month',cat:'Hepatitis B'},
+ {name:'Rotavirus (1st)',ageM:2,when:'2 months',cat:'Rotavirus'},
+ {name:'DTaP-IPV/Hib (1st)',ageM:3,when:'3 months',cat:'DTP, Polio, Hib'},
+ {name:'DTaP-IPV/Hib (2nd)',ageM:5,when:'5 months',cat:'DTP, Polio, Hib'},
+ {name:'DTaP-IPV/Hib (3rd)',ageM:7,when:'7 months',cat:'DTP, Polio, Hib'},
+ {name:'PCV (1st)',ageM:3,when:'3 months',cat:'Pneumococcal'},
+ {name:'PCV (2nd)',ageM:5,when:'5 months',cat:'Pneumococcal'},
+ {name:'PCV (3rd)',ageM:7,when:'7 months',cat:'Pneumococcal'},
+ {name:'MR (1st)',ageM:12,when:'12 months',cat:'Measles, Rubella'},
+ {name:'DTaP-IPV/Hib (4th)',ageM:18,when:'18 months',cat:'DTP, Polio, Hib'},
+ {name:'MR (2nd)',ageM:24,when:'24 months',cat:'Measles, Rubella'},
+ {name:'PCV (4th)',ageM:24,when:'24 months',cat:'Pneumococcal'},
+ {name:'DT (5th)',ageM:36,when:'3 years',cat:'Diphtheria, Tetanus'},
+ {name:'JP-B (1st)',ageM:108,when:'9 years',cat:'Japanese encephalitis'},
+ {name:'JP-B (2nd)',ageM:114,when:'9.5 years',cat:'Japanese encephalitis'},
+ {name:'OPV (4th)',ageM:48,when:'4 years',cat:'Polio'}
+];
+/* ============ STAGE LIBRARY ============ */
+const STAGES=[
+ {from:14,to:16,label:'14-16 months',
+  body:[{a:'Barefoot walking on 2 different surfaces (mat, grass)',w:'builds arches, balance, sensory maps'},{a:'Climb over cushions laid on the floor',w:'gross motor + planning'},{a:'Throw a soft ball with both hands',w:'coordination'}],
+  brain:[{a:'Cause-effect toy play (pop-up, lever)',w:'STEM intuition starts here'},{a:'Hide a toy under a cup - let him find it',w:'object permanence + memory'},{a:'Bring the spoon to Mama 1-step mission',w:'prefrontal task planning'}],
+  lang:[{a:'Read aloud 10 min, point and name pictures',w:'dialogic reading doubles vocabulary'},{a:'Name body parts during bath',w:'word-body mapping'},{a:'Echo his babbles with variations',w:'phonemic play'}],
+  heart:[{a:'Mirror his feelings: You feel sad. Mama is here.',w:'emotion naming = regulation'},{a:'Practice gentle hands with a stuffed animal',w:'early empathy'},{a:'Peekaboo with exaggerated faces',w:'reading expressions'}],
+  food:[{a:'Iron food today: egg yolk, lentils or soft meat',w:'iron protects IQ potential'},{a:'Let him self-feed with a spoon (mess is learning)',w:'fine motor + autonomy'},{a:'Offer water between meals, no juice',w:'gut and teeth protection'}],
+  create:[{a:'Bang a rhythm together on a drum or pot',w:'rhythm wires math readiness'},{a:'Crayon scribbling on big paper',w:'grip + expression'},{a:'Stack cups, knock them down, repeat',w:'physics play'}]},
+ {from:16,to:18,label:'16-18 months',
+  body:[{a:'Step climbing while holding your hand',w:'strength + spatial awareness'},{a:'Walk a tape line on the floor like a beam',w:'balance training'},{a:'Bear walk (hands + feet) for a few meters',w:'cross-brain coordination'}],
+  brain:[{a:'Shape sorter or matching game',w:'categorization'},{a:'Show 3 toys, hide 1 - which is missing?',w:'visual working memory'},{a:'Introduce same / different with two objects',w:'pattern recognition core'}],
+  lang:[{a:'Encourage 2-word combos: more milk, big dog',w:'sentence foundation'},{a:'Flashcards with REAL photos (animals, foods)',w:'real images beat cartoons'},{a:'Sing one song in each family language',w:'polyglot ear'}],
+  heart:[{a:'Practice waiting: First we wash hands, then snack',w:'delayed gratification seed'},{a:'Start thank you gratitude ritual at dinner',w:'positive wiring'},{a:'Name YOUR emotion aloud: Mama feels calm now',w:'mirror neurons learn from you'}],
+  food:[{a:'Introduce a new spice today (cinnamon, turmeric)',w:'flavor training + neuroprotection'},{a:'Practice open-cup drinking',w:'oral motor development'},{a:'DHA food: small fish, egg, or algae-DHA',w:'synapse building blocks'}],
+  create:[{a:'Finger painting session (washable!)',w:'sensory + expression'},{a:'Give him a real mini broom or sponge to help',w:'Montessori practical life'},{a:'Build a rhythm with shakers, copy each other',w:'auditory memory'}]},
+ {from:18,to:20,label:'18-20 months',
+  body:[{a:'Push/pull a cart or laundry basket with weight',w:'joint loading = body awareness'},{a:'Low jump onto a pillow',w:'courage + leg power'},{a:'Kneel-to-stand game x5',w:'core strength'}],
+  brain:[{a:'Group by function: spoon goes in kitchen',w:'systems thinking'},{a:'Match a real object to its photo',w:'symbolic representation'},{a:'2-step mission: Get the ball and put it in the box',w:'executive function'}],
+  lang:[{a:'Use emotion words in play: doll is sad, dog is excited!',w:'emotional vocabulary'},{a:'Dialogic reading: ask Where is the cat? and wait',w:'active > passive reading'},{a:'Label 3 household items in 2 languages today',w:'bilingual mapping'}],
+  heart:[{a:'When frustrated: name it, then model a slow breath',w:'co-regulation trains self-regulation'},{a:'Comfort a crying teddy together',w:'empathy rehearsal'},{a:'Offer a choice: blue cup or red cup?',w:'agency reduces tantrums'}],
+  food:[{a:'Introduce chia, pumpkin seeds or black sesame',w:'minerals + omega fats'},{a:'Seaweed strips or miso soup taste',w:'iodine for thyroid + brain'},{a:'Eat one meal together as a family, phones away',w:'mealtime = language + focus'}],
+  create:[{a:'Hand puppet mini-show about sharing',w:'symbolic learning'},{a:'Draw with both hands at once on big paper',w:'bilateral brain integration'},{a:'Object trays by category (animals / clothes / food)',w:'Montessori order'}]},
+ {from:20,to:22,label:'20-22 months',
+  body:[{a:'Catch a soft ball from close distance',w:'eye tracking + timing'},{a:'Step-over obstacle course (books, cushions)',w:'motor planning'},{a:'Dance session - copy each other moves',w:'rhythm + joy'}],
+  brain:[{a:'Ask simple logic: Why do we wear shoes?',w:'reasoning seeds'},{a:'Sequence photos: before vs after (messy/tidy room)',w:'time folding - episodic memory'},{a:'Simple story recall: What happened to the cat?',w:'narrative memory'}],
+  lang:[{a:'Ask What is that? Where is? Who is? all day',w:'question-rich input'},{a:'Read the same favorite book - repetition is learning',w:'deep encoding'},{a:'Play telephone with a toy phone, real dialogue',w:'conversation turns'}],
+  heart:[{a:'Identify emotions in photos: Is he happy or sad?',w:'theory of mind'},{a:'Visual routine board: show what comes next today',w:'predictability = security'},{a:'Praise the PROCESS: You tried again! not good boy',w:'growth mindset wiring'}],
+  food:[{a:'Gut day: kefir, yogurt, natto or miso',w:'gut-brain axis'},{a:'Let him wash a fruit or vegetable himself',w:'ownership = less pickiness'},{a:'Rainbow plate: 3+ colors of food today',w:'polyphenols protect neurons'}],
+  create:[{a:'Kitchen-tool play: whisk, ladle, strainer',w:'real objects beat toys'},{a:'Water pouring station (with towel ready)',w:'concentration + control'},{a:'Shadow play with a flashlight',w:'physics intuition'}]},
+ {from:22,to:24,label:'22-24 months',
+  body:[{a:'Walk backward a few steps holding hands',w:'vestibular challenge'},{a:'Crawl through a tunnel (or chairs + blanket)',w:'bilateral coordination'},{a:'One-leg balance: hold his hands, count to 3',w:'proprioception'}],
+  brain:[{a:'3-4 piece puzzle together',w:'spatial reasoning'},{a:'Neurobics: swap which hand you give things to',w:'neuroplasticity trigger'},{a:'Mini mission with 2 steps, let him complete alone',w:'independence + planning'}],
+  lang:[{a:'Model I want / I like sentences',w:'self-expression structure'},{a:'Read a book and let HIM turn every page',w:'engagement + fine motor'},{a:'Whisper game - he leans in to listen',w:'auditory attention'}],
+  heart:[{a:'Practice repair phrases: Sorry, Can I help?',w:'social repair skills'},{a:'Let him give something to someone (share snack)',w:'generosity feels good'},{a:'Belly-breathing hand-on-tummy when upset',w:'vagus nerve calming'}],
+  food:[{a:'Meal-prep involvement: he tears lettuce or stirs',w:'food ownership'},{a:'Choline day: egg yolk or soybeans',w:'memory wiring nutrient'},{a:'No-sugar day check - swap sweet snack for fruit',w:'attention + gut protection'}],
+  create:[{a:'Pretend shop / doctor / kitchen scene',w:'default mode network - creativity seat'},{a:'Sticker peeling and placing project',w:'pincer grip mastery'},{a:'Build the tallest tower possible together',w:'engineering + frustration tolerance'}]},
+ {from:24,to:26,label:'24-26 months',
+  body:[{a:'Jump from a low step (10-15 cm) into your hands',w:'courage + landing mechanics'},{a:'Spin slowly then stop - balance recovery game',w:'vestibular training'},{a:'Carry a slightly heavy object across the room',w:'muscle loading grounds emotions'}],
+  brain:[{a:'Which one does not belong? with 3 objects',w:'visual reasoning'},{a:'Hide-and-seek with counting to 5',w:'early numeracy + patience'},{a:'Sort toys by color, then RE-sort by size',w:'flexible categorization - rare skill'}],
+  lang:[{a:'Ask him to tell part of a familiar story',w:'narrative production'},{a:'Introduce position words: on, under, behind',w:'spatial language'},{a:'Sing a song with hand motions in 2nd language',w:'embodied bilingual memory'}],
+  heart:[{a:'Offer giving choices: Which toy for the baby?',w:'perspective taking'},{a:'Uh-oh, let us fix it instead of no! today',w:'failure to creativity rewiring'},{a:'Bedtime gratitude: What was fun today?',w:'positive memory consolidation'}],
+  food:[{a:'He washes fruits/vegetables himself today',w:'sensory + ownership'},{a:'Omega-3 meal: salmon, sardine or algae-DHA',w:'synapse fuel'},{a:'Try one NEW food (15 exposures to like it!)',w:'variety training'}],
+  create:[{a:'Cardboard fort or box machine building',w:'open-ended engineering'},{a:'Create zones: calm corner, build corner, art spot',w:'environment shapes focus'},{a:'Music + story narration (Bach or Chopin quietly)',w:'auditory patterning'}]},
+ {from:26,to:28,label:'26-28 months - Dawut is here',
+  body:[{a:'Toddler yoga: tree pose, downward dog, 3 breaths',w:'flexibility + calm focus'},{a:'Squat-and-stand game x10 while singing',w:'leg strength + rhythm'},{a:'Balance beam walk (tape line), then carrying a toy',w:'divided attention - advanced'}],
+  brain:[{a:'Volume comparison: Which cup has more water?',w:'pre-math conservation'},{a:'What did we do yesterday? after dinner',w:'episodic memory training'},{a:'Controlled frustration: lid slightly tight - wait before helping',w:'grit + problem solving'}],
+  lang:[{a:'Simple rhyming game: cat-hat, dog-log',w:'phonemic awareness leads to reading readiness'},{a:'Narrate your thinking aloud: Hmm, I am stuck... new idea!',w:'metacognition modeling'},{a:'How did you know that? after he solves anything',w:'thinking about thinking'}],
+  heart:[{a:'Feeling wheel/chart with photos - point to today feeling',w:'emotional granularity'},{a:'Role-play helping: He is sick? Will you help him?',w:'empathy in action'},{a:'Praise effort specifically: You looked carefully!',w:'identity: I am a learner'}],
+  food:[{a:'Make a mini meal plan with pictures together',w:'planning + food literacy'},{a:'Probiotic + polyphenol day: yogurt + blueberries',w:'gut-brain + neuron protection'},{a:'He helps set the table for family meal',w:'contribution identity'}],
+  create:[{a:'Mixed media art: paper + fabric + stickers',w:'creative combination thinking'},{a:'Simplify the space: rotate down to 6-8 toys',w:'less = deeper focus'},{a:'15 min silent nature watching (ants, leaves, wind)',w:'deep attention - roots of philosophy'}]},
+ {from:28,to:30,label:'28-30 months',
+  body:[{a:'Tiptoe walking across the room',w:'calf strength + control'},{a:'Carry a cup of water without spilling',w:'precision + focus'},{a:'Obstacle circuit: crawl, jump, climb, throw',w:'full-body motor planning'}],
+  brain:[{a:'Cause-effect chains: We did X, so Y happened',w:'causal reasoning'},{a:'What is missing? game with 4 objects now',w:'expanding working memory'},{a:'Count steps while climbing stairs',w:'embodied numeracy'}],
+  lang:[{a:'Describing words day: hot, cold, big, small, soft',w:'adjective explosion'},{a:'Story sequencing with 3 pictures',w:'narrative logic'},{a:'Video call grandparents - different voices and dialects',w:'multigenerational language exposure'}],
+  heart:[{a:'Encourage him to comfort someone today',w:'active empathy'},{a:'Create a book cave cozy reading nook together',w:'reading = safety = love'},{a:'Emotion freeze-frame: guess feelings from photos',w:'social decoding'}],
+  food:[{a:'Count food pieces together while eating',w:'mealtime math'},{a:'Zinc day: pumpkin seeds, oats, or miso',w:'growth + appetite regulation'},{a:'Try cooking task: mashing or sprinkling',w:'kitchen confidence'}],
+  create:[{a:'Draw family faces - however abstract!',w:'self + social representation'},{a:'Invent a machine from cups and spoons',w:'divergent thinking'},{a:'Nature collection: 5 leaves, sort by size',w:'classification in the wild'}]},
+ {from:30,to:33,label:'30-33 months',
+  body:[{a:'Two-leg jump forward, measure the distance!',w:'power + progress tracking'},{a:'Throw at a target (bucket, basket)',w:'aim + force calibration'},{a:'Balance on one foot for 3+ seconds',w:'elite proprioception'}],
+  brain:[{a:'Puzzle with a missing piece - what is wrong here?',w:'critical thinking'},{a:'Match emotional faces to what caused them',w:'social causality'},{a:'Object-sequence memory: 3 items, recall order',w:'sequential memory'}],
+  lang:[{a:'Build a short story from picture prompts together',w:'narrative creation'},{a:'3-word sentences: model and expand what he says',w:'syntax growth'},{a:'Introduce Why? - and answer his whys patiently',w:'curiosity is the engine'}],
+  heart:[{a:'Safe place routine: a calm corner he can choose',w:'self-regulation autonomy'},{a:'Notice unfairness in a story: Was that kind?',w:'moral reasoning'},{a:'Display his artwork on the wall together',w:'pride + identity'}],
+  food:[{a:'He serves food to someone else today',w:'generosity + motor control'},{a:'Magnesium evening: banana, oats or tahini',w:'calm + sleep quality'},{a:'Food collage: what did we eat this week?',w:'food awareness'}],
+  create:[{a:'Dress-up pretend play - let HIM lead the story',w:'default mode network activation'},{a:'Build a themed scene: farm, train station, town',w:'world modeling'},{a:'Rhythm copying game: you tap, he repeats',w:'auditory working memory'}]},
+ {from:33,to:37,label:'33-36 months',
+  body:[{a:'Run zigzag between cushions',w:'agility + planning'},{a:'Carry a small tray with objects across the room',w:'grace + control'},{a:'Pedal or push a balance bike / tricycle',w:'complex coordination'}],
+  brain:[{a:'Categorize: animals that swim / fly / walk',w:'abstract grouping'},{a:'Multi-step instructions: 2-3 actions in a row',w:'working memory stretch'},{a:'What happens if? prediction games',w:'hypothesis thinking'}],
+  lang:[{a:'Answer his Why? then ask HIM Why do you think?',w:'reflective reasoning'},{a:'Reflect emotions verbally: You felt frustrated because...',w:'emotional narrative'},{a:'Letter-sound play with his name first letter',w:'pre-literacy'}],
+  heart:[{a:'Practice turn-taking game with a timer',w:'impulse control'},{a:'What would YOU do? during story dilemmas',w:'moral imagination'},{a:'Identity phrases: You are the kind of boy who tries again',w:'self-belief installation'}],
+  food:[{a:'Plan tomorrow breakfast together with pictures',w:'future thinking'},{a:'He pours his own water from a small jug',w:'independence'},{a:'Rainbow challenge: eat 4 colors today',w:'micronutrient variety'}],
+  create:[{a:'Learning lab rotation: math corner OR art OR nature',w:'environment as teacher'},{a:'Make up a song together about today',w:'creative synthesis'},{a:'Free drawing: Tell me about your picture (never guess!)',w:'expression + narration'}]},
+ {from:37,to:42,label:'37-42 months',
+  body:[{a:'Hop on one foot 3+ times',w:'advanced balance + leg power'},{a:'Catch a bounced ball with two hands',w:'eye-hand coordination'},{a:'Walk up stairs alternating feet',w:'mature motor pattern'}],
+  brain:[{a:'Count objects to 10 reliably',w:'one-to-one correspondence'},{a:'Sort by 2 attributes: color AND shape',w:'multi-dimensional sorting'},{a:'Remember what happened 2 days ago',w:'extending episodic memory'}],
+  lang:[{a:'Tell a 4-5 sentence story',w:'narrative competence'},{a:'Ask What if? questions',w:'hypothetical thinking'},{a:'Recognize his written name',w:'print awareness'}],
+  heart:[{a:'Share a favorite toy without being asked',w:'spontaneous generosity'},{a:'Apologize without prompting when he hurts someone',w:'internalized empathy'},{a:'Express complex feelings: I was scared but then...',w:'emotional articulation'}],
+  food:[{a:'Help make a simple sandwich start to finish',w:'cooking confidence + planning'},{a:'Try a bitter vegetable (broccoli, kale) roasted',w:'palate expansion'},{a:'Eat mindfully: describe textures and flavors',w:'mindful eating'}],
+  create:[{a:'Build with blocks - make a bridge or tower with a base',w:'structural engineering'},{a:'Draw a person with 3+ body parts',w:'body schema representation'},{a:'Make up a dance to a song',w:'creative movement'}]},
+ {from:42,to:48,label:'42-48 months',
+  body:[{a:'Stand on one foot for 5+ seconds',w:'mature balance'},{a:'Skip alternating feet',w:'bilateral coordination mastery'},{a:'Throw overhand with accuracy',w:'force + direction control'}],
+  brain:[{a:'Count to 20, understand 1-10 quantity',w:'numeracy foundation'},{a:'Simple patterns: red-blue-red-blue-what next?',w:'pattern extension'},{a:'Understand bigger/smaller, longer/shorter',w:'comparative reasoning'}],
+  lang:[{a:'Use past, present, and future tense correctly',w:'temporal language'},{a:'Tell a long story with a beginning, middle, end',w:'narrative structure'},{a:'Recognize 4-5 letters (especially in his name)',w:'early literacy'}],
+  heart:[{a:'Include a new child in play',w:'social inclusion'},{a:'Follow 3-step rules without reminders',w:'internalized self-regulation'},{a:'Show pride in accomplishments',w:'healthy self-esteem'}],
+  food:[{a:'Help plan a full meal: choose, prep, cook',w:'food agency'},{a:'Try a new cuisine or flavor profile',w:'cultural palate expansion'},{a:'Understand sometimes vs everyday foods',w:'food literacy'}],
+  create:[{a:'Cut with scissors along a line',w:'fine motor precision'},{a:'Draw recognizable people with details',w:'symbolic representation'},{a:'Act out a familiar story with props',w:'dramatic play'}]}
+];
+const TIPS=[
+ 'Praise the process, not the person: You looked carefully beats good boy - it wires growth mindset.',
+ 'Narrate your own thinking out loud today. He learns HOW to think by watching you think.',
+ 'Wait 5 extra seconds before helping him with anything hard. Struggle is where the brain grows.',
+ 'Every tantrum is a teaching moment in disguise: name the feeling first, solve second.',
+ 'Repetition is not boring to him - the 20th reading of the same book is deep encoding, not laziness.',
+ 'Speak your home language proudly. Bilingual brains get flexibility that lasts a lifetime.',
+ 'Screens off around him when possible - he is studying your face more than you know.',
+ 'Let him do it himself even if it takes 5x longer. Slow independence beats fast dependence.',
+ 'One choice offered = one tantrum avoided: red cup or blue cup?',
+ 'Boredom is a gift. Do not rescue him from it too fast - that is where imagination starts.',
+ 'Talk about feelings when everyone is CALM, not only during storms.',
+ 'His why? phase is a golden door. Every patient answer builds trust in curiosity itself.',
+ 'Movement is learning: a child who climbed, spun and balanced today will focus better tomorrow.',
+ 'Eat one meal together today, phones in another room. Family meals predict language and focus.',
+ 'Serve and return: respond to his bids for attention warmly. Harvard research shows this builds brain architecture.',
+ 'Executive function grows through wait time: let him struggle 30 seconds before stepping in.',
+ 'Narration builds vocabulary: describe what you are doing as you cook, clean, walk. Word gap is real.',
+ 'Secure attachment is not constant attention - it is reliable response. Quality over quantity.'];
+/* ============ STATE ============ */
+const KEY='dawut-bloom';
+const SCHEMA_VERSION=2;
+let mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},lastBackup:null,version:SCHEMA_VERSION};
+function load(){try{const r=localStorage.getItem(KEY);if(r){const p=JSON.parse(r);mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},lastBackup:null,version:SCHEMA_VERSION,...p};if(!mem.version||mem.version<SCHEMA_VERSION){mem.version=SCHEMA_VERSION;save();}}}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(mem));}catch(e){}}
+function dkey(d){return d.toISOString().slice(0,10);}
+const todayKey=dkey(new Date());
+function day(k){if(!mem.days[k])mem.days[k]={body:0,brain:0,lang:0,heart:0,food:0,create:0,note:''};return mem.days[k];}
+function seedGrowth(){
+  if(!mem.growth.height||!mem.growth.height.length){
+    mem.growth.height=[{d:'2025-05-26',v:82},{d:'2026-06-01',v:95}];
+    mem.growth.weight=[{d:'2025-05-26',v:12.9},{d:'2026-06-01',v:14.5}];
+    mem.growth.head=[{d:'2025-05-26',v:47.5}];save();
+  }
+}
+/* ============ AGE & STAGE ============ */
+function ageMonths(){return (new Date()-BIRTH)/(1000*60*60*24*30.4375);}
+function ageString(){
+  const now=new Date();let y=now.getFullYear()-BIRTH.getFullYear(),m=now.getMonth()-BIRTH.getMonth(),d=now.getDate()-BIRTH.getDate();
+  if(d<0)m--;if(m<0){y--;m+=12;}return y+' year'+(y!==1?'s':'')+', '+m+' month'+(m!==1?'s':'');
+}
+function currentStage(){const m=ageMonths();return STAGES.find(s=>m>=s.from&&m<s.to)||STAGES[STAGES.length-1];}
+/* ============ TODAY'S ACTIVITIES ============ */
+function dayOfYear(){const n=new Date();return Math.floor((n-new Date(n.getFullYear(),0,0))/86400000);}
+function todaysActivity(domId){
+  const st=currentStage(),pool=st[domId],shuf=(mem.shuffles[todayKey]||{})[domId]||0;
+  return pool[(dayOfYear()+shuf)%pool.length];
+}
+const cardsEl=document.getElementById('cards');
+function renderCards(){
+  cardsEl.innerHTML='';const d=day(todayKey);
+  DOMAINS.forEach(dom=>{
+    const act=todaysActivity(dom.id);
+    const el=document.createElement('div');
+    el.className='act d-'+dom.id+(d[dom.id]?' done':'');
+    el.setAttribute('role','listitem');
+    el.innerHTML=`<div class="top"><div class="dot">${dom.icon}</div>
+      <div><h3>${dom.name}</h3><p class="what">${act.a}</p><p class="why">why: ${act.w}</p></div>
+      <div class="check" aria-hidden="true">✓</div></div>
+      <span class="shuffle" role="button" tabindex="0">↻ different one</span>`;
+    el.querySelector('.top').addEventListener('click',()=>{
+      d[dom.id]=d[dom.id]?0:1;save();renderCards();renderAll();
+      if(DOMAINS.every(x=>day(todayKey)[x.id]))confetti(70);
+    });
+    const shf=el.querySelector('.shuffle');
+    shf.addEventListener('click',e=>{e.stopPropagation();
+      if(!mem.shuffles[todayKey])mem.shuffles[todayKey]={};
+      mem.shuffles[todayKey][dom.id]=((mem.shuffles[todayKey][dom.id]||0)+1);save();renderCards();
+    });
+    cardsEl.appendChild(el);
+  });
+}
+/* ============ STREAK / HEAT ============ */
+function complete(k){const d=mem.days[k];return d&&DOMAINS.filter(x=>d[x.id]).length>=4;}
+function fullBloom(k){const d=mem.days[k];return d&&DOMAINS.every(x=>d[x.id]);}
+function streakInfo(){
+  let s=0,dt=new Date(),k=dkey(dt);
+  if(complete(k))s++;
+  for(let i=1;i<3650;i++){dt.setDate(dt.getDate()-1);k=dkey(dt);if(complete(k))s++;else break;}
+  let best=s,cur=0,prev=null;
+  Object.keys(mem.days).sort().forEach(kk=>{
+    if(complete(kk)){cur=(prev&&Math.round((new Date(kk)-new Date(prev))/86400000)===1)?cur+1:1;best=Math.max(best,cur);prev=kk;}});
+  return{streak:s,best};
+}
+function renderHeat(){
+  const heat=document.getElementById('heat');heat.innerHTML='';
+  const end=new Date(),start=new Date();start.setDate(end.getDate()-104);
+  while(start.getDay()!==1)start.setDate(start.getDate()-1);
+  const cur=new Date(start);
+  while(cur<=end){const k=dkey(cur),d=mem.days[k],n=d?DOMAINS.filter(x=>d[x.id]).length:0;
+    const c=document.createElement('div');
+    c.className='cell'+(n>=6?' l3':n>=4?' l2':n>0?' l1':'')+(k===todayKey?' today':'');
+    c.title=k+' · '+n+'/6';heat.appendChild(c);cur.setDate(cur.getDate()+1);}
+}
+/* ============ GROWTH CHARTS (WHO percentile bands) ============ */
+function renderGrowth(){
+  const wrap=document.getElementById('metrics');wrap.innerHTML='';
+  [['height','target: his own smooth curve'],['weight','balance with height matters most'],['head','checked at pediatric visits']].forEach(([id,tg])=>{
+    const w=WHO[id],data=(mem.growth[id]||[]),last=data.length?data[data.length-1]:null,m=ageMonths();
+    const div=document.createElement('div');div.className='chart-card';
+    let pctText='log a measurement';
+    if(last){const p=lmsPercentile(id,m,last.v);
+      let msg=p>=90?'tall/strong for his age':p>=75?'above average - healthy':p>=25?'right in the healthy middle':'on the lighter side - mention at next checkup';
+      pctText=`≈ <b>${p}th percentile</b> for ${ageString()} · ${msg}`;}
+    div.innerHTML=`<div class="mtop"><h3>${w.name}</h3><span class="target">${tg}</span></div>
+      <div class="chart-wrap"><svg class="chart" viewBox="0 0 320 180" preserveAspectRatio="none">${growthChart(id,data)}</svg></div>
+      <div class="chart-legend"><span><i style="background:#D4E4D4"></i>P3</span><span><i style="background:#CBE8D2"></i>P15</span><span><i style="background:#8FD1A1"></i>P50</span><span><i style="background:#CBE8D2"></i>P85</span><span><i style="background:#D4E4D4"></i>P97</span><span><i style="background:var(--green);width:2px;height:12px"></i>Dawut</span></div>
+      <div class="val-row"><div class="val mono">${last?last.v:'—'}<small> ${w.unit}</small></div></div>
+      <div class="pctl">${pctText}</div>
+      <div class="mrow"><input type="number" step="0.1" inputmode="decimal" placeholder="${w.unit}" aria-label="Log ${w.name}"><button>Log</button></div>`;
+    div.querySelector('button').addEventListener('click',()=>{
+      const val=parseFloat(div.querySelector('input').value);if(isNaN(val))return;
+      if(!mem.growth[id])mem.growth[id]=[];
+      const ex=mem.growth[id].find(e=>e.d===todayKey);
+      if(ex)ex.v=val;else mem.growth[id].push({d:todayKey,v:val});save();renderGrowth();});
+    wrap.appendChild(div);
+  });
+}
+function growthChart(id,data){
+  const m=ageMonths();
+  const W=320,H=180,padL=30,padR=10,padT=10,padB=20,plotW=W-padL-padR,plotH=H-padT-padB;
+  const ageMin=Math.max(0,m-6),ageMax=m+6;
+  const allVals=[3,15,50,85,97].flatMap(p=>[lmsValue(id,ageMin,p),lmsValue(id,ageMax,p)]);
+  if(data.length)data.forEach(d=>allVals.push(d.v));
+  const vmin=Math.min(...allVals)*.98,vmax=Math.max(...allVals)*1.02;
+  const xS=a=>padL+((a-ageMin)/(ageMax-ageMin))*plotW;
+  const yS=v=>padT+plotH-((v-vmin)/(vmax-vmin))*plotH;
+  let svg='';
+  const bandColors=['rgba(212,228,212,.5)','rgba(203,232,210,.5)','rgba(143,209,161,.35)','rgba(203,232,210,.5)','rgba(212,228,212,.5)'];
+  for(let b=0;b<4;b++){
+    const pLo=[3,15,50,85][b],pHi=[15,50,85,97][b],pts=[];
+    for(let a=ageMin;a<=ageMax;a+=.5)pts.push(`${xS(a)},${yS(lmsValue(id,a,pLo))}`);
+    for(let a=ageMax;a>=ageMin;a-=.5)pts.push(`${xS(a)},${yS(lmsValue(id,a,pHi))}`);
+    svg+=`<polygon points="${pts.join(' ')}" fill="${bandColors[b]}" stroke="none"/>`;
+  }
+  [3,15,50,85,97].forEach((p,i)=>{
+    const pts=[],colors=['#D4E4D4','#CBE8D2','#8FD1A1','#CBE8D2','#D4E4D4'];
+    for(let a=ageMin;a<=ageMax;a+=.5)pts.push(`${xS(a)},${yS(lmsValue(id,a,p))}`);
+    svg+=`<polyline points="${pts.join(' ')}" fill="none" stroke="${colors[i]}" stroke-width="1" stroke-dasharray="${p===50?'0':'3,3'}"/>`;
+  });
+  if(data.length>=2){
+    const pts=data.map(d=>`${xS((new Date(d.d)-BIRTH)/(1000*60*60*24*30.4375))},${yS(d.v)}`).join(' ');
+    svg+=`<polyline points="${pts}" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+  }
+  if(data.length){
+    const last=data[data.length-1];
+    svg+=`<circle cx="${xS((new Date(last.d)-BIRTH)/(1000*60*60*24*30.4375))}" cy="${yS(last.v)}" r="4" fill="var(--green)"/>`;
+  }
+  svg+=`<line x1="${xS(m)}" y1="${padT}" x2="${xS(m)}" y2="${padT+plotH}" stroke="var(--gold)" stroke-width="1" stroke-dasharray="2,2" opacity=".5"/>`;
+  return svg;
+}
+/* ============ SLEEP TRACKING (AAP: 11-14h for toddlers 1-3yr) ============ */
+function renderSleep(){
+  const wrap=document.getElementById('sleepCard');wrap.innerHTML='';
+  const SLEEP_MIN=11,SLEEP_MAX=14;
+  const today=mem.sleep[todayKey];
+  const div=document.createElement('div');div.className='track-card';
+  let hrs=today?today.h:null;
+  let pctText='Log tonight sleep hours',barW=0,barClass='good';
+  if(hrs!=null){
+    barW=Math.min(hrs/14*100,100);
+    if(hrs>=SLEEP_MIN&&hrs<=SLEEP_MAX)barClass='good';
+    else if(hrs>=SLEEP_MIN-1&&hrs<=SLEEP_MAX+1)barClass='warn';
+    else barClass='over';
+    pctText=hrs>=SLEEP_MIN?`✓ ${hrs}h — within AAP range (${SLEEP_MIN}-${SLEEP_MAX}h)`:`${hrs}h — below AAP range (${SLEEP_MIN}-${SLEEP_MAX}h)`;
+  }
+  let weekHtml='<div class="week-mini">';
+  for(let i=6;i>=0;i--){
+    const dt=new Date();dt.setDate(dt.getDate()-i);const k=dkey(dt);
+    const s=mem.sleep[k],h=s?s.h:null;
+    const fillH=h?Math.min(h/14*100,100):0;
+    const fillC=h>=SLEEP_MIN?'var(--green)':h>=SLEEP_MIN-1?'var(--gold)':'#E07070';
+    const lbl=['S','M','T','W','T','F','S'][dt.getDay()];
+    weekHtml+=`<div class="dbar"><div class="fill" style="height:${fillH}%;background:${h?fillC:'var(--line)'}"></div><div class="lbl">${lbl}</div></div>`;
+  }
+  weekHtml+='</div>';
+  div.innerHTML=`<h3>Sleep</h3><div class="sub">AAP recommends ${SLEEP_MIN}-${SLEEP_MAX}h for ages 1-3</div>
+    <div class="big-val">${hrs!=null?hrs+'<small> h</small>':'—'}</div>
+    <div class="bar"><div class="bar-fill ${barClass}" style="width:${barW}%"></div></div>
+    <div class="pctl" style="margin-top:8px;font-size:12px;color:var(--muted)">${pctText}</div>
+    ${weekHtml}
+    <div class="mrow"><input type="number" step="0.5" inputmode="decimal" placeholder="hours slept" aria-label="Log sleep hours"><button>Log</button></div>`;
+  div.querySelector('button').addEventListener('click',()=>{
+    const v=parseFloat(div.querySelector('input').value);if(isNaN(v))return;
+    if(!mem.sleep[todayKey])mem.sleep[todayKey]={};mem.sleep[todayKey].h=v;save();renderSleep();});
+  wrap.appendChild(div);
+}
+/* ============ SCREEN TIME TRACKING (AAP: ≤1h/day for 2-5yr) ============ */
+function renderScreen(){
+  const wrap=document.getElementById('screenCard');wrap.innerHTML='';
+  const LIMIT=60;
+  const today=mem.screen[todayKey];
+  const div=document.createElement('div');div.className='track-card';
+  let min=today?today.m:null;
+  let pctText='Log screen time minutes',barW=0,barClass='good';
+  if(min!=null){
+    barW=Math.min(min/LIMIT*100,100);
+    barClass=min<=LIMIT?'good':min<=LIMIT*2?'warn':'over';
+    pctText=min<=LIMIT?`✓ ${min}min — within AAP limit (≤${LIMIT}min)`:`${min}min — above AAP limit (≤${LIMIT}min)`;
+  }
+  let weekHtml='<div class="week-mini">';
+  for(let i=6;i>=0;i--){
+    const dt=new Date();dt.setDate(dt.getDate()-i);const k=dkey(dt);
+    const s=mem.screen[k],m=s?s.m:null;
+    const fillH=m?Math.min(m/LIMIT*100,100):0;
+    const fillC=m<=LIMIT?'var(--green)':m<=LIMIT*2?'var(--gold)':'#E07070';
+    const lbl=['S','M','T','W','T','F','S'][dt.getDay()];
+    weekHtml+=`<div class="dbar"><div class="fill" style="height:${fillH}%;background:${m?fillC:'var(--line)'}"></div><div class="lbl">${lbl}</div></div>`;
+  }
+  weekHtml+='</div>';
+  div.innerHTML=`<h3>Screen time</h3><div class="sub">AAP recommends ≤${LIMIT}min/day for ages 2-5</div>
+    <div class="big-val">${min!=null?min+'<small> min</small>':'—'}</div>
+    <div class="bar"><div class="bar-fill ${barClass}" style="width:${barW}%"></div></div>
+    <div class="pctl" style="margin-top:8px;font-size:12px;color:var(--muted)">${pctText}</div>
+    ${weekHtml}
+    <div class="mrow"><input type="number" step="5" inputmode="numeric" placeholder="minutes" aria-label="Log screen time"><button>Log</button></div>`;
+  div.querySelector('button').addEventListener('click',()=>{
+    const v=parseFloat(div.querySelector('input').value);if(isNaN(v))return;
+    if(!mem.screen[todayKey])mem.screen[todayKey]={};mem.screen[todayKey].m=v;save();renderScreen();});
+  wrap.appendChild(div);
+}
+/* ============ WORD TRACKING ============ */
+function renderWords(){
+  const wrap=document.getElementById('wordCard');wrap.innerHTML='';
+  const div=document.createElement('div');div.className='track-card';
+  const count=mem.words.length;
+  const milestones=[{n:50,label:'50-word milestone (~18mo)'},{n:100,label:'100 words'},{n:200,label:'200 words (~24mo)'},{n:500,label:'500 words (~30mo)'}];
+  const nextMs=milestones.find(m=>count<m.n);
+  div.innerHTML=`<h3>Word tracker</h3><div class="sub">${count} words logged · ${nextMs?'next: '+nextMs.label:'all milestones passed 🎉'}</div>
+    <div class="big-val">${count}<small> words</small></div>
+    <div class="mrow"><input type="text" placeholder="new word he said today" aria-label="Add new word"><button>Add</button></div>
+    <div class="word-list" id="wordList"></div>`;
+  div.querySelector('button').addEventListener('click',()=>{
+    const inp=div.querySelector('input');const w=inp.value.trim();if(!w)return;
+    if(!mem.words.includes(w)){mem.words.push(w);save();renderWords();}
+    inp.value='';
+  });
+  const wl=div.querySelector('#wordList');
+  mem.words.slice().reverse().slice(0,30).forEach(w=>{
+    const chip=document.createElement('span');chip.className='word-chip';
+    chip.innerHTML=`${w}<button aria-label="Remove word">✕</button>`;
+    chip.querySelector('button').addEventListener('click',()=>{mem.words=mem.words.filter(x=>x!==w);save();renderWords();});
+    wl.appendChild(chip);
+  });
+  if(!count)wl.innerHTML='<p style="color:var(--faint);font-size:13px;margin:4px 0">Add words as he learns them — track his vocabulary growth over time.</p>';
+  wrap.appendChild(div);
+}
+/* ============ MILESTONES (with photos) ============ */
+let msPhotoData=null;
+document.getElementById('msPhoto').addEventListener('change',e=>{
+  const f=e.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{msPhotoData=r.result;
+    const prev=document.getElementById('msPhotoPreview');prev.src=r.result;prev.style.display='block';};
+  r.readAsDataURL(f);
+});
+document.getElementById('msBtn').addEventListener('click',()=>{
+  const t=document.getElementById('msText');if(!t.value.trim())return;
+  mem.milestones.push({d:todayKey,t:t.value.trim(),photo:msPhotoData||null});
+  t.value='';msPhotoData=null;
+  document.getElementById('msPhoto').value='';
+  document.getElementById('msPhotoPreview').style.display='none';
+  save();renderMilestones();confetti(40);
+});
+function renderMilestones(){
+  const el=document.getElementById('mstones');el.innerHTML='';
+  mem.milestones.slice().reverse().forEach((m,i)=>{
+    const realIdx=mem.milestones.length-1-i;
+    const div=document.createElement('div');div.className='mstone';
+    div.innerHTML=`<button class="del" data-idx="${realIdx}" aria-label="Delete milestone">✕</button><b>${m.d}</b>${m.t}${m.photo?`<img src="${m.photo}" alt="Milestone photo">`:''}`;
+    div.querySelector('.del').addEventListener('click',()=>{
+      mem.milestones.splice(realIdx,1);save();renderMilestones();});
+    el.appendChild(div);
+  });
+  if(!mem.milestones.length)el.innerHTML='<p style="color:var(--faint);font-size:13px">No milestones yet — the next one might be today ⭐</p>';
+}
+/* ============ CDC CHECKLIST ============ */
+function renderCDC(){
+  const el=document.getElementById('cdcList');el.innerHTML='';
+  const m=ageMonths();
+  CDC.forEach(group=>{
+    const g=document.createElement('div');g.className='cdc-group';
+    const relevant=m>=group.age-3;
+    if(!relevant)return;
+    g.innerHTML=`<h4>${group.label}</h4>`;
+    group.items.forEach((item,i)=>{
+      const key=group.age+'-'+i;
+      const done=!!mem.cdc[key];
+      const row=document.createElement('div');row.className='cdc-item'+(done?' done':'');
+      row.innerHTML=`<div class="chk" role="checkbox" tabindex="0" aria-checked="${done}">✓</div><span>${item.t}</span><span class="age-tag">${item.c}</span>`;
+      row.querySelector('.chk').addEventListener('click',()=>{
+        mem.cdc[key]=!mem.cdc[key];save();renderCDC();updateBadges();
+      });
+      g.appendChild(row);
+    });
+    el.appendChild(g);
+  });
+}
+/* ============ VACCINATION SCHEDULE ============ */
+function renderVax(){
+  const el=document.getElementById('vaxList');el.innerHTML='';
+  const m=ageMonths();
+  VAX.forEach((v,i)=>{
+    const done=!!mem.vax['vax-'+i];
+    const isDue=!done&&m>=v.ageM;
+    const isUpcoming=!done&&m<v.ageM;
+    const statusClass=done?'done':isDue?'due':'upcoming';
+    const statusText=done?'✓ Done':isDue?'Due now':'Upcoming';
+    const row=document.createElement('div');row.className='vax-item'+(done?' done':'');
+    row.innerHTML=`<div class="vax-dot" role="checkbox" tabindex="0" aria-checked="${done}"></div>
+      <div class="vax-info"><div class="vax-name">${v.name}</div><div class="vax-when">${v.when} · ${v.cat}</div></div>
+      <div class="vax-status ${statusClass}">${statusText}</div>`;
+    row.querySelector('.vax-dot').addEventListener('click',()=>{
+      mem.vax['vax-'+i]=!mem.vax['vax-'+i];save();renderVax();updateBadges();});
+    el.appendChild(row);
+  });
+}
+/* ============ STAGE LIST ============ */
+function renderStages(){
+  const el=document.getElementById('stagelist');el.innerHTML='';
+  const cur=currentStage();
+  STAGES.forEach(s=>{
+    const div=document.createElement('div');div.className='stagecard'+(s===cur?' cur':'');
+    const sample=[s.body[0].a,s.brain[0].a,s.lang[0].a];
+    div.innerHTML=`<h3>${s.label}</h3><span class="rng">${s.from}–${s.to} months</span>
+      <ul>${sample.map(x=>'<li>'+x+'</li>').join('')}</ul>`;
+    el.appendChild(div);
+  });
+}
+/* ============ DAILY PLAN ============ */
+const ROUTINE=[
+ {block:'am',icon:'☀️',title:'Morning Block',time:'07:00 – 10:00',items:[
+  {t:'Wake routine: cuddle + name the day + weather window',why:'secure attachment + language input starts before breakfast',tag:'heart'},
+  {t:'Breakfast with protein (egg, yogurt, or fish)',why:'iron + protein = brain fuel for learning all morning',tag:'food'},
+  {t:'Read 1-2 books — point and name, let him turn pages',why:'dialogic reading builds vocabulary faster than any app',tag:'lang'},
+  {t:'Outdoor walk or park — 20+ min barefoot if safe',why:'morning light sets circadian rhythm + vestibular input',tag:'body'},
+  {t:'Free play with open-ended toys (blocks, cups, scarves)',why:'unstructured play = prefrontal cortex development',tag:'create'}]},
+ {block:'mid',icon:'🌤️',title:'Midday Block',time:'10:00 – 14:00',items:[
+  {t:'Today\'s 6 domain activity — check Today tab',why:'age-tuned activity from his roadmap, rotates daily',tag:'brain'},
+  {t:'Lunch together — name foods in 2 languages',why:'bilingual mapping + family meal = language + focus',tag:'food'},
+  {t:'Nap / quiet rest (1.5-2h)',why:'sleep consolidates morning learning into memory',tag:'body'},
+  {t:'1 focused activity from this week\'s goal below',why:'weekly goals build skills step by step',tag:'brain'},
+  {t:'Music time — sing in both family languages',why:'melody encodes language; rhythm wires math readiness',tag:'lang'}]},
+ {block:'pm',icon:'🌙',title:'Evening Block',time:'16:00 – 20:00',items:[
+  {t:'Outdoor play — running, climbing, ball play',why:'gross motor + afternoon light = better night sleep',tag:'body'},
+  {t:'Bath time — name body parts, pour water',why:'sensory + language + fine motor in one routine',tag:'lang'},
+  {t:'Dinner as family — phones away, let him help set table',why:'family meals predict language, focus, and emotional health',tag:'heart'},
+  {t:'Quiet play or puzzle (no screens 1h before bed)',why:'blue light delays melatonin; quiet play calms nervous system',tag:'create'},
+  {t:'Bedtime story + gratitude: "What was fun today?"',why:'positive memory consolidation + reading = love = safety',tag:'heart'},
+  {t:'Lights out by 20:00 (target 11-14h sleep)',why:'deep sleep is when brain prunes and wires new connections',tag:'body'}]}
+];
+const WEEKLY_GOALS=[
+ {week:1,title:'Language burst week',goal:'Introduce 5 new words daily, narrate everything',ageRange:[26,27]},
+ {week:2,title:'Balance & body week',goal:'Balance beam walk daily, practice jumping from low step',ageRange:[26,27]},
+ {week:3,title:'Emotional vocabulary week',goal:'Use feeling words 10x/day, make a feeling chart with photos',ageRange:[27,28]},
+ {week:4,title:'Pre-math & logic week',goal:'Volume comparison, sorting by 2 attributes, counting stairs',ageRange:[27,28]},
+ {week:5,title:'Memory & recall week',goal:'"What did we do yesterday?" nightly, missing object game with 4 items',ageRange:[27,28]},
+ {week:6,title:'Empathy & social week',goal:'Role-play helping, comfort a teddy, practice "sorry" and "thank you"',ageRange:[28,29]},
+ {week:7,title:'Rhyming & phonemic week',goal:'Daily rhyming games, clap syllables of words, alliteration play',ageRange:[28,29]},
+ {week:8,title:'Fine motor & art week',goal:'Sticker peeling, crayon drawing, pouring station daily',ageRange:[28,29]},
+ {week:9,title:'Nature & observation week',goal:'15 min silent nature watching daily, leaf collection + sorting',ageRange:[28,29]},
+ {week:10,title:'Independence week',goal:'Self-dressing, pour own water, wash own hands, help cook',ageRange:[29,30]},
+ {week:11,title:'Storytelling week',goal:'Ask him to tell part of a familiar story, 3-picture sequencing',ageRange:[29,30]},
+ {week:12,title:'Grit & problem-solving week',goal:'Tight lid challenge, puzzles, "try again" praise',ageRange:[29,30]}
+];
+const SKILL_LADDER=[
+ {skill:'Walks independently',age:12,desc:'The foundation of all gross motor',cat:'body'},
+ {skill:'Says 5-10 words',age:14,desc:'First words emerge, naming familiar objects',cat:'lang'},
+ {skill:'Points to share interest',age:15,desc:'Joint attention — critical for social learning',cat:'heart'},
+ {skill:'Follows 1-step directions',age:15,desc:'Receptive language + executive function',cat:'brain'},
+ {skill:'Scribbles with crayon',age:16,desc:'Fine motor + self-expression begins',cat:'create'},
+ {skill:'Walks up stairs with help',age:18,desc:'Leg strength + motor planning',cat:'body'},
+ {skill:'Says 20+ words',age:18,desc:'Vocabulary acceleration phase',cat:'lang'},
+ {skill:'2-word combinations',age:20,desc:'"more milk" — grammar emerges',cat:'lang'},
+ {skill:'Runs with control',age:20,desc:'Balance + momentum management',cat:'body'},
+ {skill:'Feeds self with spoon',age:20,desc:'Fine motor + autonomy',cat:'food'},
+ {skill:'Sorts by shape/color',age:22,desc:'Categorization — foundation of logic',cat:'brain'},
+ {skill:'Stacks 4+ blocks',age:22,desc:'Spatial reasoning + patience',cat:'create'},
+ {skill:'Kicks a ball',age:24,desc:'Eye-foot coordination + balance',cat:'body'},
+ {skill:'50+ words, 2-word sentences',age:24,desc:'Language explosion milestone',cat:'lang'},
+ {skill:'Pretend play (feeding doll)',age:24,desc:'Symbolic thinking — cognitive leap',cat:'create'},
+ {skill:'Washes own hands',age:26,desc:'Self-care + routine following',cat:'heart'},
+ {skill:'Rhyming games',age:27,desc:'Phonemic awareness → reading readiness',cat:'lang'},
+ {skill:'Balance on 1 foot (3s)',age:28,desc:'Advanced proprioception + core',cat:'body'},
+ {skill:'Names a color',age:28,desc:'Abstract concept understanding',cat:'brain'},
+ {skill:'Puts on loose clothes',age:30,desc:'Dressing independence + fine motor',cat:'heart'},
+ {skill:'Jumps with both feet',age:30,desc:'Power + bilateral coordination',cat:'body'},
+ {skill:'Draws a circle',age:33,desc:'Controlled motor output + shape recognition',cat:'create'},
+ {skill:'Counts to 10',age:36,desc:'One-to-one correspondence',cat:'brain'},
+ {skill:'Tells a short story',age:36,desc:'Narrative competence + memory',cat:'lang'},
+ {skill:'Hops on 1 foot',age:40,desc:'Advanced balance + leg power',cat:'body'},
+ {skill:'Recognizes own name',age:42,desc:'Print awareness → pre-literacy',cat:'lang'},
+ {skill:'Skips alternating feet',age:45,desc:'Bilateral coordination mastery',cat:'body'},
+ {skill:'Draws person with 4+ parts',age:48,desc:'Body schema + symbolic representation',cat:'create'}
+];
+const PEER_BENCH=[
+ {skill:'Walks well',typicalAge:15,desc:'Most children by 15 months'},
+ {skill:'Says 10+ words',typicalAge:18,desc:'Typical vocabulary at 18 months'},
+ {skill:'2-word phrases',typicalAge:24,desc:'"more milk", "big dog"'},
+ {skill:'Runs steadily',typicalAge:24,desc:'Without frequent falls'},
+ {skill:'Kicks a ball',typicalAge:24,desc:'Eye-foot coordination'},
+ {skill:'Names 1+ color',typicalAge:30,desc:'Color concept understanding'},
+ {skill:'Jumps with both feet',typicalAge:30,desc:'Bilateral power'},
+ {skill:'Speaks in 3-word sentences',typicalAge:36,desc:'Grammar emerging'},
+ {skill:'Counts to 10',typicalAge:36,desc:'Rote counting'},
+ {skill:'Hops on 1 foot',typicalAge:42,desc:'Balance milestone'},
+ {skill:'Tells a story with plot',typicalAge:42,desc:'Narrative thinking'},
+ {skill:'Catches a bounced ball',typicalAge:48,desc:'Eye-hand timing'}
+];
+function planWeekNum(){
+  const m=ageMonths();
+  const stageStart=STAGES.find(s=>m>=s.from&&m<s.to);
+  const startM=stageStart?stageStart.from:m;
+  const weeksInto=Math.floor((m-startM)*4.345);
+  return weeksInto;
+}
+function renderPlan(){
+  const m=ageMonths();
+  const st=currentStage();
+  const wNum=planWeekNum();
+  document.getElementById('planSub').innerHTML=`Dawut is ${ageString()} old. This plan gives Mama a clear daily routine, weekly focus goals, and a skill ladder so she always knows what to do next. Every activity is tuned to his current stage: <b>${st.label.replace(' - Dawut is here','')}</b>.`;
+  document.getElementById('planWeekTag').textContent=`Week ${wNum+1} of this stage`;
+  renderRoutine();
+  renderWeeklyGoals(wNum);
+  renderSkillLadder(m);
+  renderPeerBench(m);
+}
+function renderRoutine(){
+  const wrap=document.getElementById('routineBlocks');wrap.innerHTML='';
+  const plan=mem.plan&&mem.plan[todayKey]?mem.plan[todayKey]:{};
+  ROUTINE.forEach(block=>{
+    const div=document.createElement('div');div.className='routine-block';
+    let itemsHtml='';
+    block.items.forEach((item,i)=>{
+      const key=block.block+'-'+i;
+      const done=!!plan[key];
+      itemsHtml+=`<div class="routine-item${done?' done':''}">
+        <div class="ri-check" role="checkbox" tabindex="0" aria-checked="${done}">✓</div>
+        <div class="ri-text">${item.t}<span class="ri-why">${item.why}</span></div>
+        <span class="ri-tag ${item.tag}">${item.tag}</span></div>`;
+    });
+    div.innerHTML=`<div class="rb-head"><div class="rb-icon ${block.block}">${block.icon}</div>
+      <div><h3>${block.title}</h3><div class="rb-time">${block.time}</div></div></div>${itemsHtml}`;
+    div.querySelectorAll('.ri-check').forEach((chk,ci)=>{
+      chk.addEventListener('click',()=>{
+        const key=block.block+'-'+ci;
+        if(!mem.plan)mem.plan={};
+        if(!mem.plan[todayKey])mem.plan[todayKey]={};
+        mem.plan[todayKey][key]=!mem.plan[todayKey][key];save();renderRoutine();
+      });
+    });
+    wrap.appendChild(div);
+  });
+}
+function renderWeeklyGoals(wNum){
+  const wrap=document.getElementById('weeklyGoals');wrap.innerHTML='';
+  const cw=wNum%WEEKLY_GOALS.length;
+  const startIdx=Math.max(0,cw-1);
+  const visible=WEEKLY_GOALS.slice(startIdx,startIdx+4);
+  const div=document.createElement('div');div.className='goal-card';
+  let html='';
+  visible.forEach((g,i)=>{
+    const realIdx=startIdx+i;
+    const status=realIdx<cw?'done':realIdx===cw?'current':'future';
+    const cls=status==='done'?'done':status==='current'?'current':'future';
+    html+=`<div class="goal-row">
+      <div class="goal-dot ${status}"></div>
+      <div class="goal-text ${cls}">${g.title}: ${g.goal}</div>
+      <div class="goal-week">W${realIdx+1}</div></div>`;
+  });
+  div.innerHTML=`<h3>12-week progressive goal cycle</h3>${html}
+    <p class="hint" style="margin-top:8px">Each week focuses on one skill area. Goals repeat every 12 weeks at a higher level as he grows. Current week is highlighted.</p>`;
+  wrap.appendChild(div);
+}
+function renderSkillLadder(m){
+  const wrap=document.getElementById('skillLadder');wrap.innerHTML='';
+  const div=document.createElement('div');div.className='ladder-card';
+  let html='';
+  SKILL_LADDER.forEach(s=>{
+    const status=m>=s.age+2?'done':m>=s.age-1&&m<s.age+2?'current':'future';
+    const dotCls=status==='done'?'done':status==='current'?'current':'future';
+    const titleCls=status==='done'?'done':status==='current'?'current':'future';
+    const dotIcon=status==='done'?'✓':status==='current'?'★':'';
+    html+=`<div class="ladder-row">
+      <div class="lr-line"></div>
+      <div class="lr-dot ${dotCls}">${dotIcon}</div>
+      <div class="lr-content">
+        <div class="lr-title ${titleCls}">${s.skill}</div>
+        <div class="lr-desc">${s.desc}</div>
+        <div class="lr-age">~${s.age} months · ${s.cat}</div>
+      </div></div>`;
+  });
+  div.innerHTML=`<h3>Developmental skill ladder (27 skills)</h3>${html}`;
+  wrap.appendChild(div);
+}
+function renderPeerBench(m){
+  const wrap=document.getElementById('peerBench');wrap.innerHTML='';
+  const div=document.createElement('div');div.className='peer-card';
+  let html='';
+  PEER_BENCH.forEach(b=>{
+    const diff=m-b.typicalAge;
+    let status='ontrack',label='On track';
+    if(diff>=2){status='ahead';label=`${Math.round(diff)}mo ahead`;}
+    else if(diff<=-3){status='behind';label=`${Math.round(-diff)}mo to go`;}
+    else if(diff>=0){status='ahead';label='Achieved';}
+    html+=`<div class="peer-row">
+      <div class="pr-skill">${b.skill}<br><span style="font-size:10px;color:var(--faint)">${b.desc}</span></div>
+      <div class="pr-status ${status}">${label}</div></div>`;
+  });
+  div.innerHTML=`<h3>How Dawut compares to typical development</h3>
+    <div class="peer-sub">Based on CDC/WHO typical ages. "Ahead" means he achieved it early. Every child has their own pace — this is for reference, not pressure.</div>${html}`;
+  wrap.appendChild(div);
+}
+/* ============ SETTINGS ============ */
+const S=()=>mem.settings;
+function renderSettings(){
+  document.getElementById('remAM').value=S().remAM||'09:30';
+  document.getElementById('remPM').value=S().remPM||'20:30';
+  document.getElementById('swNotif').classList.toggle('on',!!S().notif);
+  document.getElementById('swDark').classList.toggle('on',!!S().darkMode);
+  document.getElementById('swAutoBackup').classList.toggle('on',!!S().autoBackup);
+}
+document.getElementById('saveRem').addEventListener('click',()=>{
+  S().remAM=document.getElementById('remAM').value;S().remPM=document.getElementById('remPM').value;save();confetti(15);});
+document.getElementById('swNotif').addEventListener('click',async function(){
+  if(!S().notif){
+    if(!('Notification' in window)){alert('Notifications not supported here.');return;}
+    const p=await Notification.requestPermission();if(p!=='granted')return;
+    S().notif=true;new Notification('🌱 Dawut\u2019s daily bloom reminders are on.');
+  }else S().notif=false;save();this.classList.toggle('on',!!S().notif);
+});
+/* Dark mode */
+function applyTheme(){
+  const dark=S().darkMode!=null?S().darkMode:window.matchMedia('(prefers-color-scheme:dark)').matches;
+  document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+  document.getElementById('metaTheme').setAttribute('content',dark?'#1A1714':'#FDF8F0');
+}
+document.getElementById('swDark').addEventListener('click',function(){
+  S().darkMode=S().darkMode==null?!window.matchMedia('(prefers-color-scheme:dark)').matches:!S().darkMode;
+  save();applyTheme();this.classList.toggle('on',!!S().darkMode);
+});
+window.matchMedia('(prefers-color-scheme:dark)').addEventListener('change',()=>{if(S().darkMode==null)applyTheme();});
+/* Auto-backup */
+document.getElementById('swAutoBackup').addEventListener('click',function(){
+  S().autoBackup=!S().autoBackup;save();this.classList.toggle('on',!!S().autoBackup);
+});
+function checkAutoBackup(){
+  if(!S().autoBackup)return;
+  const last=mem.lastBackup?new Date(mem.lastBackup):null;
+  const days=last?(new Date()-last)/86400000:999;
+  if(days>=7){
+    if(!('Notification' in window)||Notification.permission!=='granted')return;
+    new Notification('🌱 Backup reminder','It has been 7+ days since your last Dawut Bloom backup. Export now to save memories!');
+  }
+}
+/* Notifications */
+setInterval(()=>{
+  if(!S().notif||!('Notification' in window)||Notification.permission!=='granted')return;
+  const now=new Date();const hm=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+  if(!mem.fired)mem.fired={};
+  [['remAM','🌱 Dawut\u2019s 6 little activities for today are ready!'],
+   ['remPM','⭐ Save today\u2019s little moment before it fades — one line is enough.']].forEach(([k,msg])=>{
+    if(S()[k]===hm&&mem.fired[k]!==todayKey){new Notification(msg);mem.fired[k]=todayKey;save();}});
+},20000);
+/* Backup */
+document.getElementById('expBtn').addEventListener('click',()=>{
+  const blob=new Blob([JSON.stringify(mem,null,1)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='dawut-bloom-backup-'+todayKey+'.json';a.click();
+  mem.lastBackup=new Date().toISOString();save();
+});
+document.getElementById('impBtn').addEventListener('click',()=>document.getElementById('impFile').click());
+document.getElementById('impFile').addEventListener('change',e=>{
+  const f=e.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{try{const p=JSON.parse(r.result);if(!p.days)throw 0;
+    if(confirm('Replace current data with this backup?')){mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},lastBackup:null,version:SCHEMA_VERSION,...p};save();location.reload();}
+  }catch(err){alert('Not a valid backup file.');}};r.readAsText(f);
+});
+/* ============ PWA ============ */
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;
+  document.getElementById('installBanner').classList.add('show');});
+document.getElementById('installBtn').addEventListener('click',async()=>{
+  if(!deferredPrompt)return;
+  deferredPrompt.prompt();const{outcome}=await deferredPrompt.userChoice;
+  if(outcome==='accepted')document.getElementById('installBanner').classList.remove('show');
+  deferredPrompt=null;
+});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+
+/* ============ BADGES ============ */
+function updateBadges(){
+  const m=ageMonths();
+  const dueVax=VAX.filter((v,i)=>!mem.vax['vax-'+i]&&m>=v.ageM).length;
+  const vaxBadge=document.getElementById('badge-stages');
+  if(dueVax>0){vaxBadge.textContent=dueVax;vaxBadge.classList.remove('hide');}
+  else vaxBadge.classList.add('hide');
+}
+
+/* ============ RENDER ALL ============ */
+function renderAll(){
+  document.getElementById('age').textContent=ageString()+' old · born 13 March 2024';
+  document.getElementById('hsAge').textContent=ageMonths().toFixed(1);
+  const st=currentStage();
+  document.getElementById('stagechip').innerHTML='🧭 Current window: <b>'+st.label.replace(' - Dawut is here','')+'</b> — today\u2019s activities are tuned exactly to this stage and rotate automatically every day.';
+  const si=streakInfo();
+  document.getElementById('hsStreak').textContent=si.streak;
+  const blooms=Object.keys(mem.days).filter(fullBloom).length;
+  document.getElementById('hsDone').textContent=blooms;
+  const d=day(todayKey),done=DOMAINS.filter(x=>d[x.id]).length;
+  document.getElementById('donecount').textContent=done;
+  document.getElementById('daydone').classList.toggle('show',done===6);
+  document.getElementById('stTotal').textContent=blooms;
+  document.getElementById('stBest').textContent=si.best;
+  document.getElementById('stActs').textContent=Object.values(mem.days).reduce((s,dd)=>s+DOMAINS.filter(x=>dd[x.id]).length,0);
+  /* Progress ring */
+  const circ=314.16,offset=circ-(done/6)*circ;
+  document.getElementById('ringFg').setAttribute('stroke-dashoffset',offset);
+  document.getElementById('ringTxt').textContent=done+'/6';
+  renderHeat();
+  updateBadges();
+}
+function confetti(n){
+  const colors=['#FF8A7A','#FFC24D','#7FA8FF','#F78FB8','#7ACB8F','#B79AE8'];
+  for(let i=0;i<n;i++){const c=document.createElement('div');c.className='cf';
+    c.style.left=Math.random()*100+'vw';c.style.background=colors[i%colors.length];
+    c.style.animationDuration=(1.6+Math.random()*1.6)+'s';c.style.animationDelay=(Math.random()*.4)+'s';
+    const sz=6+Math.random()*8;c.style.width=sz+'px';c.style.height=(sz*1.4)+'px';
+    c.style.borderRadius=Math.random()>.5?'50%':Math.random()>.5?'2px':'4px 50% 50% 4px';
+    document.body.appendChild(c);setTimeout(()=>c.remove(),3600);}
+}
+/* nav */
+document.querySelectorAll('nav button').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('nav button').forEach(x=>{x.classList.remove('active');x.setAttribute('aria-selected','false');});
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');b.setAttribute('aria-selected','true');
+    document.getElementById(b.dataset.tab).classList.add('active');
+    if(b.dataset.tab==='tab-plan')renderPlan();
+    if(b.dataset.tab==='tab-growth'){renderGrowth();renderSleep();renderScreen();renderWords();}
+    if(b.dataset.tab==='tab-stages'){renderMilestones();renderCDC();renderVax();renderStages();}
+    if(b.dataset.tab==='tab-settings')renderSettings();
+    window.scrollTo({top:0});});
+});
+/* init */
+document.getElementById('today').textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+document.getElementById('tipText').textContent=TIPS[dayOfYear()%TIPS.length];
+const noteEl=document.getElementById('note');
+noteEl.addEventListener('input',()=>{day(todayKey).note=noteEl.value;save();});
+load();seedGrowth();applyTheme();
+noteEl.value=day(todayKey).note||'';
+renderCards();renderAll();renderGrowth();renderSleep();renderScreen();renderWords();renderPlan();
+checkAutoBackup();
+</script>
+</body>
+</html>
