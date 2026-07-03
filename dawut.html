@@ -411,6 +411,78 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
 /* Streak recovery */
 .streak-msg{margin-top:10px;padding:10px 14px;border-radius:14px;background:linear-gradient(135deg,rgba(255,138,122,.1),rgba(232,169,61,.08));border:1.5px solid rgba(232,169,61,.3);font-size:13px;color:var(--muted);line-height:1.5;text-align:center;}
 .streak-msg b{color:var(--gold);}
+/* Potty training tracker */
+.potty-card{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:12px;box-shadow:var(--shadow);transition:box-shadow .25s;}
+.potty-card:hover{box-shadow:var(--shadow-lg);}
+.potty-card h3{margin:0 0 4px;font-size:15px;font-weight:700;}
+.potty-card .sub{font-size:11px;color:var(--faint);font-family:'JetBrains Mono',monospace;margin-bottom:10px;}
+.potty-stats{display:flex;gap:12px;margin-bottom:12px;}
+.potty-stat{flex:1;text-align:center;padding:10px 6px;border-radius:12px;background:var(--bg);}
+.potty-stat b{display:block;font-family:'JetBrains Mono',monospace;font-size:20px;color:var(--green);}
+.potty-stat span{font-size:10px;color:var(--faint);}
+.potty-buttons{display:flex;gap:8px;flex-wrap:wrap;}
+.potty-btn{flex:1;min-width:80px;padding:10px;border-radius:14px;border:2px solid var(--line);background:var(--bg);cursor:pointer;font-size:13px;font-weight:600;font-family:'Quicksand',sans-serif;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text);}
+.potty-btn:hover{border-color:var(--muted);transform:translateY(-1px);}
+.potty-btn:active{transform:scale(.95);}
+.potty-btn .pb-icon{font-size:22px;}
+.potty-btn.potty-pee{border-color:rgba(127,168,255,.3);}
+.potty-btn.potty-poo{border-color:rgba(210,145,60,.3);}
+.potty-btn.potty-dry{border-color:rgba(122,203,143,.3);}
+.potty-week{display:flex;gap:3px;margin-top:12px;justify-content:center;}
+.potty-day{display:flex;flex-direction:column;align-items:center;gap:2px;}
+.potty-day .pd-dot{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;}
+.potty-day .pd-dot.dry{background:rgba(122,203,143,.2);color:var(--green);}
+.potty-day .pd-dot.pee{background:rgba(127,168,255,.15);color:var(--brain);}
+.potty-day .pd-dot.mixed{background:rgba(232,169,61,.15);color:var(--gold);}
+.potty-day .pd-dot.accident{background:rgba(224,112,112,.15);color:#E07070;}
+.potty-day .pd-dot.none{background:var(--bg);color:var(--faint);}
+.potty-day .pd-lbl{font-size:8px;color:var(--faint);font-family:'JetBrains Mono',monospace;}
+/* Achievement badges */
+.badges-section{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:14px;box-shadow:var(--shadow);}
+.badges-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px;}
+.badge-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px;border-radius:14px;text-align:center;transition:all .2s;}
+.badge-item.unlocked{background:linear-gradient(135deg,rgba(255,194,77,.08),rgba(122,203,143,.06));border:1.5px solid rgba(255,194,77,.2);}
+.badge-item.locked{opacity:.35;filter:grayscale(.5);}
+.badge-item .bi-emoji{font-size:28px;}
+.badge-item.unlocked .bi-emoji{animation:badgePulse 2s ease-in-out infinite;}
+.badge-item .bi-name{font-size:9px;font-weight:700;color:var(--text);line-height:1.2;}
+.badge-item .bi-desc{font-size:8px;color:var(--faint);line-height:1.2;}
+@keyframes badgePulse{0%,100%{transform:scale(1);}50%{transform:scale(1.08);}}
+/* Meal tracker */
+.meal-card{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:12px;box-shadow:var(--shadow);transition:box-shadow .25s;}
+.meal-card:hover{box-shadow:var(--shadow-lg);}
+.meal-card h3{margin:0 0 4px;font-size:15px;font-weight:700;}
+.meal-card .sub{font-size:11px;color:var(--faint);font-family:'JetBrains Mono',monospace;margin-bottom:10px;}
+.meal-buttons{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.meal-tag{padding:6px 12px;border-radius:99px;border:1.5px solid var(--line);background:var(--bg);font-size:12px;cursor:pointer;font-family:'Quicksand',sans-serif;transition:all .2s;color:var(--text);}
+.meal-tag:hover{border-color:var(--muted);}
+.meal-tag:active{transform:scale(.93);}
+.meal-tag.selected{border-color:var(--food);background:rgba(122,203,143,.1);color:var(--food);font-weight:700;}
+.meal-log{margin-top:8px;}
+.meal-entry{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--line);font-size:13px;}
+.meal-entry:last-child{border-bottom:none;}
+.meal-entry .me-icons{flex:1;}
+.meal-entry .me-date{font-size:10px;color:var(--faint);font-family:'JetBrains Mono',monospace;}
+.meal-entry .me-del{background:none;border:none;color:var(--faint);cursor:pointer;font-size:14px;padding:0 4px;}
+.meal-entry .me-del:hover{color:#E07070;}
+/* Allergy tracker */
+.allergy-card{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:12px;box-shadow:var(--shadow);}
+.allergy-card h3{margin:0 0 4px;font-size:15px;font-weight:700;}
+.allergy-card .sub{font-size:11px;color:var(--faint);font-family:'JetBrains Mono',monospace;margin-bottom:10px;}
+.allergy-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.allergy-chip{padding:5px 12px;border-radius:99px;background:rgba(224,112,112,.1);border:1.5px solid rgba(224,112,112,.3);font-size:12px;color:#E07070;font-weight:600;display:flex;align-items:center;gap:6px;}
+.allergy-chip button{background:none;border:none;color:#E07070;cursor:pointer;font-size:14px;padding:0;}
+.allergy-chip button:hover{font-weight:bold;}
+/* Dental care */
+.dental-card{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:12px;box-shadow:var(--shadow);transition:box-shadow .25s;}
+.dental-card:hover{box-shadow:var(--shadow-lg);}
+.dental-card h3{margin:0 0 4px;font-size:15px;font-weight:700;}
+.dental-card .sub{font-size:11px;color:var(--faint);font-family:'JetBrains Mono',monospace;margin-bottom:10px;}
+.dental-week{display:flex;gap:4px;margin-top:10px;justify-content:center;}
+.dental-day{display:flex;flex-direction:column;align-items:center;gap:2px;}
+.dental-day .dd-icon{font-size:16px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--bg);}
+.dental-day .dd-icon.brushed{background:rgba(122,203,143,.15);}
+.dental-day .dd-lbl{font-size:8px;color:var(--faint);font-family:'JetBrains Mono',monospace;}
 </style>
 </head>
 <body>
@@ -448,6 +520,7 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
   </div>
   <div class="weeksum" id="weekSummary"></div>
   <div class="mood-card" id="moodCard"></div>
+  <div class="badges-section" id="badgesSection"></div>
   <div class="daterow">
     <h2 id="today"></h2>
     <div class="count"><b id="donecount">0</b>/6</div>
@@ -494,6 +567,12 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
   <div id="wordCard"></div>
   <h2 class="sec">Books read</h2>
   <div id="bookCard"></div>
+  <h2 class="sec">Meals & nutrition</h2>
+  <div id="mealCard"></div>
+  <h2 class="sec">Potty training</h2>
+  <div id="pottyCard"></div>
+  <h2 class="sec">Dental care</h2>
+  <div id="dentalCard"></div>
   <h2 class="sec">30-day activity trend</h2>
   <div id="trendCard"></div>
   <h2 class="sec">Consistency garden</h2>
@@ -539,6 +618,12 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
     <input id="illMeds" placeholder="medication given (optional)">
     <button id="illBtn">Log illness</button>
     <div id="illList" style="margin-top:12px"></div>
+  </div>
+  <h2 class="sec">Allergy tracker</h2>
+  <div class="panel">
+    <p>Known or suspected allergies. Important for daycare, restaurants, and pediatrician visits.</p>
+    <div class="mrow"><input type="text" id="allergyInput" placeholder="e.g. peanuts, eggs, lactose" aria-label="Add allergy"><button id="allergyBtn">Add</button></div>
+    <div class="allergy-chips" id="allergyChips"></div>
   </div>
   <h2 class="sec">The development roadmap</h2>
   <div id="stagelist"></div>
@@ -842,8 +927,8 @@ const TIPS=[
 /* ============ STATE ============ */
 const KEY='dawut-bloom';
 const SCHEMA_VERSION=2;
-let mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},books:[],outdoor:{},mood:{},illness:[],lastBackup:null,version:SCHEMA_VERSION};
-function load(){try{const r=localStorage.getItem(KEY);if(r){const p=JSON.parse(r);mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},books:[],outdoor:{},mood:{},illness:[],lastBackup:null,version:SCHEMA_VERSION,...p};if(!mem.version||mem.version<SCHEMA_VERSION){mem.version=SCHEMA_VERSION;save();}if(mem.settings&&mem.settings.birthDate){BIRTH=new Date(mem.settings.birthDate+'T00:00:00');}}}catch(e){}}
+let mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},books:[],outdoor:{},mood:{},illness:[],meals:[],potty:{},dental:{},allergies:[],lastBackup:null,version:SCHEMA_VERSION};
+function load(){try{const r=localStorage.getItem(KEY);if(r){const p=JSON.parse(r);mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},books:[],outdoor:{},mood:{},illness:[],meals:[],potty:{},dental:{},allergies:[],lastBackup:null,version:SCHEMA_VERSION,...p};if(!mem.version||mem.version<SCHEMA_VERSION){mem.version=SCHEMA_VERSION;save();}if(mem.settings&&mem.settings.birthDate){BIRTH=new Date(mem.settings.birthDate+'T00:00:00');}}}catch(e){}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(mem));}catch(e){}}
 function dkey(d){return d.toISOString().slice(0,10);}
 const todayKey=dkey(new Date());
@@ -1165,6 +1250,163 @@ function renderStages(){
     el.appendChild(div);
   });
 }
+/* ============ ACHIEVEMENT BADGES ============ */
+const BADGES=[
+ {id:'firstBloom',e:'🌸',n:'First Bloom',d:'1 full bloom day',check:()=>Object.keys(mem.days).filter(fullBloom).length>=1},
+ {id:'week3',e:'🔥',n:'On Fire',d:'3-day streak',check:()=>streakInfo().best>=3},
+ {id:'week7',e:'⚡',n:'Lightning',d:'7-day streak',check:()=>streakInfo().best>=7},
+ {id:'month30',e:'🌟',n:'Star Month',d:'30 bloom days',check:()=>Object.keys(mem.days).filter(fullBloom).length>=30},
+ {id:'word50',e:'🗣️',n:'Chatterbox',d:'50 words logged',check:()=>mem.words.length>=50},
+ {id:'word100',e:'💬',n:'Word Wizard',d:'100 words logged',check:()=>mem.words.length>=100},
+ {id:'book10',e:'📖',n:'Bookworm',d:'10 books read',check:()=>mem.books.length>=10},
+ {id:'book50',e:'📚',n:'Library',d:'50 books read',check:()=>mem.books.length>=50},
+ {id:'outdoor7',e:'🌳',n:'Nature Lover',d:'7 days outdoor logged',check:()=>Object.keys(mem.outdoor).length>=7},
+ {id:'sleepGood',e:'😴',n:'Dream Sleeper',d:'7 nights in AAP range',check:()=>{let c=0;for(let i=0;i<7;i++){const dt=new Date();dt.setDate(dt.getDate()-i);const s=mem.sleep[dkey(dt)];if(s&&s.h>=SLEEP_MIN&&s.h<=SLEEP_MAX)c++;}return c>=7;}},
+ {id:'milestone5',e:'⭐',n:'Memory Keeper',d:'5 milestones saved',check:()=>mem.milestones.length>=5},
+ {id:'cdcHalf',e:'✅',n:'Halfway There',d:'50% CDC milestones',check:()=>{let total=0,done=0;CDC.forEach(g=>{if(ageMonths()>=g.age-3){g.items.forEach((item,i)=>{total++;if(mem.cdc[g.age+'-'+i])done++;});}});return total>0&&done/total>=0.5;}},
+ {id:'allDom',e:'🌈',n:'Rainbow Day',d:'All 6 domains in one day',check:()=>Object.values(mem.days).some(d=>DOMAINS.every(x=>d[x.id]))},
+ {id:'pottyDry3',e:'🩲',n:'Dry Streak',d:'3 dry days in a row',check:()=>{let c=0;for(let i=0;i<3;i++){const dt=new Date();dt.setDate(dt.getDate()-i);const p=mem.potty[dkey(dt)];if(p&&p.type==='dry')c++;}return c>=3;}},
+];
+function renderBadges(){
+  const el=document.getElementById('badgesSection');el.innerHTML='';
+  const unlocked=BADGES.filter(b=>b.check());
+  const locked=BADGES.filter(b=>!b.check());
+  let html=`<h3 style="margin:0 0 4px;font-size:14px;font-weight:700">Achievements 🏆</h3>
+    <div style="font-size:11px;color:var(--faint);font-family:'JetBrains Mono',monospace;margin-bottom:8px">${unlocked.length}/${BADGES.length} unlocked</div>
+    <div class="badges-grid">`;
+  [...unlocked,...locked].forEach(b=>{
+    const u=b.check();
+    html+=`<div class="badge-item ${u?'unlocked':'locked'}">
+      <div class="bi-emoji">${b.e}</div>
+      <div class="bi-name">${b.n}</div>
+      <div class="bi-desc">${b.d}</div></div>`;
+  });
+  html+='</div>';
+  el.innerHTML=html;
+}
+/* ============ POTTY TRAINING ============ */
+function renderPotty(){
+  const wrap=document.getElementById('pottyCard');wrap.innerHTML='';
+  const div=document.createElement('div');div.className='potty-card';
+  const today=mem.potty[todayKey];
+  let dryDays=0,peeDays=0,accDays=0;
+  for(let i=0;i<7;i++){const dt=new Date();dt.setDate(dt.getDate()-i);const p=mem.potty[dkey(dt)];if(p){if(p.type==='dry')dryDays++;else if(p.type==='accident')accDays++;}}
+  let weekHtml='<div class="potty-week">';
+  for(let i=6;i>=0;i--){
+    const dt=new Date();dt.setDate(dt.getDate()-i);const k=dkey(dt);
+    const p=mem.potty[k];
+    const cls=p?p.type:'none';
+    const icon=p?(p.type==='dry'?'✓':p.type==='pee'?'💧':p.type==='poo'?'💩':p.type==='mixed'?'💧💩':p.type==='accident'?'✗':'·'):'·';
+    const lbl=['S','M','T','W','T','F','S'][dt.getDay()];
+    weekHtml+=`<div class="potty-day"><div class="pd-dot ${cls}">${icon}</div><div class="pd-lbl">${lbl}</div></div>`;
+  }
+  weekHtml+='</div>';
+  div.innerHTML=`<h3>🚽 Potty training</h3><div class="sub">Track dry days, successes, and accidents</div>
+    <div class="potty-stats"><div class="potty-stat"><b>${dryDays}</b><span>dry days (7d)</span></div><div class="potty-stat"><b>${accDays}</b><span>accidents (7d)</span></div></div>
+    <div class="potty-buttons">
+      <button class="potty-btn potty-dry" data-type="dry"><span class="pb-icon">✓</span>Dry day</button>
+      <button class="potty-btn potty-pee" data-type="pee"><span class="pb-icon">💧</span>Pee in potty</button>
+      <button class="potty-btn potty-poo" data-type="poo"><span class="pb-icon">💩</span>Poo in potty</button>
+      <button class="potty-btn" data-type="accident"><span class="pb-icon">✗</span>Accident</button>
+    </div>
+    ${weekHtml}`;
+  div.querySelectorAll('.potty-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const t=btn.dataset.type;
+      if(mem.potty[todayKey]&&mem.potty[todayKey].type===t){delete mem.potty[todayKey];}
+      else{mem.potty[todayKey]={type:t};}
+      save();renderPotty();renderBadges();
+    });
+  });
+  wrap.appendChild(div);
+}
+/* ============ MEAL TRACKER ============ */
+const MEAL_TYPES=[
+ {id:'veg',e:'🥦',l:'Veggies'},
+ {id:'fruit',e:'🍎',l:'Fruit'},
+ {id:'protein',e:'🍳',l:'Protein'},
+ {id:'grain',e:'🍚',l:'Grains'},
+ {id:'dairy',e:'🥛',l:'Dairy'},
+ {id:'fish',e:'🐟',l:'Fish'},
+ {id:'sweets',e:'🍬',l:'Sweets'},
+];
+function renderMeals(){
+  const wrap=document.getElementById('mealCard');wrap.innerHTML='';
+  const div=document.createElement('div');div.className='meal-card';
+  const todayMeals=mem.meals.filter(m=>m.d===todayKey);
+  let selectedIds=todayMeals.length?todayMeals[0].items:[];
+  let btnsHtml='<div class="meal-buttons">';
+  MEAL_TYPES.forEach(mt=>{
+    const sel=selectedIds.includes(mt.id)?' selected':'';
+    btnsHtml+=`<button class="meal-tag${sel}" data-id="${mt.id}">${mt.e} ${mt.l}</button>`;
+  });
+  btnsHtml+='</div>';
+  let logHtml='<div class="meal-log">';
+  mem.meals.slice().reverse().slice(0,7).forEach((m,i)=>{
+    const realIdx=mem.meals.length-1-i;
+    const icons=m.items.map(id=>MEAL_TYPES.find(t=>t.id===id)).filter(Boolean).map(t=>t.e).join(' ');
+    logHtml+=`<div class="meal-entry"><span class="me-icons">${icons||'—'}</span><span class="me-date">${m.d}</span><button class="me-del" data-idx="${realIdx}" aria-label="Delete meal">✕</button></div>`;
+  });
+  logHtml+='</div>';
+  div.innerHTML=`<h3>🍽️ Today's meals</h3><div class="sub">Tap food groups he ate today — spot picky patterns</div>${btnsHtml}${logHtml}`;
+  div.querySelectorAll('.meal-tag').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const id=btn.dataset.id;
+      let entry=mem.meals.find(m=>m.d===todayKey);
+      if(!entry){entry={d:todayKey,items:[]};mem.meals.push(entry);}
+      if(entry.items.includes(id)){entry.items=entry.items.filter(x=>x!==id);}
+      else{entry.items.push(id);}
+      save();renderMeals();
+    });
+  });
+  div.querySelectorAll('.me-del').forEach(btn=>{
+    btn.addEventListener('click',()=>{mem.meals.splice(parseInt(btn.dataset.idx),1);save();renderMeals();});
+  });
+  wrap.appendChild(div);
+}
+/* ============ DENTAL CARE ============ */
+function renderDental(){
+  const wrap=document.getElementById('dentalCard');wrap.innerHTML='';
+  const div=document.createElement('div');div.className='dental-card';
+  const today=mem.dental[todayKey];
+  let weekHtml='<div class="dental-week">';
+  let brushedCount=0;
+  for(let i=6;i>=0;i--){
+    const dt=new Date();dt.setDate(dt.getDate()-i);const k=dkey(dt);
+    const d=mem.dental[k];
+    const brushed=d&&d.brushed;
+    if(brushed)brushedCount++;
+    const lbl=['S','M','T','W','T','F','S'][dt.getDay()];
+    weekHtml+=`<div class="dental-day"><div class="dd-icon ${brushed?'brushed':''}">${brushed?'🦷':'·'}</div><div class="dd-lbl">${lbl}</div></div>`;
+  }
+  weekHtml+='</div>';
+  div.innerHTML=`<h3>🦷 Dental care</h3><div class="sub">Brushed ${brushedCount}/7 days · AAPD recommends brushing 2x daily</div>
+    <div class="mrow"><button id="dentalBtn" style="${today&&today.brushed?'opacity:.5':''}">${today&&today.brushed?'✓ Brushed today':'Mark brushed today'}</button></div>
+    ${weekHtml}`;
+  div.querySelector('#dentalBtn').addEventListener('click',()=>{
+    if(mem.dental[todayKey]&&mem.dental[todayKey].brushed){delete mem.dental[todayKey];}
+    else{mem.dental[todayKey]={brushed:true};}
+    save();renderDental();
+  });
+  wrap.appendChild(div);
+}
+/* ============ ALLERGY TRACKER ============ */
+function renderAllergies(){
+  const el=document.getElementById('allergyChips');el.innerHTML='';
+  if(!mem.allergies.length){el.innerHTML='<p style="color:var(--faint);font-size:13px;margin:4px 0">No known allergies logged.</p>';return;}
+  mem.allergies.forEach((a,i)=>{
+    const chip=document.createElement('span');chip.className='allergy-chip';
+    chip.innerHTML=`⚠️ ${a} <button aria-label="Remove allergy">✕</button>`;
+    chip.querySelector('button').addEventListener('click',()=>{mem.allergies.splice(i,1);save();renderAllergies();});
+    el.appendChild(chip);
+  });
+}
+document.getElementById('allergyBtn').addEventListener('click',()=>{
+  const inp=document.getElementById('allergyInput');const v=inp.value.trim();if(!v)return;
+  if(!mem.allergies.includes(v)){mem.allergies.push(v);save();renderAllergies();}
+  inp.value='';
+});
+document.getElementById('allergyInput').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('allergyBtn').click();});
 /* ============ MOOD TRACKER ============ */
 const MOODS=[{e:'😊',l:'Great'},{e:'🙂',l:'Good'},{e:'😐',l:'Okay'},{e:'😟',l:'Fussy'},{e:'😢',l:'Hard'}];
 function renderMood(){
@@ -1429,7 +1671,8 @@ th{background:#f5f0e8;font-weight:bold;}
 <b>Total activities completed:</b> ${totalActs}<br>
 <b>Words logged:</b> ${mem.words.length} (${langBreakdown})<br>
 <b>Books read:</b> ${mem.books.length}<br>
-<b>Sleep avg (all logged):</b> ${sleepAvg}h · <b>Screen avg:</b> ${screenAvg}min/day · <b>Outdoor avg:</b> ${outdoorAvg}min/day
+<b>Sleep avg (all logged):</b> ${sleepAvg}h · <b>Screen avg:</b> ${screenAvg}min/day · <b>Outdoor avg:</b> ${outdoorAvg}min/day<br>
+<b>Allergies:</b> ${mem.allergies.length?mem.allergies.join(', '):'None logged'}
 </div>
 <h2>Growth measurements (WHO)</h2>
 <table><tr><th>Metric</th><th>Value</th><th>Percentile</th><th>Date</th></tr>${growthHtml}</table>
@@ -1692,7 +1935,7 @@ document.getElementById('impBtn').addEventListener('click',()=>document.getEleme
 document.getElementById('impFile').addEventListener('change',e=>{
   const f=e.target.files[0];if(!f)return;const r=new FileReader();
   r.onload=()=>{try{const p=JSON.parse(r.result);if(!p.days)throw 0;
-    if(confirm('Replace current data with this backup?')){mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},books:[],outdoor:{},mood:{},illness:[],lastBackup:null,version:SCHEMA_VERSION,...p};save();location.reload();}
+    if(confirm('Replace current data with this backup?')){mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},books:[],outdoor:{},mood:{},illness:[],meals:[],potty:{},dental:{},allergies:[],lastBackup:null,version:SCHEMA_VERSION,...p};save();location.reload();}
   }catch(err){alert('Not a valid backup file.');}};r.readAsText(f);
 });
 /* ============ PWA ============ */
@@ -1739,6 +1982,7 @@ function renderAll(){
   renderHeat();
   renderWeekSummary();
   renderMood();
+  renderBadges();
   updateBadges();
   const sm=streakMessage();
   const existing=document.querySelector('.streak-msg');if(existing)existing.remove();
@@ -1761,8 +2005,8 @@ document.querySelectorAll('nav button').forEach(b=>{
     b.classList.add('active');b.setAttribute('aria-selected','true');
     document.getElementById(b.dataset.tab).classList.add('active');
     if(b.dataset.tab==='tab-plan')renderPlan();
-    if(b.dataset.tab==='tab-growth'){renderGrowth();renderSleep();renderScreen();renderOutdoor();renderWords();renderBooks();renderTrend();}
-    if(b.dataset.tab==='tab-stages'){renderMilestones();renderGallery();renderCDC();renderVax();renderIllness();renderStages();}
+    if(b.dataset.tab==='tab-growth'){renderGrowth();renderSleep();renderScreen();renderOutdoor();renderWords();renderBooks();renderMeals();renderPotty();renderDental();renderTrend();}
+    if(b.dataset.tab==='tab-stages'){renderMilestones();renderGallery();renderCDC();renderVax();renderIllness();renderAllergies();renderStages();}
     if(b.dataset.tab==='tab-settings')renderSettings();
     window.scrollTo({top:0});});
 });
@@ -1773,7 +2017,7 @@ const noteEl=document.getElementById('note');
 noteEl.addEventListener('input',()=>{day(todayKey).note=noteEl.value;save();});
 load();seedGrowth();applyTheme();
 noteEl.value=day(todayKey).note||'';
-renderCards();renderAll();renderGrowth();renderSleep();renderScreen();renderOutdoor();renderWords();renderBooks();renderTrend();renderPlan();renderWeekSummary();renderMood();renderIllness();
+renderCards();renderAll();renderGrowth();renderSleep();renderScreen();renderOutdoor();renderWords();renderBooks();renderMeals();renderPotty();renderDental();renderTrend();renderPlan();renderWeekSummary();renderMood();renderIllness();renderAllergies();renderBadges();
 checkAutoBackup();
 </script>
 </body>
