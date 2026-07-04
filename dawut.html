@@ -965,6 +965,13 @@ footer{margin-top:44px;text-align:center;font-size:11px;color:var(--faint);line-
 <footer>little seeds daily 🌱<br>guidance only — his pediatrician knows him best</footer>
 
 <script>
+window.addEventListener('error',function(e){
+  var d=document.createElement('div');
+  d.style.cssText='position:fixed;top:0;left:0;right:0;z-index:99999;background:#d32f2f;color:#fff;padding:10px 14px;font-size:12px;font-family:monospace;white-space:pre-wrap;max-height:40vh;overflow:auto';
+  d.textContent='JS Error: '+(e.message||'unknown')+' at '+(e.filename||'')+':'+(e.lineno||'');
+  document.body.appendChild(d);
+  setTimeout(function(){d.remove()},8000);
+});
 /* ============ CONFIG ============ */
 let BIRTH=new Date('2024-03-13T00:00:00');
 const DOMAINS=[
@@ -3303,6 +3310,7 @@ function renderTodayEmotional(){
 
 /* ============ RENDER ALL ============ */
 function renderAll(){
+ try{
   document.getElementById('age').textContent=ageString()+' old · born '+BIRTH.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
   document.getElementById('hsAge').textContent=ageMonths().toFixed(1);
   const st=currentStage();
@@ -3328,15 +3336,16 @@ function renderAll(){
   const circ=314.16,offset=circ-(done/6)*circ;
   document.getElementById('ringFg').setAttribute('stroke-dashoffset',offset);
   document.getElementById('ringTxt').textContent=done+'/6';
-  renderHeat();
-  renderWeekSummary();
-  renderMood();
-  renderBadges();
-  updateBadges();
-  renderTodaySleep();renderTodayScreen();renderTodayOutdoor();renderTodayMeals();renderTodayBooks();renderTodayDental();renderTodayEmotional();
+  safe(renderHeat,'renderHeat');
+  safe(renderWeekSummary,'renderWeekSummary');
+  safe(renderMood,'renderMood');
+  safe(renderBadges,'renderBadges');
+  safe(updateBadges,'updateBadges');
+  safe(renderTodaySleep,'renderTodaySleep');safe(renderTodayScreen,'renderTodayScreen');safe(renderTodayOutdoor,'renderTodayOutdoor');safe(renderTodayMeals,'renderTodayMeals');safe(renderTodayBooks,'renderTodayBooks');safe(renderTodayDental,'renderTodayDental');safe(renderTodayEmotional,'renderTodayEmotional');
   const sm=streakMessage();
   const existing=document.querySelector('.streak-msg');if(existing)existing.remove();
   if(sm){document.querySelector('.hero').insertAdjacentHTML('afterend',sm);}
+ }catch(e){console.error('renderAll error:',e);}
 }
 function confetti(n){
   const colors=['#FF8A7A','#FFC24D','#7FA8FF','#F78FB8','#7ACB8F','#B79AE8'];
@@ -3354,10 +3363,10 @@ document.querySelectorAll('nav button').forEach(b=>{
     document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
     b.classList.add('active');b.setAttribute('aria-selected','true');
     document.getElementById(b.dataset.tab).classList.add('active');
-    if(b.dataset.tab==='tab-plan'){renderPlan();renderSleep();renderScreen();renderOutdoor();renderWords();renderBooks();renderMeals();renderPotty();renderDental();renderTrend();}
-    if(b.dataset.tab==='tab-growth'){renderGrowth();renderGrowthInput();renderCountdowns();renderHeat();renderBadges();}
-    if(b.dataset.tab==='tab-stages'){renderMilestones();renderGallery();renderCDC();renderVax();renderIllness();renderAllergies();renderStages();renderEmotionalGuide();}
-    if(b.dataset.tab==='tab-settings'){renderSettings();loadBirthDetails();}
+    if(b.dataset.tab==='tab-plan'){safe(renderPlan,'renderPlan');safe(renderSleep,'renderSleep');safe(renderScreen,'renderScreen');safe(renderOutdoor,'renderOutdoor');safe(renderWords,'renderWords');safe(renderBooks,'renderBooks');safe(renderMeals,'renderMeals');safe(renderPotty,'renderPotty');safe(renderDental,'renderDental');safe(renderTrend,'renderTrend');}
+    if(b.dataset.tab==='tab-growth'){safe(renderGrowth,'renderGrowth');safe(renderGrowthInput,'renderGrowthInput');safe(renderCountdowns,'renderCountdowns');safe(renderHeat,'renderHeat');safe(renderBadges,'renderBadges');}
+    if(b.dataset.tab==='tab-stages'){safe(renderMilestones,'renderMilestones');safe(renderGallery,'renderGallery');safe(renderCDC,'renderCDC');safe(renderVax,'renderVax');safe(renderIllness,'renderIllness');safe(renderAllergies,'renderAllergies');safe(renderStages,'renderStages');safe(renderEmotionalGuide,'renderEmotionalGuide');}
+    if(b.dataset.tab==='tab-settings'){safe(renderSettings,'renderSettings');safe(loadBirthDetails,'loadBirthDetails');}
     window.scrollTo({top:0});});
 });
 /* init */
@@ -3380,7 +3389,8 @@ document.getElementById('qwBtn').addEventListener('click',function(){
 document.getElementById('quickWordInput').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('qwBtn').click();});
 load();seedGrowth();applyTheme();loadBirthDetails();
 noteEl.value=day(todayKey).note||'';
-renderCards();renderAll();renderGrowth();renderGrowthInput();renderCountdowns();renderSleep();renderScreen();renderOutdoor();renderWords();renderBooks();renderMeals();renderPotty();renderDental();renderTrend();renderPlan();renderWeekSummary();renderMood();renderIllness();renderAllergies();renderBadges();renderEmotionalGuide();renderTodaySleep();renderTodayScreen();renderTodayOutdoor();renderTodayMeals();renderTodayBooks();renderTodayDental();renderTodayEmotional();
+function safe(fn,name){try{fn();}catch(e){console.error('Error in '+name+':',e);}}
+safe(renderCards,'renderCards');safe(renderAll,'renderAll');safe(renderGrowth,'renderGrowth');safe(renderGrowthInput,'renderGrowthInput');safe(renderCountdowns,'renderCountdowns');safe(renderSleep,'renderSleep');safe(renderScreen,'renderScreen');safe(renderOutdoor,'renderOutdoor');safe(renderWords,'renderWords');safe(renderBooks,'renderBooks');safe(renderMeals,'renderMeals');safe(renderPotty,'renderPotty');safe(renderDental,'renderDental');safe(renderTrend,'renderTrend');safe(renderPlan,'renderPlan');safe(renderWeekSummary,'renderWeekSummary');safe(renderMood,'renderMood');safe(renderIllness,'renderIllness');safe(renderAllergies,'renderAllergies');safe(renderBadges,'renderBadges');safe(renderEmotionalGuide,'renderEmotionalGuide');safe(renderTodaySleep,'renderTodaySleep');safe(renderTodayScreen,'renderTodayScreen');safe(renderTodayOutdoor,'renderTodayOutdoor');safe(renderTodayMeals,'renderTodayMeals');safe(renderTodayBooks,'renderTodayBooks');safe(renderTodayDental,'renderTodayDental');safe(renderTodayEmotional,'renderTodayEmotional');
 checkAutoBackup();
 </script>
 </body>
