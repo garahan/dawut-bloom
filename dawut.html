@@ -599,8 +599,46 @@ footer{margin-top:44px;text-align:center;font-size:11px;color:var(--faint);line-
 .dental-day .dd-icon.brushed{background:rgba(122,203,143,.15);}
 .dental-day .dd-lbl{font-size:8px;color:var(--faint);font-family:'JetBrains Mono',monospace;}
 /* iPhone responsive tuning */
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.dash-mini{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:12px;box-shadow:var(--shadow);transition:box-shadow .25s;}
+.dash-mini:hover{box-shadow:var(--shadow-lg);}
+.dash-mini.full{grid-column:1/-1;}
+.dash-mini .dm-head{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.dash-mini .dm-icon{font-size:18px;flex-shrink:0;}
+.dash-mini .dm-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--faint);}
+.dash-mini .dm-val{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:600;line-height:1.2;}
+.dash-mini .dm-val small{font-size:11px;color:var(--muted);font-weight:400;}
+.dash-mini .dm-bar{height:6px;border-radius:99px;background:var(--line);margin-top:6px;overflow:hidden;}
+.dash-mini .dm-bar-fill{height:100%;border-radius:99px;transition:width .5s cubic-bezier(.2,1,.4,1);}
+.dash-mini .dm-status{font-size:10px;color:var(--muted);margin-top:4px;line-height:1.3;}
+.dash-mini .dm-input{display:flex;gap:6px;margin-top:8px;}
+.dash-mini .dm-input input{flex:1;border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14px;background:var(--input-bg);color:var(--text);outline:none;min-width:0;min-height:36px;}
+.dash-mini .dm-input input:focus{border-color:var(--brain);}
+.dash-mini .dm-input button{border:none;border-radius:10px;background:var(--brain);color:#fff;font-weight:700;padding:7px 12px;font-size:12px;cursor:pointer;min-height:36px;transition:transform .15s;}
+.dash-mini .dm-input button:active{transform:scale(.93);}
+.dash-mini .dm-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;}
+.dash-mini .dm-tag{padding:5px 10px;border-radius:99px;border:1.5px solid var(--line);background:var(--bg);font-size:12px;cursor:pointer;transition:all .15s;min-height:30px;display:inline-flex;align-items:center;}
+.dash-mini .dm-tag:active{transform:scale(.92);}
+.dash-mini .dm-tag.selected{border-color:var(--food);background:rgba(122,203,143,.1);font-weight:700;}
+.dash-mini .dm-week{display:flex;gap:3px;margin-top:6px;}
+.dash-mini .dm-week .dm-d{flex:1;height:20px;border-radius:4px;background:var(--line);display:flex;align-items:flex-end;overflow:hidden;}
+.dash-mini .dm-week .dm-d .dm-f{width:100%;border-radius:4px;transition:height .3s;}
+.dash-mini .dm-week .dm-d .dm-l{font-size:7px;color:var(--faint);text-align:center;position:relative;top:22px;}
+.eg-snap{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:16px 18px;box-shadow:var(--shadow);border-left:4px solid var(--heart);}
+.eg-snap .es-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.eg-snap .es-icon{font-size:24px;}
+.eg-snap .es-age{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--heart);}
+.eg-snap .es-title{font-size:15px;font-weight:700;color:var(--text);}
+.eg-snap .es-section{margin-top:10px;}
+.eg-snap .es-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;display:flex;align-items:center;gap:5px;}
+.eg-snap .es-items{font-size:12.5px;line-height:1.5;color:var(--text);}
+.eg-snap .es-items li{margin-bottom:4px;}
+.eg-snap .es-link{margin-top:12px;font-size:12px;color:var(--heart);font-weight:600;cursor:pointer;text-decoration:underline;}
 @media (max-width:390px){
   .hero{padding:16px;border-radius:20px;}
+  .dash-grid{gap:8px;}
+  .dash-mini{padding:10px;}
+  .dash-mini .dm-val{font-size:18px;}
   .hero .face{width:48px;height:48px;font-size:24px;}
   .hero h1{font-size:18px;}
   .herostats{gap:8px;}
@@ -750,6 +788,17 @@ footer{margin-top:44px;text-align:center;font-size:11px;color:var(--faint);line-
     <label for="note">A little moment today</label>
     <textarea id="note" placeholder="e.g. said 'more water' by himself, balanced on one foot for 2 seconds!"></textarea>
   </div>
+  <h2 class="sec">Quick daily logs</h2>
+  <div class="dash-grid">
+    <div id="todaySleep"></div>
+    <div id="todayScreen"></div>
+    <div id="todayOutdoor"></div>
+    <div id="todayMeals"></div>
+    <div id="todayBooks"></div>
+    <div id="todayDental"></div>
+  </div>
+  <h2 class="sec">Emotional snapshot 💛</h2>
+  <div id="todayEmotional"></div>
 </div>
 
 <div class="tab" id="tab-plan" role="tabpanel" aria-label="Daily plan and goals">
@@ -3051,6 +3100,157 @@ function homeActivitySuggestion(){
   return HOME_ACTIVITIES.nice[Math.floor(Math.random()*HOME_ACTIVITIES.nice.length)];
 }
 
+/* ============ TODAY DASHBOARD COMPACT CARDS ============ */
+function renderTodaySleep(){
+  const el=document.getElementById('todaySleep');if(!el)return;el.innerHTML='';
+  const t=mem.sleep[todayKey];const hrs=t?t.h:null;
+  let val='—',status='Not logged',barW=0,barC='var(--line)';
+  if(hrs!=null){
+    val=hrs+'h';barW=Math.min(hrs/14*100,100);
+    if(hrs>=SLEEP_MIN&&hrs<=SLEEP_MAX){barC='var(--green)';status='✓ In range';}
+    else if(hrs>=SLEEP_MIN-1&&hrs<=SLEEP_MAX+1){barC='var(--gold)';status='Near range';}
+    else{barC='#E07070';status='Out of range';}
+  }
+  const d=document.createElement('div');d.className='dash-mini';
+  d.innerHTML=`<div class="dm-head"><span class="dm-icon">😴</span><span class="dm-title">Sleep</span></div>
+    <div class="dm-val">${val}<small> / ${SLEEP_MIN}-${SLEEP_MAX}h</small></div>
+    <div class="dm-bar"><div class="dm-bar-fill" style="width:${barW}%;background:${barC}"></div></div>
+    <div class="dm-status">${status}</div>
+    <div class="dm-input"><input type="number" step="0.5" inputmode="decimal" placeholder="hours" aria-label="Log sleep"><button>Log</button></div>`;
+  d.querySelector('button').addEventListener('click',()=>{
+    const v=parseFloat(d.querySelector('input').value);if(isNaN(v))return;
+    if(!mem.sleep[todayKey])mem.sleep[todayKey]={};mem.sleep[todayKey].h=v;save();renderTodaySleep();renderSleep();haptic(10);});
+  d.querySelector('input').addEventListener('keydown',e=>{if(e.key==='Enter')d.querySelector('button').click();});
+  el.appendChild(d);
+}
+function renderTodayScreen(){
+  const el=document.getElementById('todayScreen');if(!el)return;el.innerHTML='';
+  const t=mem.screen[todayKey];const min=t?t.m:null;const LIMIT=60;
+  let val='—',status='Not logged',barW=0,barC='var(--line)';
+  if(min!=null){
+    val=min+'m';barW=Math.min(min/LIMIT*100,100);
+    if(min<=LIMIT){barC='var(--green)';status='✓ Under limit';}
+    else if(min<=LIMIT*2){barC='var(--gold)';status='Over limit';}
+    else{barC='#E07070';status='Well over limit';}
+  }
+  const d=document.createElement('div');d.className='dash-mini';
+  d.innerHTML=`<div class="dm-head"><span class="dm-icon">📱</span><span class="dm-title">Screen</span></div>
+    <div class="dm-val">${val}<small> / ${LIMIT}m max</small></div>
+    <div class="dm-bar"><div class="dm-bar-fill" style="width:${barW}%;background:${barC}"></div></div>
+    <div class="dm-status">${status}</div>
+    <div class="dm-input"><input type="number" step="5" inputmode="numeric" placeholder="minutes" aria-label="Log screen time"><button>Log</button></div>`;
+  d.querySelector('button').addEventListener('click',()=>{
+    const v=parseFloat(d.querySelector('input').value);if(isNaN(v))return;
+    if(!mem.screen[todayKey])mem.screen[todayKey]={};mem.screen[todayKey].m=v;save();renderTodayScreen();renderScreen();haptic(10);});
+  d.querySelector('input').addEventListener('keydown',e=>{if(e.key==='Enter')d.querySelector('button').click();});
+  el.appendChild(d);
+}
+function renderTodayOutdoor(){
+  const el=document.getElementById('todayOutdoor');if(!el)return;el.innerHTML='';
+  const t=mem.outdoor[todayKey];const min=t?t.m:null;const TARGET=120;
+  let val='—',status='Not logged',barW=0,barC='var(--line)';
+  if(min!=null){
+    val=min+'m';barW=Math.min(min/TARGET*100,100);
+    if(min>=TARGET){barC='var(--green)';status='✓ Great!';}
+    else if(min>=60){barC='var(--gold)';status='Getting there';}
+    else{barC='#E07070';status='Need more';}
+  }
+  const d=document.createElement('div');d.className='dash-mini';
+  d.innerHTML=`<div class="dm-head"><span class="dm-icon">🌳</span><span class="dm-title">Outdoor</span></div>
+    <div class="dm-val">${val}<small> / ${TARGET}m</small></div>
+    <div class="dm-bar"><div class="dm-bar-fill" style="width:${barW}%;background:${barC}"></div></div>
+    <div class="dm-status">${status}</div>
+    <div class="dm-input"><input type="number" step="5" inputmode="numeric" placeholder="minutes" aria-label="Log outdoor time"><button>Log</button></div>`;
+  d.querySelector('button').addEventListener('click',()=>{
+    const v=parseFloat(d.querySelector('input').value);if(isNaN(v))return;
+    if(!mem.outdoor[todayKey])mem.outdoor[todayKey]={};mem.outdoor[todayKey].m=v;save();renderTodayOutdoor();renderOutdoor();haptic(10);});
+  d.querySelector('input').addEventListener('keydown',e=>{if(e.key==='Enter')d.querySelector('button').click();});
+  el.appendChild(d);
+}
+function renderTodayMeals(){
+  const el=document.getElementById('todayMeals');if(!el)return;el.innerHTML='';
+  const todayMeals=mem.meals.filter(m=>m.d===todayKey);
+  let selectedIds=todayMeals.length?todayMeals[0].items:[];
+  let tagsHtml='<div class="dm-tags">';
+  MEAL_TYPES.forEach(mt=>{
+    const sel=selectedIds.includes(mt.id)?' selected':'';
+    tagsHtml+=`<button class="dm-tag${sel}" data-id="${mt.id}">${mt.e} ${mt.l}</button>`;
+  });
+  tagsHtml+='</div>';
+  const d=document.createElement('div');d.className='dash-mini full';
+  d.innerHTML=`<div class="dm-head"><span class="dm-icon">🍽️</span><span class="dm-title">Meals & nutrition</span></div>${tagsHtml}`;
+  d.querySelectorAll('.dm-tag').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const id=btn.dataset.id;
+      if(selectedIds.includes(id))selectedIds=selectedIds.filter(x=>x!==id);
+      else selectedIds.push(id);
+      const ex=mem.meals.find(m=>m.d===todayKey);
+      if(ex)ex.items=selectedIds;
+      else mem.meals.push({d:todayKey,items:selectedIds});
+      save();renderTodayMeals();renderMeals();haptic(10);
+    });
+  });
+  el.appendChild(d);
+}
+function renderTodayBooks(){
+  const el=document.getElementById('todayBooks');if(!el)return;el.innerHTML='';
+  const total=mem.books.length;
+  const d=document.createElement('div');d.className='dash-mini';
+  d.innerHTML=`<div class="dm-head"><span class="dm-icon">📖</span><span class="dm-title">Books</span></div>
+    <div class="dm-val">${total}<small> total read</small></div>
+    <div class="dm-input"><input type="text" placeholder="book title" aria-label="Add book"><button>Add</button></div>`;
+  d.querySelector('button').addEventListener('click',()=>{
+    const v=d.querySelector('input').value.trim();if(!v)return;
+    mem.books.push({t:v,d:todayKey});save();renderTodayBooks();renderBooks();confetti(8);haptic(10);
+    d.querySelector('input').value='';
+  });
+  d.querySelector('input').addEventListener('keydown',e=>{if(e.key==='Enter')d.querySelector('button').click();});
+  el.appendChild(d);
+}
+function renderTodayDental(){
+  const el=document.getElementById('todayDental');if(!el)return;el.innerHTML='';
+  const t=mem.dental[todayKey];const brushed=t&&t.brushed;
+  let weekCount=0;
+  for(let i=0;i<7;i++){const dt=new Date();dt.setDate(dt.getDate()-i);if(mem.dental[dkey(dt)]&&mem.dental[dkey(dt)].brushed)weekCount++;}
+  const d=document.createElement('div');d.className='dash-mini';
+  d.innerHTML=`<div class="dm-head"><span class="dm-icon">🦷</span><span class="dm-title">Dental</span></div>
+    <div class="dm-val">${brushed?'✓':'—'}<small> ${weekCount}/7 days</small></div>
+    <div class="dm-status">${brushed?'Brushed today':'Not brushed yet'}</div>
+    <div class="dm-input"><button style="width:100%;background:${brushed?'var(--green)':'var(--brain)'}">${brushed?'✓ Brushed today':'Mark brushed'}</button></div>`;
+  d.querySelector('button').addEventListener('click',()=>{
+    if(mem.dental[todayKey]&&mem.dental[todayKey].brushed){delete mem.dental[todayKey];}
+    else{mem.dental[todayKey]={brushed:true};}
+    save();renderTodayDental();renderDental();haptic(10);
+  });
+  el.appendChild(d);
+}
+function renderTodayEmotional(){
+  const el=document.getElementById('todayEmotional');if(!el)return;el.innerHTML='';
+  const m=ageMonths();
+  let phase=null;
+  EMOTIONAL_GUIDE.forEach(p=>{
+    const [lo,hi]=p.age.split('-').map(s=>parseFloat(s));
+    if(m>=lo&&m<hi)phase=p;
+  });
+  if(!phase){el.innerHTML='<div class="eg-snap"><p style="color:var(--faint);font-size:13px">No emotional guide data for current age.</p></div>';return;}
+  const expectHtml=phase.expect.slice(0,2).map(e=>`<li><b>${e.b}</b> — <span style="color:var(--muted)">${e.why}</span></li>`).join('');
+  const doHtml=phase.do.slice(0,2).map(d=>`<li>${d}</li>`).join('');
+  const dontHtml=phase.dont.slice(0,1).map(d=>`<li>${d}</li>`).join('');
+  const teachHtml=phase.teach.slice(0,1).map(d=>`<li>${d}</li>`).join('');
+  const d=document.createElement('div');d.className='eg-snap';
+  d.innerHTML=`<div class="es-head"><span class="es-icon">${phase.icon}</span><div><div class="es-age">${phase.age}</div><div class="es-title">${phase.title}</div></div></div>
+    <div class="es-section"><div class="es-label" style="color:var(--heart)">💛 What to expect</div><ul class="es-items">${expectHtml}</ul></div>
+    <div class="es-section"><div class="es-label" style="color:var(--green)">✅ Do</div><ul class="es-items">${doHtml}</ul></div>
+    <div class="es-section"><div class="es-label" style="color:#E07070">🚫 Don't</div><ul class="es-items">${dontHtml}</ul></div>
+    <div class="es-section"><div class="es-label" style="color:var(--brain)">💡 Teach</div><ul class="es-items">${teachHtml}</ul></div>
+    <div class="es-link" id="egSnapLink">See full emotional guide →</div>`;
+  d.querySelector('#egSnapLink').addEventListener('click',()=>{
+    document.querySelector('nav button[data-tab="tab-stages"]').click();
+    setTimeout(()=>{const eg=document.getElementById('emotionalGuide');if(eg){const firstCard=eg.querySelector('.eg-card');if(firstCard)firstCard.click();eg.scrollIntoView({behavior:'smooth'});}},100);
+  });
+  el.appendChild(d);
+}
+
 /* ============ RENDER ALL ============ */
 function renderAll(){
   document.getElementById('age').textContent=ageString()+' old · born '+BIRTH.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
@@ -3083,6 +3283,7 @@ function renderAll(){
   renderMood();
   renderBadges();
   updateBadges();
+  renderTodaySleep();renderTodayScreen();renderTodayOutdoor();renderTodayMeals();renderTodayBooks();renderTodayDental();renderTodayEmotional();
   const sm=streakMessage();
   const existing=document.querySelector('.streak-msg');if(existing)existing.remove();
   if(sm){document.querySelector('.hero').insertAdjacentHTML('afterend',sm);}
@@ -3129,7 +3330,7 @@ document.getElementById('qwBtn').addEventListener('click',function(){
 document.getElementById('quickWordInput').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('qwBtn').click();});
 load();seedGrowth();applyTheme();loadBirthDetails();
 noteEl.value=day(todayKey).note||'';
-renderCards();renderAll();renderGrowth();renderGrowthInput();renderCountdowns();renderSleep();renderScreen();renderOutdoor();renderWords();renderBooks();renderMeals();renderPotty();renderDental();renderTrend();renderPlan();renderWeekSummary();renderMood();renderIllness();renderAllergies();renderBadges();renderEmotionalGuide();
+renderCards();renderAll();renderGrowth();renderGrowthInput();renderCountdowns();renderSleep();renderScreen();renderOutdoor();renderWords();renderBooks();renderMeals();renderPotty();renderDental();renderTrend();renderPlan();renderWeekSummary();renderMood();renderIllness();renderAllergies();renderBadges();renderEmotionalGuide();renderTodaySleep();renderTodayScreen();renderTodayOutdoor();renderTodayMeals();renderTodayBooks();renderTodayDental();renderTodayEmotional();
 checkAutoBackup();
 </script>
 </body>
