@@ -71,6 +71,8 @@ h2.sec::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(
 .ringwrap .ringlbl{font-size:9px;fill:var(--faint);text-anchor:middle;letter-spacing:.1em;text-transform:uppercase;}
 .tip{margin-top:14px;background:linear-gradient(135deg,var(--card),rgba(232,169,61,.04));border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow);display:flex;gap:12px;align-items:flex-start;position:relative;overflow:hidden;}
 .tip::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--gold),var(--body));}
+.tip.home-tip::before{background:linear-gradient(180deg,var(--food),var(--brain));}
+.tip.home-tip h4{color:var(--food);}
 .tip .ti{font-size:20px;}
 .tip h4{margin:0 0 3px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:700;}
 .tip p{margin:0;font-size:13.5px;color:var(--muted);line-height:1.5;}
@@ -458,6 +460,14 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
 .act.expanded .expand-hint{display:none;}
 .act .act-footer{padding:8px 16px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
 /* Potty training tracker */
+.weather-card{background:linear-gradient(135deg,var(--card),rgba(127,168,255,.05));border:1.5px solid var(--line);border-radius:var(--r);padding:14px 16px;margin-top:12px;box-shadow:var(--shadow);display:flex;align-items:center;gap:14px;}
+.wc-icon{font-size:36px;flex-shrink:0;}
+.wc-info{flex:1;min-width:0;}
+.wc-temp{font-size:22px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--text);}
+.wc-cond{font-size:12px;color:var(--muted);margin-top:1px;}
+.wc-suggestion{font-size:12px;color:var(--text);background:var(--bg);border-radius:12px;padding:8px 12px;margin-top:6px;line-height:1.4;}
+.wc-suggestion b{color:var(--gold);}
+.wc-loading{font-size:12px;color:var(--faint);padding:8px 0;}
 .eg-card{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);margin-bottom:14px;box-shadow:var(--shadow);overflow:hidden;}
 .eg-header{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;user-select:none;-webkit-user-select:none;transition:background .2s;}
 .eg-header:active{background:var(--bg);}
@@ -704,6 +714,7 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
     </div>
   </div>
   <div class="mom-motivation" id="momMotivation"></div>
+  <div class="weather-card" id="weatherCard"></div>
   <div class="daterow">
     <h2 id="today"></h2>
     <div class="daterow-right">
@@ -716,6 +727,10 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
   <div class="tip" role="note">
     <span class="ti" aria-hidden="true">💡</span>
     <div><h4>Today's parenting key</h4><p id="tipText"></p></div>
+  </div>
+  <div class="tip home-tip" role="note">
+    <span class="ti" aria-hidden="true">🏠</span>
+    <div><h4>Home activity today</h4><p id="homeTip"></p></div>
   </div>
   <div class="weeksum" id="weekSummary"></div>
   <div class="mood-card" id="moodCard"></div>
@@ -2613,6 +2628,111 @@ function updateBadges(){
   else vaxBadge.classList.add('hide');
 }
 
+/* ============ WEATHER + HOME SUGGESTIONS ============ */
+const WEATHER_CODES={0:'Clear sky',1:'Mainly clear',2:'Partly cloudy',3:'Overcast',45:'Foggy',48:'Foggy',51:'Light drizzle',53:'Drizzle',55:'Heavy drizzle',61:'Light rain',63:'Rain',65:'Heavy rain',71:'Light snow',73:'Snow',75:'Heavy snow',77:'Snow grains',80:'Rain showers',81:'Rain showers',82:'Heavy showers',95:'Thunderstorm',96:'Thunderstorm',99:'Heavy thunderstorm'};
+const WEATHER_ICONS={0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌦️',55:'🌧️',61:'🌦️',63:'🌧️',65:'🌧️',71:'🌨️',73:'🌨️',75:'❄️',77:'🌨️',80:'🌦️',81:'🌧️',82:'🌧️',95:'⛈️',96:'⛈️',99:'⛈️'};
+let lastWeather=null;
+async function fetchWeather(){
+  const el=document.getElementById('weatherCard');
+  if(!el)return;
+  const today=todayKey;
+  if(lastWeather&&lastWeather.date===today){
+    renderWeather(lastWeather);return;
+  }
+  el.innerHTML='<div class="wc-loading">Checking weather…</div>';
+  try{
+    const lat=37.38,lon=60.50;
+    const url=`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code,uv_index,relative_humidity_2m,wind_speed_10m&timezone=Asia%2FAshkhabad`;
+    const res=await fetch(url);
+    const data=await res.json();
+    const cur=data.current||{};
+    const w={
+      date:today,
+      temp:Math.round(cur.temperature_2m),
+      code:cur.weather_code||0,
+      uv:cur.uv_index||0,
+      humidity:cur.relative_humidity_2m||0,
+      wind:Math.round(cur.wind_speed_10m||0)
+    };
+    lastWeather=w;
+    renderWeather(w);
+  }catch(e){
+    el.innerHTML='<div class="wc-loading">Weather unavailable — check connection</div>';
+  }
+}
+function weatherSuggestion(w){
+  const tips=[];
+  if(w.temp>=35)tips.push('🔥 Very hot — <b>stay indoors 11am-4pm</b>, offer water every 30min, cool bath before sleep');
+  else if(w.temp>=30)tips.push('🥵 Hot — <b>extra water today</b>, shade play only, light cotton clothes');
+  else if(w.temp>=25)tips.push('☀️ Warm — <b>sunscreen before going out</b>, water within reach');
+  else if(w.temp>=15)tips.push(' pleasant — perfect outdoor play weather');
+  else if(w.temp>=5)tips.push('🧥 Cool — <b>layer up</b>, keep outdoor play shorter (30-45min)');
+  else if(w.temp<5)tips.push('❄️ Cold — <b>limit outdoor time</b>, warm hat + gloves, indoor activities today');
+
+  if(w.uv>=6)tips.push('🧴 UV high — <b>sunscreen SPF30+</b>, hat, avoid direct sun 11am-3pm');
+  else if(w.uv>=3)tips.push('🧴 UV moderate — sunscreen recommended');
+
+  if([51,53,55,61,63,65,80,81,82].includes(w.code))tips.push('🌧️ Rainy — <b>indoor day</b>: build a blanket fort, paint, bake together');
+  else if([95,96,99].includes(w.code))tips.push('⛈️ Storm — <b>stay inside</b>, read books, play with pillows and tunnels');
+  else if([71,73,75,77].includes(w.code))tips.push('🌨️ Snow — <b>bundle up</b>, short outdoor play, warm cocoa after');
+
+  if(w.humidity<30)tips.push('💨 Dry air — <b>extra water</b>, moisturize skin, use humidifier at night');
+  if(w.wind>=30)tips.push('💨 Windy — secure loose items, indoor play safer');
+
+  if(w.temp>=30&&[51,53,55,61,63,65].includes(w.code))tips.shift(); // hot+rain = rain takes priority
+
+  return tips.length?tips.join(' · '):'';
+}
+function renderWeather(w){
+  const el=document.getElementById('weatherCard');if(!el)return;
+  const icon=WEATHER_ICONS[w.code]||'☀️';
+  const cond=WEATHER_CODES[w.code]||'Clear';
+  const sg=weatherSuggestion(w);
+  el.innerHTML=`<div class="wc-icon">${icon}</div><div class="wc-info">
+    <div class="wc-temp">${w.temp}°C</div>
+    <div class="wc-cond">${cond} · UV ${w.uv} · 💧 ${w.humidity}%</div>
+    ${sg?`<div class="wc-suggestion">${sg}</div>`:''}</div>`;
+}
+const HOME_ACTIVITIES={
+  hot:[
+    'Ice cube painting: freeze food coloring in ice, paint on paper as it melts',
+    'Splash tub: fill a small tub with water, add cups and spoons — 30min of sensory play',
+    'Frozen toy rescue: freeze small toys in a block of ice, let him "rescue" them with warm water',
+    'Cold sponge transfer: two bowls, water, and a sponge — squeeze water from one to the other',
+    'Shade walk: early morning or after 5pm, walk barefoot on grass in the shade'
+  ],
+  rain:[
+    'Blanket fort: chairs + blanket = a cave. Bring a flashlight and books inside',
+    'Baking together: let him stir, pour, and knead dough. Mess = learning',
+    'Pillow mountain: stack cushions, climb over, roll down. Gross motor indoors',
+    'Bathtub painting: shaving foam + food coloring on bathtub walls. Washes off easily',
+    'Laundry sorting: match socks, find papa\'s shirt, pile by color. Sorting = math'
+  ],
+  nice:[
+    'Nature scavenger hunt: find 3 leaves, 2 rocks, 1 flower. Collect in a basket',
+    'Chalk drawing: driveway or sidewalk — draw circles, trace his shadow',
+    'Water painting: brush + water on a wall or fence. Disappears as it dries — magic!',
+    'Mud kitchen: old pots + dirt + water = a restaurant. Let him "cook" you something',
+    'Bubble chase: blow bubbles, let him catch and pop. Great for running + giggling'
+  ],
+  cold:[
+    'Warm bath science: pour water from different heights, sink/float objects',
+    'Cardboard tunnel: tape boxes together into a crawling tunnel',
+    'Sock skating: put socks on, slide on smooth floor. Fall down, laugh, repeat',
+    'Indoor obstacle course: pillow to jump over, chair to crawl under, blanket to roll on',
+    'Warm playdough: make playdough together, add cinnamon for smell sensory play'
+  ]
+};
+function homeActivitySuggestion(){
+  if(!lastWeather)return HOME_ACTIVITIES.nice[Math.floor(Math.random()*HOME_ACTIVITIES.nice.length)];
+  const t=lastWeather.temp,code=lastWeather.code;
+  if([51,53,55,61,63,65,80,81,82,95,96,99].includes(code))return HOME_ACTIVITIES.rain[Math.floor(Math.random()*HOME_ACTIVITIES.rain.length)];
+  if([71,73,75,77].includes(code))return HOME_ACTIVITIES.cold[Math.floor(Math.random()*HOME_ACTIVITIES.cold.length)];
+  if(t>=30)return HOME_ACTIVITIES.hot[Math.floor(Math.random()*HOME_ACTIVITIES.hot.length)];
+  if(t<10)return HOME_ACTIVITIES.cold[Math.floor(Math.random()*HOME_ACTIVITIES.cold.length)];
+  return HOME_ACTIVITIES.nice[Math.floor(Math.random()*HOME_ACTIVITIES.nice.length)];
+}
+
 /* ============ RENDER ALL ============ */
 function renderAll(){
   document.getElementById('age').textContent=ageString()+' old · born '+BIRTH.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
@@ -2674,6 +2794,8 @@ document.querySelectorAll('nav button').forEach(b=>{
 /* init */
 document.getElementById('today').textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
 document.getElementById('tipText').textContent=TIPS[dayOfYear()%TIPS.length];
+document.getElementById('homeTip').textContent=homeActivitySuggestion();
+fetchWeather();
 const noteEl=document.getElementById('note');
 noteEl.addEventListener('input',()=>{day(todayKey).note=noteEl.value;save();});
 /* Quick word add from Today tab */
