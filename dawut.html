@@ -1393,11 +1393,12 @@ const KEY='dawut-bloom';
 const SCHEMA_VERSION=2;
 const SLEEP_MIN=11,SLEEP_MAX=14;
 function haptic(ms){if(navigator.vibrate)try{navigator.vibrate(ms);}catch(e){}}
-let mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},books:[],outdoor:{},mood:{},illness:[],meals:[],potty:{},dental:{},allergies:[],lastBackup:null,version:SCHEMA_VERSION};
-function load(){try{const r=localStorage.getItem(KEY);if(r){const p=JSON.parse(r);mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},books:[],outdoor:{},mood:{},illness:[],meals:[],potty:{},dental:{},allergies:[],lastBackup:null,version:SCHEMA_VERSION,...p};if(!mem.version||mem.version<SCHEMA_VERSION){mem.version=SCHEMA_VERSION;save();}if(mem.settings&&mem.settings.birthDate){BIRTH=new Date(mem.settings.birthDate+'T00:00:00');}}}catch(e){}}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(mem));}catch(e){}}
-function dkey(d){return d.toISOString().slice(0,10);}
-const todayKey=dkey(new Date());
+let mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},books:[],outdoor:{},mood:{},illness:[],meals:[],potty:{},dental:{},allergies:[],fired:{},lastBackup:null,version:SCHEMA_VERSION};
+function load(){try{const r=localStorage.getItem(KEY);if(r){const p=JSON.parse(r);mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},books:[],outdoor:{},mood:{},illness:[],meals:[],potty:{},dental:{},allergies:[],fired:{},lastBackup:null,version:SCHEMA_VERSION,...p};if(!mem.version||mem.version<SCHEMA_VERSION){mem.version=SCHEMA_VERSION;save();}if(mem.settings&&mem.settings.birthDate){BIRTH=new Date(mem.settings.birthDate+'T00:00:00');}}}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(mem));}catch(e){console.warn('Save failed:',e);if(e.name==='QuotaExceededError')alert('Storage full — please export a backup and clear old data.');}}
+function dkey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+let todayKey=dkey(new Date());
+function refreshTodayKey(){const nk=dkey(new Date());if(nk!==todayKey){todayKey=nk;return true;}return false;}
 function day(k){if(!mem.days[k])mem.days[k]={body:0,brain:0,lang:0,heart:0,food:0,create:0,note:''};return mem.days[k];}
 function seedGrowth(){
   if(!mem.growth.height||!mem.growth.height.length){
@@ -1872,7 +1873,6 @@ function renderEmotionalGuide(){
   EMOTIONAL_GUIDE.forEach((phase,idx)=>{
     const [lo,hi]=phase.age.split('-').map(s=>parseInt(s));
     const isCurrent=m>=lo&&m<hi;
-    const isPast=m>=hi;
     const card=document.createElement('div');
     card.className='eg-card'+(isCurrent?' open eg-current':'');
     let bodyHtml='';
@@ -2053,7 +2053,7 @@ function renderAllergies(){
 }
 document.getElementById('allergyBtn').addEventListener('click',()=>{
   const inp=document.getElementById('allergyInput');const v=inp.value.trim();if(!v)return;
-  if(!mem.allergies.includes(v)){mem.allergies.push(v);save();renderAllergies();}
+  if(!mem.allergies.includes(v)){mem.allergies.push(v);save();renderAllergies();haptic(10);}
   inp.value='';
 });
 document.getElementById('allergyInput').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('allergyBtn').click();});
@@ -2101,7 +2101,7 @@ function renderIllness(){
 document.getElementById('illBtn').addEventListener('click',()=>{
   const s=document.getElementById('illSymptom').value.trim();if(!s)return;
   const m=document.getElementById('illMeds').value.trim();
-  mem.illness.push({d:todayKey,s:s,m:m});save();renderIllness();
+  mem.illness.push({d:todayKey,s:s,m:m});save();renderIllness();haptic(10);
   document.getElementById('illSymptom').value='';document.getElementById('illMeds').value='';
 });
 /* ============ HEATMAP DAY DETAIL ============ */
@@ -2506,8 +2506,9 @@ function renderRoutine(){
         const key=block.block+'-'+ci;
         if(!mem.plan)mem.plan={};
         if(!mem.plan[todayKey])mem.plan[todayKey]={};
-        mem.plan[todayKey][key]=!mem.plan[todayKey][key];save();renderRoutine();
+        mem.plan[todayKey][key]=!mem.plan[todayKey][key];save();renderRoutine();haptic(10);
       });
+      chk.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.target.click();}});
     });
     wrap.appendChild(div);
   });
@@ -2613,6 +2614,7 @@ function checkAutoBackup(){
 }
 /* Notifications */
 setInterval(()=>{
+  if(refreshTodayKey()){renderCards();renderAll();renderPlan();renderSleep();renderScreen();renderOutdoor();renderWords();renderBooks();renderMeals();renderPotty();renderDental();renderMood();}
   if(!S().notif||!('Notification' in window)||Notification.permission!=='granted')return;
   const now=new Date();const hm=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
   if(!mem.fired)mem.fired={};
@@ -2631,7 +2633,7 @@ document.getElementById('impBtn').addEventListener('click',()=>document.getEleme
 document.getElementById('impFile').addEventListener('change',e=>{
   const f=e.target.files[0];if(!f)return;const r=new FileReader();
   r.onload=()=>{try{const p=JSON.parse(r.result);if(!p.days)throw 0;
-    if(confirm('Replace current data with this backup?')){mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},books:[],outdoor:{},mood:{},illness:[],meals:[],potty:{},dental:{},allergies:[],lastBackup:null,version:SCHEMA_VERSION,...p};save();location.reload();}
+    if(confirm('Replace current data with this backup?')){mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},books:[],outdoor:{},mood:{},illness:[],meals:[],potty:{},dental:{},allergies:[],fired:{},lastBackup:null,version:SCHEMA_VERSION,...p};save();location.reload();}
   }catch(err){alert('Not a valid backup file.');}};r.readAsText(f);
 });
 /* ============ PWA ============ */
