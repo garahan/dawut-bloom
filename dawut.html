@@ -430,7 +430,7 @@ footer{margin-top:44px;text-align:center;font-size:11px;color:var(--faint);line-
 .day-detail .dd-note{margin-top:12px;padding:12px;background:var(--bg);border-radius:12px;font-size:13px;color:var(--muted);line-height:1.5;}
 /* Word language tags */
 .word-chip .wc-lang{font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;margin-left:2px;}
-.word-chip .wc-lang.tr{background:rgba(255,138,122,.15);color:var(--body);}
+.word-chip .wc-lang.tk,.word-chip .wc-lang.tr{background:rgba(255,138,122,.15);color:var(--body);}
 .word-chip .wc-lang.jp{background:rgba(127,168,255,.15);color:var(--brain);}
 .word-chip .wc-lang.ru{background:rgba(183,154,232,.15);color:var(--create);}
 .word-chip .wc-lang.en{background:rgba(122,203,143,.15);color:var(--food);}
@@ -779,7 +779,7 @@ footer{margin-top:44px;text-align:center;font-size:11px;color:var(--faint);line-
   <div class="quick-word">
     <label for="quickWordInput">＋ New word he said</label>
     <div class="qw-row">
-      <select id="qwLang"><option value="tr">🇹🇷 TR</option><option value="jp">🇯🇵 JP</option><option value="ru">🇷🇺 RU</option><option value="en">🇬🇧 EN</option></select>
+      <select id="qwLang"><option value="tk">🇹🇲 TK</option><option value="jp">🇯🇵 JP</option><option value="ru">🇷🇺 RU</option><option value="en">🇬🇧 EN</option></select>
       <input type="text" id="quickWordInput" placeholder="e.g. 'mama', 'water', 'more'">
       <button id="qwBtn">Add</button>
     </div>
@@ -1731,7 +1731,6 @@ const SCHEMA_VERSION=2;
 const SLEEP_MIN=11,SLEEP_MAX=14;
 function haptic(ms){if(navigator.vibrate)try{navigator.vibrate(ms);}catch(e){}}
 let mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},books:[],outdoor:{},mood:{},illness:[],meals:[],potty:{},dental:{},allergies:[],fired:{},lastBackup:null,version:SCHEMA_VERSION};
-function load(){try{const r=localStorage.getItem(KEY);if(r){const p=JSON.parse(r);mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},books:[],outdoor:{},mood:{},illness:[],meals:[],potty:{},dental:{},allergies:[],fired:{},lastBackup:null,version:SCHEMA_VERSION,...p};if(!mem.version||mem.version<SCHEMA_VERSION){mem.version=SCHEMA_VERSION;save();}if(mem.settings&&mem.settings.birthDate){BIRTH=new Date(mem.settings.birthDate+'T00:00:00');}}}catch(e){}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(mem));}catch(e){console.warn('Save failed:',e);if(e.name==='QuotaExceededError')alert('Storage full — please export a backup and clear old data.');}}
 function dkey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 let todayKey=dkey(new Date());
@@ -2079,13 +2078,13 @@ function renderScreen(){
   wrap.appendChild(div);
 }
 /* ============ WORD TRACKING ============ */
-const LANGS=[{c:'tr',l:'TR'},{c:'jp',l:'JP'},{c:'ru',l:'RU'},{c:'en',l:'EN'}];
-let selectedLang='tr';
+const LANGS=[{c:'tk',l:'TK'},{c:'jp',l:'JP'},{c:'ru',l:'RU'},{c:'en',l:'EN'}];
+let selectedLang='tk';
 function renderWords(){
   const wrap=document.getElementById('wordCard');wrap.innerHTML='';
   const div=document.createElement('div');div.className='track-card';
   const count=mem.words.length;
-  const langCounts={tr:0,jp:0,ru:0,en:0};
+  const langCounts={tk:0,jp:0,ru:0,en:0};
   mem.words.forEach(w=>{if(typeof w==='object'&&w.l)langCounts[w.l]++;});
   const milestones=[{n:50,label:'50-word milestone (~18mo)'},{n:100,label:'100 words'},{n:200,label:'200 words (~24mo)'},{n:500,label:'500 words (~30mo)'}];
   const nextMs=milestones.find(m=>count<m.n);
