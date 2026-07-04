@@ -520,6 +520,37 @@ footer{margin-top:40px;text-align:center;font-size:10px;color:var(--faint);font-
 .coupling-item .c-arrow{color:var(--accent);font-size:14px;}
 .coupling-item .c-action{font-size:13px;color:var(--wind);flex:1;line-height:1.4;}
 .coupling-empty{text-align:center;padding:16px;font-size:12px;color:var(--faint);}
+
+/* ===== HEALTH SYNC ===== */
+.health-sync-bar{display:flex;align-items:center;gap:10px;margin:0 0 14px;padding:12px 14px;
+  border-radius:var(--r-sm);background:linear-gradient(135deg,rgba(77,212,148,.06),rgba(86,217,190,.04));
+  border:1px solid rgba(77,212,148,.15);font-size:13px;color:var(--text);line-height:1.4;
+  animation:fadein .4s var(--spring);}
+.health-sync-bar.synced{border-color:rgba(77,212,148,.25);background:linear-gradient(135deg,rgba(77,212,148,.08),rgba(86,217,190,.06));}
+.health-sync-bar .hs-icon{font-size:18px;flex-shrink:0;}
+.health-sync-bar .hs-text{flex:1;font-size:12px;line-height:1.5;}
+.health-sync-bar .hs-btn{padding:6px 14px;font-size:11px;font-weight:600;border-radius:99px;
+  border:1px solid var(--line2);background:var(--surface);color:var(--text);cursor:pointer;
+  font-family:inherit;white-space:nowrap;transition:all .2s var(--ease-out);}
+.health-sync-bar .hs-btn:active{transform:scale(.95);}
+.health-suggestions{display:none;margin-bottom:14px;}
+.hs-title{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);
+  font-weight:600;margin-bottom:8px;}
+.hs-sugg{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-radius:var(--r-sm);
+  margin-bottom:6px;font-size:13px;line-height:1.5;animation:fadein .3s var(--spring);}
+.hs-sugg.high{background:linear-gradient(135deg,rgba(232,105,78,.08),rgba(232,168,56,.05));border:1px solid rgba(232,105,78,.15);}
+.hs-sugg.med{background:rgba(180,142,255,.04);border:1px solid rgba(180,142,255,.1);}
+.hs-sugg.low{background:rgba(77,212,148,.04);border:1px solid rgba(77,212,148,.1);}
+.hs-sugg-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+.hs-setup{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin:8px 0;}
+.hs-setup h3{font-size:13px;font-weight:600;margin-bottom:10px;}
+.hs-setup ol{padding-left:20px;font-size:12px;line-height:1.7;color:var(--muted);}
+.hs-setup ol li{margin-bottom:6px;}
+.hs-setup code{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--surface);
+  padding:2px 6px;border-radius:4px;color:var(--accent);word-break:break-all;}
+.hs-setup .hs-example{margin-top:10px;padding:10px 12px;border-radius:var(--r-sm);background:var(--surface);
+  border:1px solid var(--line);font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--faint);
+  word-break:break-all;line-height:1.6;}
 </style>
 </head>
 <body>
@@ -567,6 +598,8 @@ footer{margin-top:40px;text-align:center;font-size:10px;color:var(--faint);font-
     </div>
   </div>
   <div class="smart-nudge" id="smartNudge"><span class="sn-icon">🤖</span><span id="smartNudgeText"></span><span class="sn-x" onclick="document.getElementById('smartNudge').classList.remove('show')">×</span></div>
+  <div class="health-sync-bar" id="healthSyncBar"></div>
+  <div class="health-suggestions" id="healthSuggestions"></div>
   <div class="quote" id="quote"></div>
   <div class="identity" id="identity"></div>
   <div class="northstar" id="northStar">
@@ -759,6 +792,22 @@ footer{margin-top:40px;text-align:center;font-size:10px;color:var(--faint);font-
   <h2 class="sec"><span class="sec-icon">🔗</span>Habit coupling — implementation intentions</h2>
   <div class="glass" id="couplingEditor"></div>
 
+  <h2 class="sec"><span class="sec-icon">🍎</span>Apple Health sync</h2>
+  <div class="hs-setup">
+    <h3>How it works</h3>
+    <p style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:12px">An Apple Shortcut reads your HealthKit data and opens this app with the data as URL parameters. The app auto-fills your metrics and generates smart suggestions based on your real body data.</p>
+    <h3>Setup (5 minutes, one time)</h3>
+    <ol>
+      <li>Open the <b>Shortcuts</b> app on iPhone</li>
+      <li>Create a new Shortcut named <code>BegaHealthSync</code></li>
+      <li>Add a <b>Get Health Sample</b> action for each: Steps, Sleep, HRV, Weight, Resting HR, Active Energy, Mindful Minutes, Water</li>
+      <li>Add a <b>Get Workouts</b> action and set it to total minutes today</li>
+      <li>Add an <b>Open URL</b> action with the URL pattern shown below, substituting your data variables</li>
+      <li>Save and add the Shortcut to your home screen for daily one-tap sync</li>
+    </ol>
+    <div class="hs-example" id="hsExample"></div>
+  </div>
+
   <h2 class="sec"><span class="sec-icon">�</span>PWA</h2>
   <div class="glass">
     <div class="setting-row">
@@ -910,13 +959,13 @@ const DEFAULT_NTTD=[
 /* ===== STATE ===== */
 const KEY='bega-v2';
 const SCHEMA=2;
-let mem={days:{},metrics:{},swaps:[],lastRankIdx:0,habits:DEFAULT_HABITS,accent:'purple',goal:null,goalSet:null,nttd:DEFAULT_NTTD,northStar:{},identity:[],monthly:{},shields:0,coupling:[],weeklyScore:{}};
+let mem={days:{},metrics:{},swaps:[],lastRankIdx:0,habits:DEFAULT_HABITS,accent:'purple',goal:null,goalSet:null,nttd:DEFAULT_NTTD,northStar:{},identity:[],monthly:{},shields:0,coupling:[],weeklyScore:{},healthSync:{}};
 function load(){
   try{
     const r=localStorage.getItem(KEY);
     if(r){
       const p=JSON.parse(r);
-      mem={days:{},metrics:{},swaps:[],lastRankIdx:0,habits:DEFAULT_HABITS,accent:'purple',goal:null,goalSet:null,nttd:DEFAULT_NTTD,northStar:{},identity:[],monthly:{},shields:0,coupling:[],weeklyScore:{},...p};
+      mem={days:{},metrics:{},swaps:[],lastRankIdx:0,habits:DEFAULT_HABITS,accent:'purple',goal:null,goalSet:null,nttd:DEFAULT_NTTD,northStar:{},identity:[],monthly:{},shields:0,coupling:[],weeklyScore:{},healthSync:{},...p};
       if(!mem.habits||!mem.habits.length)mem.habits=DEFAULT_HABITS;
       if(!mem.nttd||!mem.nttd.length)mem.nttd=DEFAULT_NTTD;
       if(!mem.northStar)mem.northStar={};
@@ -925,6 +974,7 @@ function load(){
       if(typeof mem.shields!=='number')mem.shields=0;
       if(!mem.coupling)mem.coupling=[];
       if(!mem.weeklyScore)mem.weeklyScore={};
+      if(!mem.healthSync)mem.healthSync={};
     }
   }catch(e){}
 }
@@ -1041,14 +1091,165 @@ function smartNudge(){
   if(risk.level==='high')return risk.msg;
   const si=streakInfo();
   if(si.streak>=7&&done===0&&hour>=12)return'🔥 '+si.streak+'-day streak. Don\'t break it. Floor one habit now.';
+  let nudge=null;
   habits().forEach(h=>{
+    if(nudge)return;
     const pat=skipPattern(h.id);
     if(pat&&new Date().getDay()===['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'].indexOf(pat.day)&&d[h.id]===0){
-      return'📊 You skip '+h.name+' most on '+pat.day+'. Today is '+pat.day+'. Do the floor.';
+      nudge='📊 You skip '+h.name+' most on '+pat.day+'. Today is '+pat.day+'. Do the floor.';
     }
   });
+  if(nudge)return nudge;
   if(risk.level==='medium')return risk.msg;
+  // health-based nudge
+  const hs=mem.healthSync||{};
+  if(hs.lastSync===todayKey){
+    if(hs.sleep&&hs.sleep<6&&done===0)return'😴 You slept '+hs.sleep+'h last night. Do the floor — even 10 min counts on low-sleep days.';
+    if(hs.steps&&hs.steps<3000&&hour>=16)return'👟 Only '+hs.steps+' steps today. A 10-min walk would clear your head and hit your Move floor.';
+    if(hs.hrv&&hs.hrv<35)return'📉 HRV is low ('+hs.hrv+'ms). Your body is under stress — prioritize Wind Down tonight.';
+    if(hs.sleep&&hs.sleep>=7.5&&hs.hrv&&hs.hrv>=50&&done<2)return'💪 Great recovery: '+hs.sleep+'h sleep, HRV '+hs.hrv+'. Your body is primed — push for FULL today.';
+  }
   return null;
+}
+
+/* ===== HEALTH SYNC (Apple Shortcuts URL Bridge) ===== */
+const HEALTH_PARAMS=['steps','sleep','hrv','weight','restingHR','workoutMin','activeCal','mindfulMin','water'];
+function parseHealthURL(){
+  const params=new URLSearchParams(window.location.search);
+  const data={};
+  let hasData=false;
+  HEALTH_PARAMS.forEach(k=>{
+    const v=params.get(k);
+    if(v!==null&&!isNaN(parseFloat(v))){data[k]=parseFloat(v);hasData=true;}
+  });
+  if(!hasData)return null;
+  data.syncedAt=new Date().toISOString();
+  data.lastSync=todayKey;
+  return data;
+}
+function applyHealthData(data){
+  if(!data)return false;
+  if(!mem.healthSync)mem.healthSync={};
+  mem.healthSync={...mem.healthSync,...data};
+  // auto-fill metrics
+  const metricMap={weight:'weight',hrv:'hrv',sleep:'sleep',screen:null};
+  Object.keys(metricMap).forEach(hk=>{
+    const mk=metricMap[hk];
+    if(mk&&data[hk]!=null){
+      if(!mem.metrics[mk])mem.metrics[mk]=[];
+      const arr=mem.metrics[mk];
+      const ex=arr.find(e=>e.d===todayKey);
+      if(ex)ex.v=data[hk];else arr.push({d:todayKey,v:data[hk]});
+    }
+  });
+  // auto-detect workout → suggest Move full
+  if(data.workoutMin&&data.workoutMin>=20&&day(todayKey).move===0){
+    // don't auto-toggle, just note it
+    mem.healthSync.workoutDetected=true;
+  }
+  // auto-detect sleep quality → suggest mood
+  if(data.sleep&&data.sleep<5){
+    mem.healthSync.lowSleep=true;
+  }
+  save();
+  return true;
+}
+function healthSuggestions(){
+  const hs=mem.healthSync||{};
+  if(hs.lastSync!==todayKey)return[];
+  const s=[];
+  const d=day(todayKey);
+  // sleep-based
+  if(hs.sleep!=null){
+    if(hs.sleep<6){
+      s.push({icon:'😴',text:'Low sleep ('+hs.sleep+'h). Do Floor versions today. Protect energy.',priority:'high'});
+      if(d.wind===0)s.push({icon:'🌙',text:'Tonight: phone out of bedroom by 22:00. Your sleep debt is '+((7.5-hs.sleep).toFixed(1))+'h.',priority:'medium'});
+    }else if(hs.sleep>=7.5){
+      s.push({icon:'💪',text:'Great sleep ('+hs.sleep+'h). Push for FULL on all habits — your body is recovered.',priority:'low'});
+    }
+  }
+  // steps-based
+  if(hs.steps!=null){
+    if(hs.steps>=8000&&d.move===0){
+      s.push({icon:'👟',text:'You already hit '+hs.steps+' steps. Log Move as FULL — you earned it.',priority:'high'});
+    }else if(hs.steps<3000&&new Date().getHours()>=16){
+      s.push({icon:'🚶',text:'Only '+hs.steps+' steps. A 15-min walk = ~1500 steps + clears your head.',priority:'medium'});
+    }
+  }
+  // HRV-based
+  if(hs.hrv!=null){
+    if(hs.hrv<35){
+      s.push({icon:'📉',text:'HRV '+hs.hrv+'ms is below your baseline. Stress is high — prioritize recovery over intensity today.',priority:'high'});
+    }else if(hs.hrv>=50){
+      s.push({icon:'📈',text:'HRV '+hs.hrv+'ms is strong. Your nervous system is ready — go hard on Build today.',priority:'low'});
+    }
+  }
+  // workout-based
+  if(hs.workoutMin&&hs.workoutMin>=20){
+    s.push({icon:'🏋️',text:'Workout detected: '+hs.workoutMin+' min. Log Move as FULL.',priority:'high'});
+  }
+  // resting HR
+  if(hs.restingHR&&hs.restingHR>70){
+    s.push({icon:'❤️',text:'Resting HR '+hs.restingHR+' bpm is elevated. Consider a lighter day or extra Wind Down focus.',priority:'medium'});
+  }
+  // mindful minutes
+  if(hs.mindfulMin&&hs.mindfulMin>=10){
+    s.push({icon:'🧘',text:'You logged '+hs.mindfulMin+' min of mindfulness. That counts as Wind Down floor.',priority:'low'});
+  }
+  // water
+  if(hs.water&&hs.water<1500){
+    s.push({icon:'💧',text:'Only '+hs.water+'ml water today. Dehydration mimics fatigue — drink a glass now.',priority:'medium'});
+  }
+  // active calories
+  if(hs.activeCal&&hs.activeCal>=500&&d.move===0){
+    s.push({icon:'🔥',text:'You burned '+hs.activeCal+' active calories. Log Move as FULL.',priority:'high'});
+  }
+  return s;
+}
+function renderHealthSync(){
+  const el=document.getElementById('healthSyncBar');
+  if(!el)return;
+  const hs=mem.healthSync||{};
+  const today=hs.lastSync===todayKey;
+  if(!today){
+    el.classList.remove('synced');
+    el.innerHTML='<div class="hs-icon">🍎</div><div class="hs-text">No health data today. Run the Apple Shortcut to sync.</div><button class="hs-btn" onclick="openHealthShortcut()">Sync now</button>';
+    return;
+  }
+  el.classList.add('synced');
+  const chips=[];
+  if(hs.steps!=null)chips.push('👟 '+hs.steps.toLocaleString()+' steps');
+  if(hs.sleep!=null)chips.push('😴 '+hs.sleep+'h sleep');
+  if(hs.hrv!=null)chips.push('❤️ '+hs.hrv+'ms HRV');
+  if(hs.weight!=null)chips.push('⚖️ '+hs.weight+'kg');
+  if(hs.workoutMin)chips.push('🏋️ '+hs.workoutMin+'min');
+  if(hs.restingHR)chips.push('🫀 '+hs.restingHR+'bpm RHR');
+  if(hs.activeCal)chips.push('🔥 '+hs.activeCal+'cal');
+  if(hs.mindfulMin)chips.push('🧘 '+hs.mindfulMin+'min');
+  if(hs.water)chips.push('💧 '+hs.water+'ml');
+  el.innerHTML='<div class="hs-icon">✅</div><div class="hs-text"><b>Health synced</b> · '+chips.join(' · ')+'</div><button class="hs-btn" onclick="openHealthShortcut()">Re-sync</button>';
+}
+function renderHealthSuggestions(){
+  const el=document.getElementById('healthSuggestions');
+  if(!el)return;
+  const sugg=healthSuggestions();
+  if(sugg.length===0){
+    el.innerHTML='';
+    el.style.display='none';
+    return;
+  }
+  el.style.display='block';
+  el.innerHTML='<div class="hs-title">🤖 Health-based suggestions</div>';
+  sugg.forEach(s=>{
+    const cls=s.priority==='high'?'hs-sugg high':s.priority==='medium'?'hs-sugg med':'hs-sugg low';
+    el.innerHTML+='<div class="'+cls+'"><span class="hs-sugg-icon">'+s.icon+'</span><span>'+s.text+'</span></div>';
+  });
+}
+function openHealthShortcut(){
+  // This URL opens Apple Shortcuts. User creates a shortcut that reads HealthKit
+  // and opens this URL with data as parameters.
+  // Instructions shown in Settings > Health Sync section.
+  window.location.href='shortcuts://run-shortcut?name=BegaHealthSync';
 }
 
 /* ===== RING ===== */
@@ -1217,6 +1418,8 @@ function renderAll(){
   checkWeeklyNudge();
   checkShields();
   renderSmartNudge();
+  renderHealthSync();
+  renderHealthSuggestions();
   renderMonthly();
   renderWeeklyScore();
 }
@@ -2087,6 +2290,19 @@ const noteEl=document.getElementById('note');
 noteEl.addEventListener('input',()=>{day(todayKey).note=noteEl.value;save();});
 load();
 noteEl.value=day(todayKey).note||"";
+// health URL bridge
+const healthData=parseHealthURL();
+if(healthData){
+  applyHealthData(healthData);
+  // clean URL so params don't persist on refresh
+  window.history.replaceState({},document.title,window.location.pathname);
+}
+// populate example URL in settings
+const hsEx=document.getElementById('hsExample');
+if(hsEx){
+  const base=window.location.origin+window.location.pathname;
+  hsEx.textContent=base+'?steps=8234&sleep=7.2&hrv=48&weight=89.5&restingHR=58&workoutMin=35&activeCal=520&mindfulMin=15&water=1800';
+}
 applyAccent(ACCENTS.find(a=>a.name===mem.accent)?.val||'#B48EFF');
 setupRing();
 renderCards();renderAll();renderMetrics();
