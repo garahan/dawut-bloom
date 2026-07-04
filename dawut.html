@@ -458,6 +458,34 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
 .act.expanded .expand-hint{display:none;}
 .act .act-footer{padding:8px 16px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
 /* Potty training tracker */
+.eg-card{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);margin-bottom:14px;box-shadow:var(--shadow);overflow:hidden;}
+.eg-header{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;user-select:none;-webkit-user-select:none;transition:background .2s;}
+.eg-header:active{background:var(--bg);}
+.eg-icon{font-size:28px;flex-shrink:0;}
+.eg-header-text{flex:1;min-width:0;}
+.eg-age{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--heart);}
+.eg-title{font-size:15px;font-weight:700;color:var(--text);margin-top:1px;}
+.eg-chevron{font-size:14px;color:var(--faint);transition:transform .25s;}
+.eg-card.open .eg-chevron{transform:rotate(180deg);}
+.eg-current{border-color:var(--heart);}
+.eg-current .eg-header{background:linear-gradient(135deg,rgba(247,143,184,.08),transparent);}
+.eg-body{display:none;padding:0 16px 16px;}
+.eg-card.open .eg-body{display:block;animation:fadein .25s ease;}
+.eg-section{margin-top:14px;}
+.eg-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.eg-st-expect{color:var(--heart);}
+.eg-st-do{color:var(--green);}
+.eg-st-dont{color:#E07070;}
+.eg-st-prevent{color:var(--gold);}
+.eg-st-teach{color:var(--brain);}
+.eg-item{font-size:13px;line-height:1.5;color:var(--text);padding:8px 12px;border-radius:10px;margin-bottom:6px;}
+.eg-item-do{background:rgba(122,203,143,.08);border-left:3px solid var(--green);}
+.eg-item-dont{background:rgba(224,112,112,.06);border-left:3px solid #E07070;}
+.eg-item-prevent{background:rgba(232,169,61,.06);border-left:3px solid var(--gold);}
+.eg-item-teach{background:rgba(127,168,255,.06);border-left:3px solid var(--brain);}
+.eg-expect-item{background:var(--bg);border-radius:10px;padding:10px 12px;margin-bottom:8px;}
+.eg-expect-item .eg-b{font-size:13px;font-weight:700;color:var(--text);}
+.eg-expect-item .eg-why{font-size:12px;color:var(--muted);line-height:1.45;margin-top:3px;}
 .potty-card{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:12px;box-shadow:var(--shadow);transition:box-shadow .25s;}
 /* Life countdown */
 .countdown-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
@@ -800,6 +828,8 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
   </div>
   <h2 class="sec">The development roadmap</h2>
   <div id="stagelist"></div>
+  <h2 class="sec">Emotional development guide 💛</h2>
+  <div id="emotionalGuide"></div>
 </div>
 
 <div class="tab" id="tab-settings" role="tabpanel" aria-label="Settings">
@@ -1092,6 +1122,188 @@ const STAGES=[
   heart:[{a:'Include a new child in play',w:'social inclusion'},{a:'Follow 3-step rules without reminders',w:'internalized self-regulation'},{a:'Show pride in accomplishments',w:'healthy self-esteem'}],
   food:[{a:'Help plan a full meal: choose, prep, cook',w:'food agency'},{a:'Try a new cuisine or flavor profile',w:'cultural palate expansion'},{a:'Understand sometimes vs everyday foods',w:'food literacy'}],
   create:[{a:'Cut with scissors along a line',w:'fine motor precision'},{a:'Draw recognizable people with details',w:'symbolic representation'},{a:'Act out a familiar story with props',w:'dramatic play'}]}
+];
+/* ============ EMOTIONAL DEVELOPMENT GUIDE ============ */
+const EMOTIONAL_GUIDE=[
+ {age:'12-18 months',icon:'🍼',title:'The Explorer Phase',
+  expect:[
+   {b:'Separation anxiety peaks',why:'Object permanence is solid now — he knows you exist when you leave, but can\'t predict when you\'ll return. This is a sign of healthy attachment.'},
+   {b:'Crying when frustrated',why:'He has strong desires but very few words. The gap between what he wants and what he can communicate causes daily frustration.'},
+   {b:'Clinging in new environments',why:'Temperament and novelty sensitivity are developing. Some children need 10-15 minutes to warm up to new spaces.'},
+   {b:'Resistance to diaper changes/dressing',why:'Autonomy drive is emerging. He\'s discovering he has preferences about his own body.'},
+   {b:'Throwing food or objects',why:'Cause-and-effect learning + gravity experiments. He\'s not being bad — he\'s being a physicist.'}
+  ],
+  do:[
+   'Narrate departures and returns: "Mama is going to the kitchen. I\'ll be back in 2 minutes." Always say goodbye — never sneak out.',
+   'Name his feelings even though he can\'t talk yet: "You\'re frustrated because the block fell. That\'s annoying." This builds emotional vocabulary.',
+   'Offer 2 choices whenever possible: "Red cup or blue cup?" This satisfies the autonomy drive without overwhelming him.',
+   'Create a goodbye ritual: a special wave, a kiss on the palm, a phrase. Predictability = safety.',
+   'Validate the feeling, then redirect: "You want to keep playing. Playing is fun. But it\'s bath time now. We can play again tomorrow."'
+  ],
+  dont:[
+   'Don\'t sneak out when he\'s not looking — this breaks trust and makes separation anxiety WORSE, not better.',
+   'Don\'t say "Don\'t cry" or "You\'re fine" — this teaches him his feelings are wrong. He\'s not fine — he\'s sad, and that\'s okay.',
+   'Don\'t laugh at throwing food (even if it\'s funny) — laughter is a reward. Calmly say "Food stays on the tray" and move on.',
+   'Don\'t force eye contact or physical affection with strangers/relatives. His body, his boundaries.',
+   'Don\'t use time-outs — at this age he can\'t self-regulate. Use time-INs: sit with him, co-regulate.'
+  ],
+  prevent:[
+   'Establish predictable daily routines. The brain calms when it can predict what comes next.',
+   'Use visual cues before transitions: show the bath towel, say "bath soon", then "bath now".',
+   'Keep hunger and sleep on schedule — 80% of toddler meltdowns are physiological, not emotional.',
+   'Childproof the environment so you say "yes" more than "no". Fewer "no"s = fewer battles.'
+  ],
+  teach:[
+   'Emotion naming: point to faces in books and say "he looks sad/happy/surprised".',
+   'Gentle touch practice: stroke a stuffed animal softly, say "gentle hands".',
+   'Simple sign language: "more", "all done", "help" — these prevent frustration meltdowns.',
+   'Breathing games: blow bubbles, blow on hot food. This plants the seed of breathing for regulation.'
+  ]},
+
+ {age:'18-24 months',icon:'🌪️',title:'The Tantrum Beginning',
+  expect:[
+   {b:'First real tantrums appear',why:'The prefrontal cortex (impulse control) is vastly underdeveloped compared to the limbic system (emotions). He literally cannot stop the emotional flood once it starts.'},
+   {b:'Hitting, biting, or pushing',why:'Physical impulses are faster than verbal ones. When overwhelmed, the body reacts before the brain can think. This is developmental, not malicious.'},
+   {b:'"No!" to everything',why:'Autonomy is the primary developmental task now. "No" is the easiest way to assert independence. It\'s not defiance — it\'s identity formation.'},
+   {b:'Meltdowns over seemingly nothing',why:'It\'s never about the "nothing". It\'s accumulated stress (tired, hungry, overstimulated) that overflowed. The trigger is just the last drop.'},
+   {b:'Wanting something then rejecting it',why:'He wants the FEELING of choosing, not the thing itself. When you give it, the choosing is over, so he rejects it. Offer it again or offer a different choice.'}
+  ],
+  do:[
+   'Stay calm during tantrums. Your nervous system is his external regulator. If you escalate, he escalates. If you breathe slowly, he eventually syncs.',
+   'Get down to his eye level. Towering over a panicking child triggers threat responses. Kneel, speak low and slow.',
+   'Name + validate + hold the limit: "You\'re angry because I turned off the TV. Anger is okay. But we don\'t hit. I\'m going to hold your hands gently so you can\'t hit."',
+   'After the storm: offer a hug, don\'t rehash. "That was hard. I love you. Let\'s read a book."',
+   'Use "first...then" language: "First shoes, then outside." This gives him a map of what\'s coming.'
+  ],
+  dont:[
+   'Don\'t reason during a tantrum. The logical brain is OFFLINE. You cannot logic a child out of an emotional state. Wait for the storm to pass.',
+   'Don\'t give in to stop the tantrum. This teaches: tantrum → reward. The behavior will increase, not decrease.',
+   'Don\'t punish the emotion. "Go to your room until you stop crying" teaches: emotions are unacceptable and must be hidden.',
+   'Don\'t label the child: "you\'re bad", "you\'re difficult". Label the behavior: "hitting is not okay".',
+   'Don\'t threaten abandonment: "I\'m leaving without you." This is the deepest fear of a toddler and damages attachment.'
+  ],
+  prevent:[
+   'Track tantrum triggers for 2 weeks. You\'ll see patterns: hunger, fatigue, transitions, overstimulation. Prevent the pattern, prevent the tantrum.',
+   'Give 5-minute and 2-minute warnings before transitions. "In 5 minutes we clean up. In 2 minutes."',
+   'Offer autonomy in safe zones: let him choose clothes, which bowl, which book. A child who chooses all day says "no" less.',
+   'Avoid over-scheduling. Toddlers need 3-4 hours of unstructured play per day. Too many activities = meltdown guarantee.',
+   'Limit screen time — fast-paced shows overstimulate the developing nervous system and increase emotional volatility.'
+  ],
+  teach:[
+   'Practice "mad hands": when he\'s calm, show him how to stomp feet or push a wall when angry. Give the body a safe outlet.',
+   'Read books about feelings: "The Color Monster", "Llama Llama Mad at Mama", "Hands Are Not for Hitting".',
+   'Model your own regulation out loud: "I\'m frustrated. I\'m going to take a deep breath." He learns by watching YOU.',
+   'Teach "gentle" vs "rough" with a pet or stuffed animal. Practice both so he can feel the difference in his hands.'
+  ]},
+
+ {age:'24-30 months',icon:'🌋',title:'Peak Tantrum Window',
+  expect:[
+   {b:'Tantrums peak in frequency and intensity',why:'This is the scientifically documented peak. The emotional brain is developing rapidly, but the regulatory brain is 3-4 years behind. Maximum gap = maximum meltdowns.'},
+   {b:'Hitting parents or siblings',why:'Attachment figures are the safest targets. He hits you BECAUSE he trusts you won\'t leave. It\'s a backhanded compliment of secure attachment.'},
+   {b:'Rigid routines — must do things "the right way"',why:'Order creates safety in a chaotic world. If the cup is wrong, the world feels wrong. This is called "just right" OCD-like behavior and it\'s normal.'},
+   {b:'Saying "mine!" about everything',why:'Ego development. He\'s learning where he ends and others begin. "Mine" is the first word of identity.'},
+   {b:'Night fears and bedtime resistance',why:'Imagination is blooming — he can now picture scary things in the dark. The ability to imagine outpaces the ability to distinguish real from pretend.'}
+  ],
+  do:[
+   'Use the "tantrum ladder": ignore the noise, stay nearby, offer a hug when the crying shifts from rage to sadness. That shift is the door opening.',
+   'For hitting: hold his hands firmly but gently, look in his eyes, say "I won\'t let you hit. Hitting hurts. I\'ll hold your hands until your body is safe."',
+   'For rigidity: when possible, honor the "right way". When not possible, narrate: "I know you wanted the blue plate. The blue plate is dirty. This is hard."',
+   'Create a "calm corner": a cozy spot with a soft toy, a book, a bottle of water. Not a punishment — a refuge. Go there WITH him.',
+   'For bedtime fears: use a nightlight, check "for monsters" together (this validates the fear), read a calming book, leave a "magic protector" (a stuffed animal that "guards" him).'
+  ],
+  dont:[
+   'Don\'t match his intensity. A screaming toddler + a shouting parent = two dysregulated nervous systems. You must be the calm one.',
+   'Don\'t use timeouts at this age — research shows they increase anxiety and don\'t teach regulation. Use "time-in": sit together until calm.',
+   'Don\'t shame crying: "Big boys don\'t cry", "Look at you, crying over nothing". This creates adults who hide emotions.',
+   'Don\'t force sharing. "Mine" is developmentally correct. Model taking turns instead: "You\'re using the truck now. When you\'re done, it\'s Leo\'s turn."',
+   'Don\'t dismiss fears as "not real". To him, the monster IS real. Dismissal = "Mama doesn\'t believe me" = trust erosion.'
+  ],
+  prevent:[
+   'Maintain consistent sleep schedule — overtired toddlers tantrum 3x more. Bedtime 20:00-20:30, no exceptions.',
+   'Protein at every meal — blood sugar crashes trigger emotional crashes. Crackers-only snacks = meltdown fuel.',
+   'Outdoor play daily — 60-120 minutes. Nature regulates the nervous system better than any indoor activity.',
+   'Limit choices to 2. "What do you want for snack?" is overwhelming. "Apple or banana?" is empowering.',
+   'Avoid transitions during hunger windows. Don\'t leave the park when he\'s getting hungry — leave 20 minutes before.'
+  ],
+  teach:[
+   'Teach the "turtle technique": tuck into shell (curl up), take 3 breaths, come out when ready. Practice when calm, use when upset.',
+   'Make a "feelings chart" with faces. Point to how he feels: "You\'re here — the angry face. That\'s okay."',
+   'Role-play with stuffed animals: "Bear is angry because Bunny took his toy. What should Bear do?" This teaches problem-solving without pressure.',
+   'Teach "I need space" as a phrase. Even at 2, he can learn to say this instead of hitting. Model it yourself.'
+  ]},
+
+ {age:'30-36 months',icon:'🎭',title:'The Empathy Awakening',
+  expect:[
+   {b:'Empathy begins emerging',why:'Theory of mind is developing — he\'s starting to understand that others have different feelings than his. This is a huge cognitive leap.'},
+   {b:'Lying (first simple lies)',why:'This is a POSITIVE developmental sign. It means he understands that you don\'t know what he knows. It requires perspective-taking — a cognitive milestone.'},
+   {b:'Jealousy and possessiveness',why:'Social comparison is emerging. He\'s learning that attention is finite and others might get "more". This is normal social-cognitive development.'},
+   {b:'Fear of the dark, monsters, strangers',why:'Imagination is now powerful enough to create vivid mental images. The fear system is mature but the reality-testing system is not.'},
+   {b:'Resistance to new foods (food neophobia peaks)',why:'Evolutionary protection — newly mobile hunter-gatherer toddlers needed to avoid unknown plants. It\'s hardwired, not picky.'}
+  ],
+  do:[
+   'When he shows empathy, celebrate it specifically: "You noticed Leo was sad and gave him a hug. That was kind. You\'re learning to care about others."',
+   'For lying: don\'t trap him. Instead of "Did you spill this?", say "I see milk on the floor. Let\'s clean it together." This removes the need to lie.',
+   'For jealousy: acknowledge it openly. "You wish Mama was only playing with you. It\'s hard to share Mama. I love you AND I love your sister."',
+   'For fears: validate, investigate, protect. "Let\'s check the closet together. See, just clothes. Should we put a \"no monsters\" sign on the door?"',
+   'For food: offer new foods alongside safe foods. No pressure to eat — just exposure. "This is broccoli. You don\'t have to eat it. It\'s just on the plate."'
+  ],
+  dont:[
+   'Don\'t call him a liar. "You\'re lying!" → he internalizes "I\'m a liar". Instead: "That\'s not what happened. Let me tell you what I saw."',
+   'Don\'t force apologies. A forced "sorry" teaches nothing. Instead: "That hurt Leo. Let\'s check if he\'s okay." Empathy first, words later.',
+   'Don\'t compare to siblings: "Why can\'t you eat like your sister?" This breeds resentment, not improvement.',
+   'Don\'t use fear-based discipline: "The police will take you", "Monsters will come". This damages trust and increases anxiety.',
+   'Don\'t make food a battle. Research shows children need 10-15 exposures to accept a new food. Pressure extends this to 30+ exposures.'
+  ],
+  prevent:[
+   'Give 1:1 time daily — 15 minutes of fully present, child-led play. This fills the attention cup and reduces jealousy-driven behavior.',
+   'Use social stories before new situations: "At the doctor, we\'ll wait, then say hi, then she\'ll check your tummy..."',
+   'Keep a consistent bedtime routine: bath → pajamas → book → song → sleep. Same order every night.',
+   'Offer new foods 10-15 times before giving up. Serve them with zero pressure and a safe food alongside.',
+   'Limit scary content — even "child-friendly" shows can have frightening scenes. Preview what he watches.'
+  ],
+  teach:[
+   'Ask "How do you think that made them feel?" after conflicts. This builds the empathy neural pathway.',
+   'Teach repair: "You knocked over Leo\'s tower. How can we make it better?" Let him generate the solution.',
+   'Practice feeling identification in others: "Look at that boy\'s face. How do you think he\'s feeling?"',
+   'Teach "stop" and "I don\'t like that" as boundary phrases. Practice with tickling: "Say stop and I stop immediately."'
+  ]},
+
+ {age:'36-48 months',icon:'🌟',title:'The Social Being',
+  expect:[
+   {b:'Friendship preferences emerge',why:'Social cognition now supports preferring specific peers. He\'s learning that relationships are chosen, not just given.'},
+   {b:'More complex lying and excuses',why:'Executive function is improving — he can now hold two versions of reality and choose which to present. This is advanced cognition, not moral failure.'},
+   {b:'Testing boundaries systematically',why:'He\'s mapping the rules of the world. "What happens if I do THIS?" is scientific inquiry, not misbehavior. He needs to know where the walls are.'},
+   {b:'Gender identity and role exploration',why:'He\'s categorizing the social world, including gender. This is normal cognitive categorization, not conditioning.'},
+   {b:'Nightmares and night terrors',why:'REM sleep and dream complexity are increasing. Emotional processing happens during sleep, and sometimes it spills into waking.'}
+  ],
+  do:[
+   'Set clear, consistent boundaries with natural consequences: "You threw the toy, so the toy is resting for 10 minutes." No anger, just facts.',
+   'Use "when/then" phrasing: "When toys are picked up, then we go to the park." This is not a threat — it\'s a sequence.',
+   'Facilitate playdates with structured activities + free play. 2-3 hours max. Longer = meltdown.',
+   'For lying: focus on the solution, not the lie. "The milk spilled. What should we do?" If he confesses, celebrate honesty: "Thank you for telling me. That took courage."',
+   'For nightmares: comfort, don\'t analyze. "That was a scary dream. You\'re safe now. I\'m here." Don\'t ask for details at 3am — talk about it in the morning.'
+  ],
+  dont:[
+   'Don\'t use shame: "What\'s wrong with you?", "I\'m so disappointed". Shame destroys self-worth. Guilt (I did something bad) is productive. Shame (I AM bad) is destructive.',
+   'Don\'t compare to other children. Ever. "Why can\'t you be like..." is the most damaging sentence in parenting.',
+   'Don\'t over-explain. At 3, he needs 1-2 sentences, not a lecture. "We don\'t hit. Hitting hurts. Let\'s use gentle hands." Done.',
+   'Don\'t force gender norms. If he wants to wear pink or play with dolls, that\'s exploration, not confusion. Let him explore.',
+   'Don\'t dismiss nightmares as "just a dream". To his brain, the dream was real. Validate first, then comfort.'
+  ],
+  prevent:[
+   'Hold weekly family meetings (even at 3!): "What went well this week? What was hard? What should we try next week?" This builds communication habits.',
+   'Give him "jobs": water the plants, feed the cat, set napkins. Contribution = belonging = fewer behavior problems.',
+   'Maintain the sleep schedule. 3-year-olds still need 11-13 hours. Sleep deprivation looks like ADHD symptoms at this age.',
+   'Pre-teach before social situations: "At the park, we take turns on the slide. If someone is waiting, we let them go next."',
+   'Limit sugar — research shows sugar doesn\'t cause hyperactivity, but it does cause blood sugar crashes that look like emotional meltdowns.'
+  ],
+  teach:[
+   'Teach the "STOP" problem-solving method: Stop, Think, Options, Pick. Practice with pretend scenarios.',
+   'Use emotion coaching: 1) Notice the feeling, 2) Name it, 3) Validate it, 4) Set limits if needed, 5) Problem-solve together.',
+   'Teach self-talk: "I can try again", "Mistakes help me learn", "I can ask for help". Model this out loud yourself.',
+   'Practice perspective-taking: "If you were the baby in the story, how would you feel?" This builds the empathy neural pathway.',
+   'Teach consent and body autonomy: "Your body belongs to you. You can say no to hugs, even from family."'
+  ]}
 ];
 const TIPS=[
  'Praise the process, not the person: You looked carefully beats good boy - it wires growth mindset.',
@@ -1618,6 +1830,42 @@ function renderStages(){
     div.innerHTML=`<h3>${s.label}</h3><span class="rng">${s.from}–${s.to} months</span>
       <ul>${sample.map(x=>'<li>'+x+'</li>').join('')}</ul>`;
     el.appendChild(div);
+  });
+}
+/* ============ EMOTIONAL GUIDE RENDER ============ */
+function renderEmotionalGuide(){
+  const el=document.getElementById('emotionalGuide');if(!el)return;
+  el.innerHTML='';
+  const m=ageMonths();
+  EMOTIONAL_GUIDE.forEach((phase,idx)=>{
+    const [lo,hi]=phase.age.split('-').map(s=>parseInt(s));
+    const isCurrent=m>=lo&&m<hi;
+    const isPast=m>=hi;
+    const card=document.createElement('div');
+    card.className='eg-card'+(isCurrent?' open eg-current':'');
+    let bodyHtml='';
+    bodyHtml+='<div class="eg-section"><div class="eg-section-title eg-st-expect">💜 What to expect</div>';
+    phase.expect.forEach(e=>{
+      bodyHtml+=`<div class="eg-expect-item"><div class="eg-b">${e.b}</div><div class="eg-why">${e.why}</div></div>`;
+    });
+    bodyHtml+='</div>';
+    bodyHtml+='<div class="eg-section"><div class="eg-section-title eg-st-do">✅ Do this</div>';
+    phase.do.forEach(d=>{bodyHtml+=`<div class="eg-item eg-item-do">${d}</div>`;});
+    bodyHtml+='</div>';
+    bodyHtml+='<div class="eg-section"><div class="eg-section-title eg-st-dont">🚫 Don\'t do this</div>';
+    phase.dont.forEach(d=>{bodyHtml+=`<div class="eg-item eg-item-dont">${d}</div>`;});
+    bodyHtml+='</div>';
+    bodyHtml+='<div class="eg-section"><div class="eg-section-title eg-st-prevent">🛡️ Prevent it</div>';
+    phase.prevent.forEach(d=>{bodyHtml+=`<div class="eg-item eg-item-prevent">${d}</div>`;});
+    bodyHtml+='</div>';
+    bodyHtml+='<div class="eg-section"><div class="eg-section-title eg-st-teach">🎓 Teach him</div>';
+    phase.teach.forEach(d=>{bodyHtml+=`<div class="eg-item eg-item-teach">${d}</div>`;});
+    bodyHtml+='</div>';
+    card.innerHTML=`<div class="eg-header"><div class="eg-icon">${phase.icon}</div>
+      <div class="eg-header-text"><div class="eg-age">${phase.age}${isCurrent?' · now':''}</div><div class="eg-title">${phase.title}</div></div>
+      <div class="eg-chevron">▼</div></div><div class="eg-body">${bodyHtml}</div>`;
+    card.querySelector('.eg-header').addEventListener('click',()=>card.classList.toggle('open'));
+    el.appendChild(card);
   });
 }
 /* ============ ACHIEVEMENT BADGES ============ */
@@ -2419,7 +2667,7 @@ document.querySelectorAll('nav button').forEach(b=>{
     document.getElementById(b.dataset.tab).classList.add('active');
     if(b.dataset.tab==='tab-plan'){renderPlan();renderSleep();renderScreen();renderOutdoor();renderWords();renderBooks();renderMeals();renderPotty();renderDental();renderTrend();}
     if(b.dataset.tab==='tab-growth'){renderGrowth();renderGrowthInput();renderCountdowns();renderHeat();renderBadges();}
-    if(b.dataset.tab==='tab-stages'){renderMilestones();renderGallery();renderCDC();renderVax();renderIllness();renderAllergies();renderStages();}
+    if(b.dataset.tab==='tab-stages'){renderMilestones();renderGallery();renderCDC();renderVax();renderIllness();renderAllergies();renderStages();renderEmotionalGuide();}
     if(b.dataset.tab==='tab-settings'){renderSettings();loadBirthDetails();}
     window.scrollTo({top:0});});
 });
@@ -2441,7 +2689,7 @@ document.getElementById('qwBtn').addEventListener('click',function(){
 document.getElementById('quickWordInput').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('qwBtn').click();});
 load();seedGrowth();applyTheme();loadBirthDetails();
 noteEl.value=day(todayKey).note||'';
-renderCards();renderAll();renderGrowth();renderGrowthInput();renderCountdowns();renderSleep();renderScreen();renderOutdoor();renderWords();renderBooks();renderMeals();renderPotty();renderDental();renderTrend();renderPlan();renderWeekSummary();renderMood();renderIllness();renderAllergies();renderBadges();
+renderCards();renderAll();renderGrowth();renderGrowthInput();renderCountdowns();renderSleep();renderScreen();renderOutdoor();renderWords();renderBooks();renderMeals();renderPotty();renderDental();renderTrend();renderPlan();renderWeekSummary();renderMood();renderIllness();renderAllergies();renderBadges();renderEmotionalGuide();
 checkAutoBackup();
 </script>
 </body>
