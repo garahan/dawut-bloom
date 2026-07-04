@@ -879,11 +879,6 @@ footer{margin-top:44px;text-align:center;font-size:11px;color:var(--faint);line-
     <p>Check off each milestone as Dawut achieves it.</p>
     <div id="cdcList"></div>
   </div>
-  <h2 class="sec">Vaccination schedule (Japan)</h2>
-  <div class="panel">
-    <p>Japan routine immunizations. Tap to mark done.</p>
-    <div id="vaxList"></div>
-  </div>
   <h2 class="sec">Illness & medication log</h2>
   <div class="panel">
     <input id="illSymptom" placeholder="e.g. fever 38.5°C" style="margin-bottom:6px">
@@ -3044,11 +3039,8 @@ if('serviceWorker' in navigator)navigator.serviceWorker.register('service-worker
 
 /* ============ BADGES ============ */
 function updateBadges(){
-  const m=ageMonths();
-  const dueVax=VAX.filter((v,i)=>!mem.vax['vax-'+i]&&m>=v.ageM).length;
   const vaxBadge=document.getElementById('badge-stages');
-  if(dueVax>0){vaxBadge.textContent=dueVax;vaxBadge.classList.remove('hide');}
-  else vaxBadge.classList.add('hide');
+  if(vaxBadge)vaxBadge.classList.add('hide');
 }
 
 /* ============ WEATHER + HOME SUGGESTIONS ============ */
@@ -3365,7 +3357,7 @@ document.querySelectorAll('nav button').forEach(b=>{
     document.getElementById(b.dataset.tab).classList.add('active');
     if(b.dataset.tab==='tab-plan'){safe(renderPlan,'renderPlan');safe(renderSleep,'renderSleep');safe(renderScreen,'renderScreen');safe(renderOutdoor,'renderOutdoor');safe(renderWords,'renderWords');safe(renderBooks,'renderBooks');safe(renderMeals,'renderMeals');safe(renderPotty,'renderPotty');safe(renderDental,'renderDental');safe(renderTrend,'renderTrend');}
     if(b.dataset.tab==='tab-growth'){safe(renderGrowth,'renderGrowth');safe(renderGrowthInput,'renderGrowthInput');safe(renderCountdowns,'renderCountdowns');safe(renderHeat,'renderHeat');safe(renderBadges,'renderBadges');}
-    if(b.dataset.tab==='tab-stages'){safe(renderMilestones,'renderMilestones');safe(renderGallery,'renderGallery');safe(renderCDC,'renderCDC');safe(renderVax,'renderVax');safe(renderIllness,'renderIllness');safe(renderAllergies,'renderAllergies');safe(renderStages,'renderStages');safe(renderEmotionalGuide,'renderEmotionalGuide');}
+    if(b.dataset.tab==='tab-stages'){safe(renderMilestones,'renderMilestones');safe(renderGallery,'renderGallery');safe(renderCDC,'renderCDC');safe(renderIllness,'renderIllness');safe(renderAllergies,'renderAllergies');safe(renderStages,'renderStages');safe(renderEmotionalGuide,'renderEmotionalGuide');}
     if(b.dataset.tab==='tab-settings'){safe(renderSettings,'renderSettings');safe(loadBirthDetails,'loadBirthDetails');}
     window.scrollTo({top:0});});
 });
