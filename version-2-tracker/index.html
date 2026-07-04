@@ -476,6 +476,50 @@ nav button.active::after{content:'';position:absolute;bottom:2px;left:50%;transf
 @keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:.15}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 footer{margin-top:40px;text-align:center;font-size:10px;color:var(--faint);font-family:'JetBrains Mono',monospace;line-height:1.7;letter-spacing:.06em;padding-top:20px;border-top:1px solid var(--line);}
+
+/* ===== SMART NUDGE ===== */
+.smart-nudge{display:none;margin:0 0 14px;padding:12px 16px;border-radius:var(--r-sm);
+  background:linear-gradient(135deg,rgba(232,105,78,.08),rgba(232,168,56,.06));
+  border:1px solid rgba(232,105,78,.2);font-size:13px;color:var(--text);line-height:1.5;
+  align-items:center;gap:10px;animation:fadein .4s var(--spring);}
+.smart-nudge.show{display:flex;}
+.smart-nudge .sn-icon{font-size:18px;flex-shrink:0;}
+.smart-nudge .sn-x{margin-left:auto;cursor:pointer;color:var(--faint);font-size:16px;padding:0 4px;}
+
+/* ===== SHIELDS ===== */
+.shield-display{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.shield-icon{font-size:20px;filter:drop-shadow(0 0 8px rgba(180,142,255,.3));}
+.shield-count{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;color:var(--accent);}
+.shield-info{font-size:11px;color:var(--faint);line-height:1.4;}
+
+/* ===== WEEKLY SCORE ===== */
+.weekscore{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:10px;}
+.weekscore .ws-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;}
+.weekscore .ws-label{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);font-weight:600;}
+.weekscore .ws-composite{font-family:'JetBrains Mono',monospace;font-size:36px;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(100deg,var(--accent),var(--wind));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.weekscore .ws-bars{display:flex;flex-direction:column;gap:8px;}
+.weekscore .ws-bar-row{display:flex;align-items:center;gap:10px;}
+.weekscore .ws-bar-label{font-size:11px;color:var(--muted);width:80px;flex-shrink:0;}
+.weekscore .ws-bar-track{flex:1;height:6px;border-radius:99px;background:var(--surface);overflow:hidden;}
+.weekscore .ws-bar-fill{height:100%;border-radius:99px;transition:width .8s var(--ease-out);}
+.weekscore .ws-bar-val{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--faint);width:36px;text-align:right;flex-shrink:0;}
+
+/* ===== MOMENTUM ===== */
+.momentum-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.momentum-row .m-icon{font-size:16px;width:28px;text-align:center;flex-shrink:0;}
+.momentum-row .m-name{font-size:12px;font-weight:600;width:70px;flex-shrink:0;}
+.momentum-row .m-bar{flex:1;height:6px;border-radius:99px;background:var(--surface);overflow:hidden;position:relative;}
+.momentum-row .m-fill{height:100%;border-radius:99px;transition:width .6s var(--ease-out);}
+.momentum-row .m-flame{position:absolute;right:-2px;top:-3px;font-size:11px;opacity:0;transition:opacity .3s;}
+.momentum-row .m-val{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--faint);width:36px;text-align:right;flex-shrink:0;}
+
+/* ===== COUPLING ===== */
+.coupling-item{background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:10px;}
+.coupling-item .c-trigger{font-size:13px;color:var(--text);flex:1;line-height:1.4;}
+.coupling-item .c-arrow{color:var(--accent);font-size:14px;}
+.coupling-item .c-action{font-size:13px;color:var(--wind);flex:1;line-height:1.4;}
+.coupling-empty{text-align:center;padding:16px;font-size:12px;color:var(--faint);}
 </style>
 </head>
 <body>
@@ -522,6 +566,7 @@ footer{margin-top:40px;text-align:center;font-size:10px;color:var(--faint);font-
       <div class="bar"><div class="fill" id="fill"></div><div class="ticks" id="ticks"></div></div>
     </div>
   </div>
+  <div class="smart-nudge" id="smartNudge"><span class="sn-icon">🤖</span><span id="smartNudgeText"></span><span class="sn-x" onclick="document.getElementById('smartNudge').classList.remove('show')">×</span></div>
   <div class="quote" id="quote"></div>
   <div class="identity" id="identity"></div>
   <div class="northstar" id="northStar">
@@ -531,6 +576,7 @@ footer{margin-top:40px;text-align:center;font-size:10px;color:var(--faint);font-
   </div>
   <div class="warn" id="warn">⚠️ You missed yesterday. <b>Never miss twice</b> — even the Floor counts.</div>
   <div class="comeback" id="comeback"></div>
+  <div class="shield-display" id="shieldDisplay" style="display:none"></div>
   <div class="priority" id="priorityCard" style="display:none">
     <div class="p-icon">🎯</div>
     <div class="p-body"><div class="p-label">Today's #1 priority</div><div class="p-text" id="priorityText"></div></div>
@@ -571,6 +617,12 @@ footer{margin-top:40px;text-align:center;font-size:10px;color:var(--faint);font-
   <h2 class="sec" style="margin-top:8px"><span class="sec-icon">📊</span>Overview</h2>
   <div class="statgrid" id="statgrid"></div>
 
+  <h2 class="sec"><span class="sec-icon">🧮</span>Weekly composite score</h2>
+  <div id="weeklyScoreContainer"></div>
+
+  <h2 class="sec"><span class="sec-icon">🚀</span>Momentum (14-day weighted)</h2>
+  <div id="momentumContainer"></div>
+
   <h2 class="sec"><span class="sec-icon">🗓️</span>Commit history</h2>
   <div class="heatwrap"><div class="heat" id="heat"></div></div>
   <div class="heat-labels">
@@ -592,6 +644,9 @@ footer{margin-top:40px;text-align:center;font-size:10px;color:var(--faint);font-
 
   <h2 class="sec"><span class="sec-icon">🧭</span>Life domains</h2>
   <div id="domainGrid"></div>
+
+  <h2 class="sec"><span class="sec-icon">🔗</span>Habit coupling</h2>
+  <div id="couplingContainer"></div>
 
   <h2 class="sec"><span class="sec-icon">💡</span>Insights</h2>
   <div id="insights"></div>
@@ -701,6 +756,9 @@ footer{margin-top:40px;text-align:center;font-size:10px;color:var(--faint);font-
   <h2 class="sec"><span class="sec-icon">�</span>Anti-habits — not-to-do list</h2>
   <div class="glass" id="nttdEditor"></div>
 
+  <h2 class="sec"><span class="sec-icon">🔗</span>Habit coupling — implementation intentions</h2>
+  <div class="glass" id="couplingEditor"></div>
+
   <h2 class="sec"><span class="sec-icon">�</span>PWA</h2>
   <div class="glass">
     <div class="setting-row">
@@ -805,7 +863,10 @@ const BADGES=[
  {id:'swap5',icon:'🔁',name:'5 habit swaps',test:s=>s.swaps>=5},
  {id:'rest10',icon:'💤',name:'10 rest days',test:s=>s.restDays>=10},
  {id:'comeback',icon:'🧗',name:'Comeback kid',test:s=>s.comebacks>=3},
- {id:'nttd50',icon:'🚫',name:'50 anti-habit wins',test:s=>s.nttdAvoided>=50}
+ {id:'nttd50',icon:'🚫',name:'50 anti-habit wins',test:s=>s.nttdAvoided>=50},
+ {id:'shield1',icon:'🛡️',name:'First streak shield',test:s=>(mem.shields||0)>=1},
+ {id:'shield3',icon:'🧿',name:'3 streak shields',test:s=>(mem.shields||0)>=3},
+ {id:'comeback5',icon:'🔄',name:'5 comebacks',test:s=>s.comebacks>=5}
 ];
 const QUOTES=[
  "Discipline is choosing what you want most over what you want now.",
@@ -826,7 +887,11 @@ const QUOTES=[
  "You don't rise to your goals. You fall to your systems — including the things you've decided not to do anymore.",
  "In 30 years, you won't remember the day you skipped. You'll remember the thousand days you didn't.",
  "The man you want to be at 60 is built today, not at 59.",
- "Identity is the deepest layer. Habits serve identity. Don't optimize habits — become the person who has them."
+ "Identity is the deepest layer. Habits serve identity. Don't optimize habits — become the person who has them.",
+ "Momentum is built in the first 5 minutes. After that, inertia does the work.",
+ "You don't break a streak. You just start a new one. Today is Day 1 or Day N — your call.",
+ "Couple new habits to old ones. The trigger is the anchor. The action is the ship.",
+ "Shields are earned in perfect weeks. They protect you when life happens."
 ];
 const ACCENTS=[
  {name:'purple',val:'#B48EFF'},{name:'teal',val:'#56D9BE'},{name:'gold',val:'#E8C547'},
@@ -845,18 +910,21 @@ const DEFAULT_NTTD=[
 /* ===== STATE ===== */
 const KEY='bega-v2';
 const SCHEMA=2;
-let mem={days:{},metrics:{},swaps:[],lastRankIdx:0,habits:DEFAULT_HABITS,accent:'purple',goal:null,goalSet:null,nttd:DEFAULT_NTTD,northStar:{},identity:[],monthly:{}};
+let mem={days:{},metrics:{},swaps:[],lastRankIdx:0,habits:DEFAULT_HABITS,accent:'purple',goal:null,goalSet:null,nttd:DEFAULT_NTTD,northStar:{},identity:[],monthly:{},shields:0,coupling:[],weeklyScore:{}};
 function load(){
   try{
     const r=localStorage.getItem(KEY);
     if(r){
       const p=JSON.parse(r);
-      mem={days:{},metrics:{},swaps:[],lastRankIdx:0,habits:DEFAULT_HABITS,accent:'purple',goal:null,goalSet:null,nttd:DEFAULT_NTTD,northStar:{},identity:[],monthly:{},...p};
+      mem={days:{},metrics:{},swaps:[],lastRankIdx:0,habits:DEFAULT_HABITS,accent:'purple',goal:null,goalSet:null,nttd:DEFAULT_NTTD,northStar:{},identity:[],monthly:{},shields:0,coupling:[],weeklyScore:{},...p};
       if(!mem.habits||!mem.habits.length)mem.habits=DEFAULT_HABITS;
       if(!mem.nttd||!mem.nttd.length)mem.nttd=DEFAULT_NTTD;
       if(!mem.northStar)mem.northStar={};
       if(!mem.identity)mem.identity=[];
       if(!mem.monthly)mem.monthly={};
+      if(typeof mem.shields!=='number')mem.shields=0;
+      if(!mem.coupling)mem.coupling=[];
+      if(!mem.weeklyScore)mem.weeklyScore={};
     }
   }catch(e){}
 }
@@ -867,6 +935,121 @@ function day(k){if(!mem.days[k])mem.days[k]={move:0,fuel:0,build:0,wind:0,note:'
 function pts(d){if(!d)return 0;if(d.rest)return 1;return['move','fuel','build','wind'].reduce((s,h)=>s+(d[h]===2?1:d[h]===1?0.5:0),0);}
 function totalPts(){return Object.values(mem.days).reduce((s,d)=>s+pts(d),0);}
 function habits(){return mem.habits||DEFAULT_HABITS;}
+
+/* ===== SMART ANALYTICS ENGINE ===== */
+function momentum(habitId){
+  const days=Object.keys(mem.days).sort();
+  if(days.length<2)return 0;
+  let score=0,w=0;
+  for(let i=days.length-1;i>=Math.max(0,days.length-14);i--){
+    const d=mem.days[days[i]];
+    if(d&&d.rest)continue;
+    const wgt=Math.pow(0.85,w);w++;
+    score+=(d&&d[habitId]>0?d[habitId]===2?1:0.5:0)*wgt;
+  }
+  return Math.round(score/7*100);
+}
+function streakRisk(){
+  const si=streakInfo();
+  if(si.streak===0)return{level:'none',msg:''};
+  const d=day(todayKey);
+  const done=habits().filter(h=>d[h.id]>0).length;
+  const hour=new Date().getHours();
+  if(done===habits().length)return{level:'safe',msg:'Done for today.'};
+  if(hour>=21&&done===0)return{level:'high',msg:'⚠️ '+habits().length+' habits left, 3h until midnight. Do the floor now.'};
+  if(hour>=20&&done<=1)return{level:'high',msg:'⚠️ Only '+done+' done at '+hour+':'+(new Date().getMinutes()<10?'0':'')+new Date().getMinutes()+'. Floor it.'};
+  if(hour>=18&&done<=1)return{level:'medium',msg:'⏰ '+done+'/'+habits().length+' at '+hour+':00. Don\u2019t leave it all to night.'};
+  if(hour>=14&&done===0)return{level:'medium',msg:'⏰ Nothing done yet. Knock out the first one.'};
+  return{level:'low',msg:done+'/'+habits().length+' done. On track.'};
+}
+function habitMoodCorrelation(habitId){
+  const days=Object.keys(mem.days).filter(k=>mem.days[k].mood>0&&!mem.days[k].rest);
+  if(days.length<5)return null;
+  const withHabit=days.filter(k=>mem.days[k][habitId]>0);
+  const withoutHabit=days.filter(k=>mem.days[k][habitId]===0);
+  if(withHabit.length<2||withoutHabit.length<2)return null;
+  const avgWith=withHabit.reduce((s,k)=>s+mem.days[k].mood,0)/withHabit.length;
+  const avgWithout=withoutHabit.reduce((s,k)=>s+mem.days[k].mood,0)/withoutHabit.length;
+  return{avgWith:avgWith.toFixed(1),avgWithout:avgWithout.toFixed(1),diff:(avgWith-avgWithout).toFixed(1),sample:days.length};
+}
+function skipPattern(habitId){
+  const days=Object.keys(mem.days).sort();
+  if(days.length<7)return null;
+  const skipDays=days.filter(k=>{const d=mem.days[k];return d&&!d.rest&&d[habitId]===0;});
+  if(skipDays.length<2)return null;
+  const dowCount=[0,0,0,0,0,0,0];
+  skipDays.forEach(k=>{dowCount[new Date(k+'T00:00').getDay()]++;});
+  const dowNames=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  let maxDow=0,maxCount=0;
+  for(let i=0;i<7;i++){if(dowCount[i]>maxCount){maxCount=dowCount[i];maxDow=i;}}
+  if(maxCount<2)return null;
+  return{day:dowNames[maxDow],count:maxCount,total:skipDays.length};
+}
+function checkShields(){
+  const keys=Object.keys(mem.days).sort();
+  if(keys.length<7)return;
+  const today=new Date(todayKey);
+  const weekStart=new Date(today);
+  weekStart.setDate(weekStart.getDate()-weekStart.getDay());
+  const ws=dkey(weekStart);
+  if(mem.lastShieldWeek===ws)return;
+  let allPerfect=true;
+  for(let i=0;i<7;i++){
+    const d=new Date(weekStart);d.setDate(d.getDate()+i);
+    const k=dkey(d);const day=mem.days[k];
+    if(!day||(!day.rest&&!habits().every(h=>day[h.id]>0))){allPerfect=false;break;}
+  }
+  if(allPerfect){
+    mem.shields=(mem.shields||0)+1;
+    mem.lastShieldWeek=ws;save();
+  }
+}
+function compositeWeeklyScore(){
+  const days=Object.keys(mem.days).filter(k=>{const diff=(new Date(todayKey)-new Date(k))/86400000;return diff>=0&&diff<7;});
+  if(days.length===0)return null;
+  let habitPts=0,maxHabit=0;
+  days.forEach(k=>{
+    const d=mem.days[k];
+    if(d.rest){habitPts+=1;maxHabit+=1;return;}
+    habitPts+=pts(d);maxHabit+=4;
+  });
+  const habitScore=maxHabit>0?Math.round(habitPts/maxHabit*100):0;
+  const moodDays=days.filter(k=>mem.days[k].mood>0);
+  const moodScore=moodDays.length>0?Math.round(moodDays.reduce((s,k)=>s+mem.days[k].mood,0)/moodDays.length/5*100):0;
+  const nttdDays=days.filter(k=>mem.days[k].nttd&&Object.keys(mem.days[k].nttd).length>0);
+  let nttdScore=0;
+  if(nttdDays.length>0){
+    const total=nttdDays.reduce((s,k)=>s+Object.keys(mem.days[k].nttd).length,0);
+    const avoided=nttdDays.reduce((s,k)=>s+Object.values(mem.days[k].nttd).filter(v=>v===1).length,0);
+    nttdScore=Math.round(avoided/total*100);
+  }
+  const prioDays=days.filter(k=>mem.days[k].priority);
+  let prioScore=0;
+  if(prioDays.length>0){
+    const done=prioDays.filter(k=>mem.days[k].priorityDone).length;
+    prioScore=Math.round(done/prioDays.length*100);
+  }
+  const composite=Math.round(habitScore*0.5+moodScore*0.2+nttdScore*0.15+prioScore*0.15);
+  return{composite,habitScore,moodScore,nttdScore,prioScore,days:days.length};
+}
+function smartNudge(){
+  const d=day(todayKey);
+  const done=habits().filter(h=>d[h.id]>0).length;
+  const hour=new Date().getHours();
+  if(done===habits().length||d.rest)return null;
+  const risk=streakRisk();
+  if(risk.level==='high')return risk.msg;
+  const si=streakInfo();
+  if(si.streak>=7&&done===0&&hour>=12)return'🔥 '+si.streak+'-day streak. Don\'t break it. Floor one habit now.';
+  habits().forEach(h=>{
+    const pat=skipPattern(h.id);
+    if(pat&&new Date().getDay()===['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'].indexOf(pat.day)&&d[h.id]===0){
+      return'📊 You skip '+h.name+' most on '+pat.day+'. Today is '+pat.day+'. Do the floor.';
+    }
+  });
+  if(risk.level==='medium')return risk.msg;
+  return null;
+}
 
 /* ===== RING ===== */
 const C=2*Math.PI*104,SEG=C/4,GAP=14;
@@ -1007,13 +1190,21 @@ function renderAll(){
   const nttdAvoided=Object.values(mem.days).reduce((s,d)=>s+(d.nttd?Object.values(d.nttd).filter(v=>v===1).length:0),0);
   renderBadges({perfect,best:si.best,pts:p,floorSaves:floorSaves(),swaps:(mem.swaps||[]).length,restDays,comebacks,nttdAvoided});
   renderInsights(p,si,perfect);
-  renderMood();renderMoodChart();renderHabitStrength();renderNotTodo();renderNorthStar();renderIdentity();renderPriority();renderDomains();
+  renderMood();renderMoodChart();renderHabitStrength();renderNotTodo();renderNorthStar();renderIdentity();renderPriority();renderDomains();renderMomentum();renderCoupling();
   // comeback message
   const cb=document.getElementById('comeback');
   if(si.comeback){
     cb.innerHTML='You broke the streak yesterday — that happens. <b>Today is Day 1 again.</b> Not Day 0. You already know the system. Run it.';
     cb.classList.add('show');
   }else cb.classList.remove('show');
+  // shield display
+  const sdEl=document.getElementById('shieldDisplay');
+  if(sdEl&&(mem.shields||0)>0){
+    sdEl.style.display='flex';
+    let shields='';
+    for(let i=0;i<(mem.shields||0);i++)shields+='<span class="shield-icon">🛡️</span>';
+    sdEl.innerHTML=shields+'<span class="shield-count">'+(mem.shields||0)+'</span><span class="shield-info">Perfect-week shields earned. Streak protected.</span>';
+  }else if(sdEl){sdEl.style.display='none';}
   // rest day button state
   const rb=document.getElementById('restBtn');
   rb.classList.toggle('active',!!day(todayKey).rest);
@@ -1024,7 +1215,10 @@ function renderAll(){
   qa.style.display=(allDone||day(todayKey).rest)?'none':'inline-flex';
   // weekly nudge
   checkWeeklyNudge();
+  checkShields();
+  renderSmartNudge();
   renderMonthly();
+  renderWeeklyScore();
 }
 function floorSaves(){
   return Object.values(mem.days).filter(d=>['move','fuel','build','wind'].every(h=>d[h]>0)&&['move','fuel','build','wind'].some(h=>d[h]===1)).length;
@@ -1042,7 +1236,7 @@ function renderStatGrid(p,si,perfect){
     <div class="statcard"><div class="si">⚡</div><b>${p.toFixed(0)}</b><span>total pts</span><div class="delta up">${(p/400*100).toFixed(0)}% to v2</div></div>
     <div class="statcard"><div class="si">🏆</div><b>${perfect}</b><span>perfect days</span><div class="delta flat">${days} logged</div></div>
     <div class="statcard"><div class="si">📊</div><b>${avg}</b><span>avg/day</span><div class="delta ${consistency>=50?'up':'flat'}">${consistency}% perfect</div></div>
-    <div class="statcard"><div class="si">🛡️</div><b>${floorSaves()}</b><span>floor saves</span><div class="delta flat">bad-day wins</div></div>`;
+    <div class="statcard"><div class="si">🛡️</div><b>${mem.shields||0}</b><span>streak shields</span><div class="delta flat">${floorSaves()} floor saves</div></div>`;
 }
 
 /* ===== HEATMAP ===== */
@@ -1210,8 +1404,28 @@ function renderInsights(p,si,perfect){
       el.innerHTML+=`<div class="insight"><div class="ii">🚫</div><div class="it">Anti-habit avoidance rate: <b>${avoidRate}%</b> over ${nttdDays.length} days. <span class="muted">${avoidRate>=80?'Discipline is holding.':'Your environment needs engineering — not more willpower.'}</span></div></div>`;
     }
   }
+  // per-habit mood correlations
+  const hNames={};habits().forEach(h=>hNames[h.id]=h.name);
+  habits().forEach(h=>{
+    const corr=habitMoodCorrelation(h.id);
+    if(corr&&Math.abs(parseFloat(corr.diff))>=0.5){
+      const better=parseFloat(corr.diff)>0;
+      el.innerHTML+=`<div class="insight"><div class="ii">🧬</div><div class="it">On days you do <b>${hNames[h.id]}</b>, mood averages <b>${corr.avgWith}/5</b> vs <b>${corr.avgWithout}/5</b> without. <span class="muted">${better?'This habit lifts your mood.':'You do this even when down — resilience.'}</span></div></div>`;
+    }
+  });
+  // skip patterns
+  habits().forEach(h=>{
+    const pat=skipPattern(h.id);
+    if(pat){
+      el.innerHTML+=`<div class="insight"><div class="ii">📅</div><div class="it">You skip <b>${hNames[h.id]}</b> most often on <b>${pat.day}</b>s (${pat.count} of ${pat.total} skips). <span class="muted">Plan a floor version for that day.</span></div></div>`;
+    }
+  });
+  // streak risk
+  const risk=streakRisk();
+  if(risk.level==='high'){
+    el.innerHTML+=`<div class="insight" style="border-color:rgba(232,105,78,.2)"><div class="ii">⚠️</div><div class="it"><b>${risk.msg}</b> <span class="muted">Streaks die in the last 3 hours of the day.</span></div></div>`;
+  }
 }
-/* ===== LIFE DOMAINS ===== */
 function renderDomains(){
   const el=document.getElementById('domainGrid');
   if(!el)return;
@@ -1234,6 +1448,85 @@ function renderDomains(){
     el.appendChild(div);
   });
 }
+
+/* ===== SMART NUDGE RENDER ===== */
+function renderSmartNudge(){
+  const el=document.getElementById('smartNudge');
+  const txt=document.getElementById('smartNudgeText');
+  if(!el||!txt)return;
+  const msg=smartNudge();
+  if(msg){
+    txt.textContent=msg;
+    el.classList.add('show');
+  }else{
+    el.classList.remove('show');
+  }
+}
+
+/* ===== WEEKLY SCORE RENDER ===== */
+function renderWeeklyScore(){
+  const el=document.getElementById('weeklyScoreContainer');
+  if(!el)return;
+  const ws=compositeWeeklyScore();
+  if(!ws){
+    el.innerHTML='<div class="weekscore"><div class="ws-top"><span class="ws-label">This week</span></div><div style="text-align:center;padding:12px;font-size:12px;color:var(--faint)">Start logging to see your composite score.</div></div>';
+    return;
+  }
+  const grade=ws.composite>=90?'A+':ws.composite>=80?'A':ws.composite>=70?'B':ws.composite>=60?'C':ws.composite>=50?'D':'F';
+  const barColor=v=>v>=80?'var(--green)':v>=60?'var(--fuel)':v>=40?'var(--accent)':'var(--move)';
+  el.innerHTML=`<div class="weekscore">
+    <div class="ws-top"><span class="ws-label">This week · ${ws.days} days logged</span><span class="ws-composite">${ws.composite}</span></div>
+    <div class="ws-bars">
+      <div class="ws-bar-row"><span class="ws-bar-label">Habits</span><div class="ws-bar-track"><div class="ws-bar-fill" style="width:${ws.habitScore}%;background:${barColor(ws.habitScore)}"></div></div><span class="ws-bar-val">${ws.habitScore}%</span></div>
+      <div class="ws-bar-row"><span class="ws-bar-label">Mood</span><div class="ws-bar-track"><div class="ws-bar-fill" style="width:${ws.moodScore}%;background:${barColor(ws.moodScore)}"></div></div><span class="ws-bar-val">${ws.moodScore}%</span></div>
+      <div class="ws-bar-row"><span class="ws-bar-label">Anti-habits</span><div class="ws-bar-track"><div class="ws-bar-fill" style="width:${ws.nttdScore}%;background:${barColor(ws.nttdScore)}"></div></div><span class="ws-bar-val">${ws.nttdScore}%</span></div>
+      <div class="ws-bar-row"><span class="ws-bar-label">Priority</span><div class="ws-bar-track"><div class="ws-bar-fill" style="width:${ws.prioScore}%;background:${barColor(ws.prioScore)}"></div></div><span class="ws-bar-val">${ws.prioScore}%</span></div>
+    </div>
+    <div style="margin-top:12px;font-size:11px;color:var(--faint);font-family:'JetBrains Mono',monospace;letter-spacing:.04em">Grade: ${grade} · 50% habits · 20% mood · 15% anti-habits · 15% priority</div>
+  </div>`;
+}
+
+/* ===== MOMENTUM RENDER ===== */
+function renderMomentum(){
+  const el=document.getElementById('momentumContainer');
+  if(!el)return;
+  const days=Object.keys(mem.days);
+  if(days.length<2){
+    el.innerHTML='<div style="text-align:center;padding:12px;font-size:12px;color:var(--faint)">Log 2+ days to see momentum.</div>';
+    return;
+  }
+  const cols={move:'#E8694E',fuel:'#E8A838',build:'#B48EFF',wind:'#56D9BE'};
+  el.innerHTML='';
+  habits().forEach(h=>{
+    const m=momentum(h.id);
+    const flame=m>=70?'🔥':m>=40?'':m>=20?'':m>=10?'':m>=0?'':'';
+    const div=document.createElement('div');
+    div.className='momentum-row';
+    div.innerHTML=`<div class="m-icon">${h.icon}</div><div class="m-name">${h.name}</div>
+      <div class="m-bar"><div class="m-fill" style="width:${Math.min(m,100)}%;background:${cols[h.id]||'var(--accent)'}"></div></div>
+      <div class="m-val">${m}</div>`;
+    el.appendChild(div);
+  });
+}
+
+/* ===== COUPLING RENDER ===== */
+function renderCoupling(){
+  const el=document.getElementById('couplingContainer');
+  if(!el)return;
+  const items=mem.coupling||[];
+  if(items.length===0){
+    el.innerHTML='<div class="coupling-empty">No habit couplings yet. Add "After [trigger], I do [habit]" in Settings to stack habits onto existing routines.</div>';
+    return;
+  }
+  el.innerHTML='';
+  items.forEach(c=>{
+    const div=document.createElement('div');
+    div.className='coupling-item';
+    div.innerHTML=`<div class="c-trigger">After ${c.trigger}</div><div class="c-arrow">→</div><div class="c-action">I ${c.action}</div>`;
+    el.appendChild(div);
+  });
+}
+
 function renderMoodChart(){
   const el=document.getElementById('moodChart');
   const days=[];
@@ -1665,6 +1958,40 @@ function renderSettings(){
     save();renderSettings();renderNotTodo();
   });
   ne.appendChild(addBtn);
+  // coupling editor
+  const ce=document.getElementById('couplingEditor');
+  if(ce){
+    ce.innerHTML='';
+    (mem.coupling||[]).forEach((c,i)=>{
+      const div=document.createElement('div');div.className='habit-edit';
+      div.innerHTML=`<div class="he-sub">After (trigger)</div>
+        <input value="${c.trigger}" data-cf="trigger" data-i="${i}" placeholder="e.g. I pour my morning coffee" style="width:100%;margin-bottom:8px">
+        <div class="he-sub">I will (action)</div>
+        <input value="${c.action}" data-cf="action" data-i="${i}" placeholder="e.g. I do 10 push-ups" style="width:100%;margin-bottom:8px">
+        <button class="danger" data-cf="del" data-i="${i}" style="margin-top:4px;padding:6px 14px;font-size:11px">Remove</button>`;
+      ce.appendChild(div);
+    });
+    ce.querySelectorAll('input').forEach(inp=>{
+      inp.addEventListener('change',()=>{
+        const i=parseInt(inp.dataset.i),f=inp.dataset.cf;
+        if(mem.coupling&&mem.coupling[i])mem.coupling[i][f]=inp.value;save();renderCoupling();
+      });
+    });
+    ce.querySelectorAll('button[data-cf="del"]').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const i=parseInt(btn.dataset.i);
+        mem.coupling.splice(i,1);save();renderSettings();renderCoupling();
+      });
+    });
+    const cAdd=document.createElement('div');cAdd.className='habit-edit';cAdd.style.textAlign='center';
+    cAdd.innerHTML='<button style="margin-top:8px;padding:10px 20px;font-size:13px;border-radius:10px;border:1px dashed var(--line2);background:transparent;color:var(--text);cursor:pointer;font-family:inherit">+ Add coupling</button>';
+    cAdd.querySelector('button').addEventListener('click',()=>{
+      if(!mem.coupling)mem.coupling=[];
+      mem.coupling.push({trigger:'morning coffee',action:'10 push-ups'});
+      save();renderSettings();renderCoupling();
+    });
+    ce.appendChild(cAdd);
+  }
 }
 function applyAccent(val){
   document.documentElement.style.setProperty('--accent',val);
