@@ -1764,6 +1764,7 @@ const SCHEMA_VERSION=2;
 const SLEEP_MIN=11,SLEEP_MAX=14;
 function haptic(ms){if(navigator.vibrate)try{navigator.vibrate(ms);}catch(e){}}
 let mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},books:[],outdoor:{},mood:{},illness:[],meals:[],potty:{},dental:{},allergies:[],fired:{},lastBackup:null,version:SCHEMA_VERSION};
+function load(){try{const r=localStorage.getItem(KEY);if(r){const p=JSON.parse(r);mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},books:[],outdoor:{},mood:{},illness:[],meals:[],potty:{},dental:{},allergies:[],fired:{},lastBackup:null,version:SCHEMA_VERSION,...p};if(!mem.version||mem.version<SCHEMA_VERSION){mem.version=SCHEMA_VERSION;save();}if(mem.settings&&mem.settings.birthDate){BIRTH=new Date(mem.settings.birthDate+'T00:00:00');}mem.words.forEach(w=>{if(typeof w==='object'&&w.l==='tr'){w.l='tk';}});}}catch(e){}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(mem));}catch(e){console.warn('Save failed:',e);if(e.name==='QuotaExceededError')alert('Storage full — please export a backup and clear old data.');}}
 function dkey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 let todayKey=dkey(new Date());
