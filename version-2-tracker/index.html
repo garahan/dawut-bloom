@@ -83,6 +83,9 @@ h2.sec .sec-icon{font-size:13px;}
 .ringwrap svg{transform:rotate(-90deg);}
 .seg{fill:none;stroke:var(--surface);stroke-width:13;stroke-linecap:round;transition:stroke .6s var(--ease-out),filter .6s,opacity .6s;opacity:.75;}
 .seg.on{filter:drop-shadow(0 0 12px currentColor);opacity:1;}
+.ringwrap.complete::after{content:'';position:absolute;inset:-8px;border-radius:50%;
+  border:2px solid rgba(180,142,255,.3);animation:pulsering 2s ease-out infinite;pointer-events:none;}
+@keyframes pulsering{0%{transform:scale(.96);opacity:.6}50%{transform:scale(1.04);opacity:.2}100%{transform:scale(.96);opacity:.6}}
 .ringcenter{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
 .vnum{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:44px;line-height:1;letter-spacing:-.03em;
   background:linear-gradient(100deg,#F4EFE6 15%,var(--accent) 55%,var(--wind) 90%);
@@ -159,9 +162,10 @@ h2.sec .sec-icon{font-size:13px;}
 .habit[data-h="wind"].full .dot{background:rgba(86,217,190,.1);border-color:rgba(86,217,190,.35);}
 
 .daydone{display:none;margin-top:10px;text-align:center;padding:20px;border-radius:var(--r);
-  background:linear-gradient(135deg,rgba(180,142,255,.1),rgba(86,217,190,.08));
-  border:1px solid rgba(180,142,255,.25);font-weight:700;font-size:16px;}
-.daydone.show{display:block;animation:pop .5s var(--spring);}
+  background:linear-gradient(135deg,rgba(180,142,255,.12),rgba(86,217,190,.08),rgba(232,168,56,.06));
+  background-size:200% 200%;border:1px solid rgba(180,142,255,.25);font-weight:700;font-size:16px;}
+.daydone.show{display:block;animation:pop .5s var(--spring),gradshift 6s ease infinite;}
+@keyframes gradshift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 .daydone span{display:block;font-size:12px;font-weight:400;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace;}
 @keyframes pop{0%{transform:scale(.85);opacity:0}100%{transform:scale(1);opacity:1}}
 
@@ -1131,6 +1135,23 @@ function applyHealthData(data){
   if(!data)return false;
   if(!mem.healthSync)mem.healthSync={};
   mem.healthSync={...mem.healthSync,...data};
+  const d=day(todayKey);
+  const autoToggled=[];
+  // auto-toggle Move to FULL if sufficient activity
+  if(d.move===0&&!d.rest){
+    if((data.steps&&data.steps>=8000)||(data.workoutMin&&data.workoutMin>=20)||(data.activeCal&&data.activeCal>=500)){
+      d.move=2;
+      autoToggled.push('Move (auto: '+((data.workoutMin?data.workoutMin+'min workout':data.steps?data.steps.toLocaleString()+' steps':data.activeCal+' active cal'))+')');
+    }
+  }
+  // auto-toggle Wind Down floor if mindful minutes >= 10
+  if(d.wind===0&&!d.rest&&data.mindfulMin&&data.mindfulMin>=10){
+    d.wind=1;
+    autoToggled.push('Wind Down floor (auto: '+data.mindfulMin+'min mindfulness)');
+  }
+  if(autoToggled.length>0){
+    mem.healthSync.autoToggled=autoToggled;
+  }
   // auto-fill metrics
   const metricMap={weight:'weight',hrv:'hrv',sleep:'sleep',screen:null};
   Object.keys(metricMap).forEach(hk=>{
@@ -1142,15 +1163,6 @@ function applyHealthData(data){
       if(ex)ex.v=data[hk];else arr.push({d:todayKey,v:data[hk]});
     }
   });
-  // auto-detect workout → suggest Move full
-  if(data.workoutMin&&data.workoutMin>=20&&day(todayKey).move===0){
-    // don't auto-toggle, just note it
-    mem.healthSync.workoutDetected=true;
-  }
-  // auto-detect sleep quality → suggest mood
-  if(data.sleep&&data.sleep<5){
-    mem.healthSync.lowSleep=true;
-  }
   save();
   return true;
 }
@@ -1227,7 +1239,7 @@ function renderHealthSync(){
   if(hs.activeCal)chips.push('🔥 '+hs.activeCal+'cal');
   if(hs.mindfulMin)chips.push('🧘 '+hs.mindfulMin+'min');
   if(hs.water)chips.push('💧 '+hs.water+'ml');
-  el.innerHTML='<div class="hs-icon">✅</div><div class="hs-text"><b>Health synced</b> · '+chips.join(' · ')+'</div><button class="hs-btn" onclick="openHealthShortcut()">Re-sync</button>';
+  el.innerHTML='<div class="hs-icon">✅</div><div class="hs-text"><b>Health synced</b> · '+chips.join(' · ')+(hs.autoToggled&&hs.autoToggled.length?'<br><span style="color:var(--green);font-size:11px">⚡ Auto-toggled: '+hs.autoToggled.join(', ')+'</span>':'')+'</div><button class="hs-btn" onclick="openHealthShortcut()">Re-sync</button>';
 }
 function renderHealthSuggestions(){
   const el=document.getElementById('healthSuggestions');
@@ -1280,6 +1292,34 @@ function renderRing(){
     if(d[h.id]>0){el.style.stroke=cols[h.id]||'#B48EFF';el.style.color=cols[h.id]||'#B48EFF';el.classList.add('on');el.style.opacity=d[h.id]===1?.55:1;}
     else{el.style.stroke='var(--surface)';el.classList.remove('on');el.style.opacity=.85;}
   });
+  // pulse ring when all complete
+  const rw=document.querySelector('.ringwrap');
+  if(rw){
+    const allDone=habits().every(h=>d[h.id]>0);
+    rw.classList.toggle('complete',allDone&&!d.rest);
+  }
+}
+
+/* ===== ANIMATED COUNTER ===== */
+function animateCounter(el,target,opts){
+  if(!el)return;
+  opts=opts||{};
+  const dur=opts.duration||800;
+  const dec=opts.decimals||0;
+  const suffix=opts.suffix||'';
+  const prefix=opts.prefix||'';
+  const start=parseFloat(el.dataset.cur||'0');
+  const end=parseFloat(target);
+  const startTime=performance.now();
+  function tick(now){
+    const t=Math.min((now-startTime)/dur,1);
+    const eased=1-Math.pow(1-t,3);
+    const val=start+(end-start)*eased;
+    el.textContent=prefix+val.toFixed(dec)+suffix;
+    if(t<1)requestAnimationFrame(tick);
+    else el.dataset.cur=end;
+  }
+  requestAnimationFrame(tick);
 }
 
 /* ===== HABIT CARDS ===== */
@@ -1346,7 +1386,8 @@ function renderAll(){
   const p=totalPts();
   const version=Math.min(2,1+p/400);
   const v=document.getElementById('vnum');
-  v.textContent='v'+version.toFixed(2);
+  const prevVer=parseFloat(v.dataset.cur||'1');
+  animateCounter(v,version,{decimals:2,suffix:'',prefix:'v'});
   v.classList.remove('bump');void v.offsetWidth;v.classList.add('bump');
   document.getElementById('fill').style.width=Math.min(100,p/400*100)+'%';
   document.getElementById('pct').textContent=(p/400*100).toFixed(1)+'% to v2.00';
@@ -1365,7 +1406,7 @@ function renderAll(){
   }else{mem.lastRankIdx=ri;save();}
 
   const si=streakInfo();
-  document.getElementById('streakN').textContent=si.streak;
+  animateCounter(document.getElementById('streakN'),si.streak,{duration:600});
   document.getElementById('warn').classList.toggle('show',si.missedYesterday&&!isTodayComplete()&&!si.comeback);
   const d=day(todayKey);
   const done=d.rest?4:['move','fuel','build','wind'].filter(h=>d[h]>0).length;
