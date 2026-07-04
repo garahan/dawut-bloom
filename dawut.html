@@ -468,6 +468,10 @@ footer{margin-top:36px;text-align:center;font-size:11px;color:var(--faint);line-
 .wc-suggestion{font-size:12px;color:var(--text);background:var(--bg);border-radius:12px;padding:8px 12px;margin-top:6px;line-height:1.4;}
 .wc-suggestion b{color:var(--gold);}
 .wc-loading{font-size:12px;color:var(--faint);padding:8px 0;}
+.wc-refresh{background:none;border:1.5px solid var(--line);border-radius:50%;width:32px;height:32px;font-size:14px;color:var(--faint);cursor:pointer;flex-shrink:0;transition:all .2s;}
+.wc-refresh:hover{border-color:var(--brain);color:var(--brain);}
+.wc-refresh:active{transform:scale(.9) rotate(180deg);}
+.chart-card,.track-card,.book-card,.panel,.stagecard,.routine-block,.goal-card,.ladder-card,.peer-card,.weeksum,.mood-card,.illness-card,.potty-card,.meal-card,.dental-card,.trend-card,.eg-card{animation:cardIn .35s cubic-bezier(.2,1,.4,1) both;}
 .eg-card{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);margin-bottom:14px;box-shadow:var(--shadow);overflow:hidden;}
 .eg-header{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;user-select:none;-webkit-user-select:none;transition:background .2s;}
 .eg-header:active{background:var(--bg);}
@@ -1320,6 +1324,14 @@ const EMOTIONAL_GUIDE=[
    'Teach consent and body autonomy: "Your body belongs to you. You can say no to hugs, even from family."'
   ]}
 ];
+const HOW_TO={
+  body:'Keep it active and fun. Follow his lead — if he loses interest, switch to something else. 10-15 minutes is enough. Celebrate the attempt, not just the result. Barefoot when safe — it builds balance and foot arches.',
+  brain:'Sit together, no rush. Ask open questions: "What happens if...?" Let him try before helping. Wrong answers are part of learning. 5-10 minutes of focused play is more valuable than 30 minutes of passive watching.',
+  lang:'Talk slowly, repeat key words 3x. Use his home languages — each one builds a separate brain network. Narrate everything you do. Don\'t correct — just model the right word back naturally: him "wawa" → you "Yes, water!"',
+  heart:'Be fully present — put your phone away. Make eye contact. Name feelings: "You seem frustrated." Model repair: "I was grumpy earlier, I\'m sorry." 5 minutes of true connection beats 30 minutes of distracted presence.',
+  food:'Eat together, no screens. Offer 2 choices, not 5. Don\'t pressure — just expose. It takes 10-15 tries before a new food is accepted. Let him touch, smell, lick — all count as tasting. Mess = learning.',
+  create:'Focus on process, not product. Don\'t say "what is it?" — say "tell me about your picture." Provide materials, then step back. Open-ended materials (blocks, clay, crayons) beat single-purpose toys. 10-15 minutes.'
+};
 const TIPS=[
  'Praise the process, not the person: You looked carefully beats good boy - it wires growth mindset.',
  'Narrate your own thinking out loud today. He learns HOW to think by watching you think.',
@@ -1379,6 +1391,8 @@ const MOM_MOTIVATIONS=[
 /* ============ STATE ============ */
 const KEY='dawut-bloom';
 const SCHEMA_VERSION=2;
+const SLEEP_MIN=11,SLEEP_MAX=14;
+function haptic(ms){if(navigator.vibrate)try{navigator.vibrate(ms);}catch(e){}}
 let mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},books:[],outdoor:{},mood:{},illness:[],meals:[],potty:{},dental:{},allergies:[],lastBackup:null,version:SCHEMA_VERSION};
 function load(){try{const r=localStorage.getItem(KEY);if(r){const p=JSON.parse(r);mem={days:{},growth:{},milestones:[],settings:{},shuffles:{},cdc:{},vax:{},sleep:{},screen:{},words:[],plan:{},books:[],outdoor:{},mood:{},illness:[],meals:[],potty:{},dental:{},allergies:[],lastBackup:null,version:SCHEMA_VERSION,...p};if(!mem.version||mem.version<SCHEMA_VERSION){mem.version=SCHEMA_VERSION;save();}if(mem.settings&&mem.settings.birthDate){BIRTH=new Date(mem.settings.birthDate+'T00:00:00');}}}catch(e){}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(mem));}catch(e){}}
@@ -1443,17 +1457,17 @@ function renderCards(){
         </div>
         <div class="detail-section">
           <div class="ds-header"><span class="ds-icon">📋</span><span class="ds-title">How to do it</span></div>
-          <div class="ds-text">Keep it light and playful. Follow his lead — if he loses interest, switch to something else. Stop before frustration starts. Celebrate the attempt, not just the result. 5-10 minutes is enough.</div>
+          <div class="ds-text">${HOW_TO[dom.id]}</div>
         </div>
         <div class="contributes"><span class="c-icon">${dom.icon}</span> ${dom.name} domain · seed ${idx+1} of 6</div>
       </div>
       <div class="act-footer">
-        <span class="shuffle" role="button" tabindex="0">↻ give me a different one</span>
+        <span class="shuffle" role="button" tabindex="0">↻ swap</span>
       </div>`;
     const checkEl=el.querySelector('.check');
     checkEl.addEventListener('click',e=>{
       e.stopPropagation();
-      d[dom.id]=d[dom.id]?0:1;save();renderCards();renderAll();
+      d[dom.id]=d[dom.id]?0:1;save();renderCards();renderAll();haptic(15);
       if(DOMAINS.every(x=>day(todayKey)[x.id]))confetti(70);
     });
     checkEl.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();checkEl.click();}});
@@ -1473,7 +1487,7 @@ function renderCards(){
 document.getElementById('quickDone').addEventListener('click',function(){
   const d=day(todayKey);
   DOMAINS.forEach(dom=>d[dom.id]=1);
-  save();renderCards();renderAll();confetti(70);
+  save();renderCards();renderAll();confetti(70);haptic([20,30,20]);
 });
 /* ============ STREAK / HEAT ============ */
 function complete(k){const d=mem.days[k];return d&&DOMAINS.filter(x=>d[x.id]).length>=4;}
@@ -1609,7 +1623,7 @@ function renderGrowthInput(){
     if(h){if(!mem.growth.height)mem.growth.height=[];const ex=mem.growth.height.find(e=>e.d===todayKey);if(ex)ex.v=h;else mem.growth.height.push({d:todayKey,v:h});}
     if(w){if(!mem.growth.weight)mem.growth.weight=[];const ex=mem.growth.weight.find(e=>e.d===todayKey);if(ex)ex.v=w;else mem.growth.weight.push({d:todayKey,v:w});}
     if(hd){if(!mem.growth.head)mem.growth.head=[];const ex=mem.growth.head.find(e=>e.d===todayKey);if(ex)ex.v=hd;else mem.growth.head.push({d:todayKey,v:hd});}
-    save();renderGrowth();renderGrowthInput();confetti(20);
+    save();renderGrowth();renderGrowthInput();confetti(20);haptic(15);
   });
 }
 /* ============ LIFE COUNTDOWN ============ */
@@ -1658,7 +1672,6 @@ function renderCountdowns(){
 /* ============ SLEEP TRACKING (AAP: 11-14h for toddlers 1-3yr) ============ */
 function renderSleep(){
   const wrap=document.getElementById('sleepCard');wrap.innerHTML='';
-  const SLEEP_MIN=11,SLEEP_MAX=14;
   const today=mem.sleep[todayKey];
   const div=document.createElement('div');div.className='track-card';
   let hrs=today?today.h:null;
@@ -1688,7 +1701,8 @@ function renderSleep(){
     <div class="mrow"><input type="number" step="0.5" inputmode="decimal" placeholder="hours slept" aria-label="Log sleep hours"><button>Log</button></div>`;
   div.querySelector('button').addEventListener('click',()=>{
     const v=parseFloat(div.querySelector('input').value);if(isNaN(v))return;
-    if(!mem.sleep[todayKey])mem.sleep[todayKey]={};mem.sleep[todayKey].h=v;save();renderSleep();});
+    if(!mem.sleep[todayKey])mem.sleep[todayKey]={};mem.sleep[todayKey].h=v;save();renderSleep();haptic(10);});
+  div.querySelector('input').addEventListener('keydown',e=>{if(e.key==='Enter')div.querySelector('button').click();});
   wrap.appendChild(div);
 }
 /* ============ SCREEN TIME TRACKING (AAP: ≤1h/day for 2-5yr) ============ */
@@ -1722,7 +1736,8 @@ function renderScreen(){
     <div class="mrow"><input type="number" step="5" inputmode="numeric" placeholder="minutes" aria-label="Log screen time"><button>Log</button></div>`;
   div.querySelector('button').addEventListener('click',()=>{
     const v=parseFloat(div.querySelector('input').value);if(isNaN(v))return;
-    if(!mem.screen[todayKey])mem.screen[todayKey]={};mem.screen[todayKey].m=v;save();renderScreen();});
+    if(!mem.screen[todayKey])mem.screen[todayKey]={};mem.screen[todayKey].m=v;save();renderScreen();haptic(10);});
+  div.querySelector('input').addEventListener('keydown',e=>{if(e.key==='Enter')div.querySelector('button').click();});
   wrap.appendChild(div);
 }
 /* ============ WORD TRACKING ============ */
@@ -1748,7 +1763,7 @@ function renderWords(){
   const inp=div.querySelector('input');
   const addWord=()=>{const w=inp.value.trim();if(!w)return;
     const entry={w:w,l:selectedLang};
-    if(!mem.words.some(x=>typeof x==='object'&&x.w===w)){mem.words.push(entry);save();renderWords();confetti(10);}
+    if(!mem.words.some(x=>typeof x==='object'&&x.w===w)){mem.words.push(entry);save();renderWords();confetti(10);haptic(10);}
     inp.value='';
   };
   div.querySelector('button').addEventListener('click',addWord);
@@ -1780,7 +1795,7 @@ document.getElementById('msBtn').addEventListener('click',()=>{
   t.value='';msPhotoData=null;
   document.getElementById('msPhoto').value='';
   document.getElementById('msPhotoPreview').style.display='none';
-  save();renderMilestones();confetti(40);
+  save();renderMilestones();confetti(40);haptic(20);
 });
 function renderMilestones(){
   const el=document.getElementById('mstones');el.innerHTML='';
@@ -1809,8 +1824,9 @@ function renderCDC(){
       const row=document.createElement('div');row.className='cdc-item'+(done?' done':'');
       row.innerHTML=`<div class="chk" role="checkbox" tabindex="0" aria-checked="${done}">✓</div><span>${item.t}</span><span class="age-tag">${item.c}</span>`;
       row.querySelector('.chk').addEventListener('click',()=>{
-        mem.cdc[key]=!mem.cdc[key];save();renderCDC();updateBadges();
+        mem.cdc[key]=!mem.cdc[key];save();renderCDC();updateBadges();haptic(10);
       });
+      row.querySelector('.chk').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.target.click();}});
       g.appendChild(row);
     });
     el.appendChild(g);
@@ -1831,7 +1847,8 @@ function renderVax(){
       <div class="vax-info"><div class="vax-name">${v.name}</div><div class="vax-when">${v.when} · ${v.cat}</div></div>
       <div class="vax-status ${statusClass}">${statusText}</div>`;
     row.querySelector('.vax-dot').addEventListener('click',()=>{
-      mem.vax['vax-'+i]=!mem.vax['vax-'+i];save();renderVax();updateBadges();});
+      mem.vax['vax-'+i]=!mem.vax['vax-'+i];save();renderVax();updateBadges();haptic(10);});
+    row.querySelector('.vax-dot').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.target.click();}});
     el.appendChild(row);
   });
 }
@@ -1948,7 +1965,7 @@ function renderPotty(){
       const t=btn.dataset.type;
       if(mem.potty[todayKey]&&mem.potty[todayKey].type===t){delete mem.potty[todayKey];}
       else{mem.potty[todayKey]={type:t};}
-      save();renderPotty();renderBadges();
+      save();renderPotty();renderBadges();haptic(10);
     });
   });
   wrap.appendChild(div);
@@ -1989,7 +2006,7 @@ function renderMeals(){
       if(!entry){entry={d:todayKey,items:[]};mem.meals.push(entry);}
       if(entry.items.includes(id)){entry.items=entry.items.filter(x=>x!==id);}
       else{entry.items.push(id);}
-      save();renderMeals();
+      save();renderMeals();haptic(8);
     });
   });
   div.querySelectorAll('.me-del').forEach(btn=>{
@@ -2019,7 +2036,7 @@ function renderDental(){
   div.querySelector('#dentalBtn').addEventListener('click',()=>{
     if(mem.dental[todayKey]&&mem.dental[todayKey].brushed){delete mem.dental[todayKey];}
     else{mem.dental[todayKey]={brushed:true};}
-    save();renderDental();
+    save();renderDental();haptic(10);
   });
   wrap.appendChild(div);
 }
@@ -2100,8 +2117,16 @@ function showDayDetail(k){
   });
   const noteHtml=d.note?`<div class="dd-note">📝 ${d.note}</div>`:'';
   const moodIdx=mem.mood[k];
-  const moodHtml=moodIdx!=null?`<div class="dd-note">Mood: ${MOODS[moodIdx].e} ${MOODS[moodIdx].l}</div>`:'';
-  overlay.innerHTML=`<div class="dd-box"><div class="dd-head"><h3>${dtStr}</h3><button class="dd-close">✕</button></div><div class="dd-acts">${actsHtml}</div>${moodHtml}${noteHtml}</div>`;
+  const moodHtml=moodIdx!=null?`<div class="dd-note">${MOODS[moodIdx].e} Mood: ${MOODS[moodIdx].l}</div>`:'';
+  const sleepData=mem.sleep[k],screenData=mem.screen[k],outdoorData=mem.outdoor[k],pottyData=mem.potty[k];
+  let extraHtml='';
+  if(sleepData)extraHtml+=`<div class="dd-note">😴 Sleep: ${sleepData.h}h</div>`;
+  if(screenData)extraHtml+=`<div class="dd-note">📱 Screen: ${screenData.m}min</div>`;
+  if(outdoorData)extraHtml+=`<div class="dd-note">🌳 Outdoor: ${outdoorData.m}min</div>`;
+  if(pottyData)extraHtml+=`<div class="dd-note">🚽 Potty: ${pottyData.type}</div>`;
+  const dayMeals=mem.meals.find(m=>m.d===k);
+  if(dayMeals&&dayMeals.items.length){const icons=dayMeals.items.map(id=>(MEAL_TYPES.find(t=>t.id===id)||{}).e||'').join(' ');extraHtml+=`<div class="dd-note">🍽️ Meals: ${icons}</div>`;}
+  overlay.innerHTML=`<div class="dd-box"><div class="dd-head"><h3>${dtStr}</h3><button class="dd-close">✕</button></div><div class="dd-acts">${actsHtml}</div>${moodHtml}${extraHtml}${noteHtml}</div>`;
   overlay.querySelector('.dd-close').addEventListener('click',()=>overlay.remove());
   overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove();});
   document.body.appendChild(overlay);
@@ -2202,7 +2227,8 @@ function renderOutdoor(){
     <div class="mrow"><input type="number" step="5" inputmode="numeric" placeholder="minutes outdoors" aria-label="Log outdoor time"><button>Log</button></div>`;
   div.querySelector('button').addEventListener('click',()=>{
     const v=parseFloat(div.querySelector('input').value);if(isNaN(v))return;
-    if(!mem.outdoor[todayKey])mem.outdoor[todayKey]={};mem.outdoor[todayKey].m=v;save();renderOutdoor();});
+    if(!mem.outdoor[todayKey])mem.outdoor[todayKey]={};mem.outdoor[todayKey].m=v;save();renderOutdoor();haptic(10);});
+  div.querySelector('input').addEventListener('keydown',e=>{if(e.key==='Enter')div.querySelector('button').click();});
   wrap.appendChild(div);
 }
 /* ============ BOOK TRACKER ============ */
@@ -2218,9 +2244,10 @@ function renderBooks(){
     <div class="book-list" id="bookList"></div>`;
   div.querySelector('button').addEventListener('click',()=>{
     const inp=div.querySelector('input');const t=inp.value.trim();if(!t)return;
-    mem.books.push({d:todayKey,t:t});save();renderBooks();confetti(15);
+    mem.books.push({d:todayKey,t:t});save();renderBooks();confetti(15);haptic(10);
     inp.value='';
   });
+  div.querySelector('input').addEventListener('keydown',e=>{if(e.key==='Enter')div.querySelector('button').click();});
   const bl=div.querySelector('#bookList');
   mem.books.slice().reverse().slice(0,15).forEach((b,i)=>{
     const realIdx=mem.books.length-1-i;
@@ -2691,7 +2718,8 @@ function renderWeather(w){
   el.innerHTML=`<div class="wc-icon">${icon}</div><div class="wc-info">
     <div class="wc-temp">${w.temp}°C</div>
     <div class="wc-cond">${cond} · UV ${w.uv} · 💧 ${w.humidity}%</div>
-    ${sg?`<div class="wc-suggestion">${sg}</div>`:''}</div>`;
+    ${sg?`<div class="wc-suggestion">${sg}</div>`:''}</div><button class="wc-refresh" aria-label="Refresh weather">↻</button>`;
+  el.querySelector('.wc-refresh').addEventListener('click',()=>{lastWeather=null;fetchWeather();});
 }
 const HOME_ACTIVITIES={
   hot:[
