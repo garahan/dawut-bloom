@@ -750,7 +750,6 @@ footer{margin-top:44px;text-align:center;font-size:11px;color:var(--faint);line-
     </div>
     <div class="stagechip" id="stagechip"></div>
     <div class="herostats">
-      <div class="hstat"><b class="gld" id="hsStreak">0</b><span>day streak 🔥</span></div>
       <div class="hstat"><b class="grn" id="hsDone">0</b><span>bloom days</span></div>
       <div class="hstat"><b id="hsAge">—</b><span>months old</span></div>
     </div>
@@ -850,7 +849,6 @@ footer{margin-top:44px;text-align:center;font-size:11px;color:var(--faint);line-
   <div class="heat" id="heat" role="img" aria-label="Activity consistency heatmap"></div>
   <div class="stats">
     <div class="stat"><b id="stTotal">0</b><span>full bloom days</span></div>
-    <div class="stat"><b id="stBest">0</b><span>best streak</span></div>
     <div class="stat"><b id="stActs">0</b><span>activities done</span></div>
   </div>
   <h2 class="sec">Achievement badges</h2>
@@ -2273,8 +2271,6 @@ function renderEmotionalGuide(){
 /* ============ ACHIEVEMENT BADGES ============ */
 const BADGES=[
  {id:'firstBloom',e:'🌸',n:'First Bloom',d:'1 full bloom day',check:()=>Object.keys(mem.days).filter(fullBloom).length>=1},
- {id:'week3',e:'🔥',n:'On Fire',d:'3-day streak',check:()=>streakInfo().best>=3},
- {id:'week7',e:'⚡',n:'Lightning',d:'7-day streak',check:()=>streakInfo().best>=7},
  {id:'month30',e:'🌟',n:'Star Month',d:'30 bloom days',check:()=>Object.keys(mem.days).filter(fullBloom).length>=30},
  {id:'word50',e:'🗣️',n:'Chatterbox',d:'50 words logged',check:()=>mem.words.length>=50},
  {id:'word100',e:'💬',n:'Word Wizard',d:'100 words logged',check:()=>mem.words.length>=100},
@@ -2677,7 +2673,6 @@ function renderTrend(){
 /* ============ PEDIATRICIAN REPORT ============ */
 document.getElementById('reportBtn').addEventListener('click',()=>{
   const m=ageMonths();
-  const si=streakInfo();
   const bd=S().birthDetails||{};
   const blooms=Object.keys(mem.days).filter(fullBloom).length;
   const totalActs=Object.values(mem.days).reduce((s,dd)=>s+DOMAINS.filter(x=>dd[x.id]).length,0);
@@ -2736,7 +2731,6 @@ ${bd.birthFeeding?'<b>Feeding:</b> '+bd.birthFeeding+'<br>':''}
 ${bd.birthApgar?'<b>APGAR:</b> '+bd.birthApgar+'<br>':''}
 <b>Current stage:</b> ${currentStage().label}<br>
 <b>Full bloom days:</b> ${blooms}<br>
-<b>Current streak:</b> ${si.streak} days · <b>Best streak:</b> ${si.best} days<br>
 <b>Total activities completed:</b> ${totalActs}<br>
 <b>Words logged:</b> ${mem.words.length} (${langBreakdown})<br>
 <b>Books read:</b> ${mem.books.length}<br>
@@ -3308,8 +3302,6 @@ function renderAll(){
   document.getElementById('hsAge').textContent=ageMonths().toFixed(1);
   const st=currentStage();
   document.getElementById('stagechip').innerHTML='🧭 Stage: <b>'+st.label.replace(' - Dawut is here','')+'</b>';
-  const si=streakInfo();
-  document.getElementById('hsStreak').textContent=si.streak;
   const blooms=Object.keys(mem.days).filter(fullBloom).length;
   document.getElementById('hsDone').textContent=blooms;
   const d=day(todayKey),done=DOMAINS.filter(x=>d[x.id]).length;
@@ -3320,7 +3312,6 @@ function renderAll(){
   if(done>0&&done<6){todayBadge.textContent=done;todayBadge.classList.remove('hide');}
   else todayBadge.classList.add('hide');
   document.getElementById('stTotal').textContent=blooms;
-  document.getElementById('stBest').textContent=si.best;
   document.getElementById('stActs').textContent=Object.values(mem.days).reduce((s,dd)=>s+DOMAINS.filter(x=>dd[x.id]).length,0);
   /* Mom motivation */
   const mm=MOM_MOTIVATIONS[dayOfYear()%MOM_MOTIVATIONS.length];
@@ -3335,9 +3326,6 @@ function renderAll(){
   safe(renderBadges,'renderBadges');
   safe(updateBadges,'updateBadges');
   safe(renderTodaySleep,'renderTodaySleep');safe(renderTodayScreen,'renderTodayScreen');safe(renderTodayOutdoor,'renderTodayOutdoor');safe(renderTodayMeals,'renderTodayMeals');safe(renderTodayBooks,'renderTodayBooks');safe(renderTodayDental,'renderTodayDental');safe(renderTodayEmotional,'renderTodayEmotional');
-  const sm=streakMessage();
-  const existing=document.querySelector('.streak-msg');if(existing)existing.remove();
-  if(sm){document.querySelector('.hero').insertAdjacentHTML('afterend',sm);}
  }catch(e){console.error('renderAll error:',e);}
 }
 function confetti(n){
