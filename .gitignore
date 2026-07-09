@@ -3,3 +3,7 @@ version-2-repo.zip
 node_modules/
 .DS_Store
 .vercel
+
+# Personal projects — not part of dawut-bloom
+version-2-tracker/
+ideal-day/
